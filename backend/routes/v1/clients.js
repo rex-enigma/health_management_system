@@ -203,4 +203,62 @@ router.get('/v1/clients/search', requireAuth, async (req, res, next) => {
     }
 });
 
+// get a specific client. External systems with api keys can use this endpoint
+router.get('/v1/clients/:id', requireAuth, async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        const [client] = await db.execute('SELECT * FROM clients WHERE id = ? AND user_id = ?', [id, req.authType === 'jwt' ? req.user.id : 0]);
+        if (client.length === 0) return res.status(404).json({ error: 'Client not found or not authorized' });
+
+        const [programs] = await db.execute(
+            'SELECT hp.* FROM health_programs hp JOIN health_program_enrollments hpe ON hp.id = hpe.health_program_id WHERE hpe.client_id = ?',
+            [id]
+        );
+        const [diagnoses] = await db.execute(
+            'SELECT d.id, d.diagnosis_name FROM diagnoses d JOIN client_diagnoses cd ON d.id = cd.diagnosis_id WHERE cd.client_id = ?',
+            [id]
+        );
+
+        const profile = {
+            id: client[0].id,
+            first_name: client[0].first_name,
+            last_name: client[0].last_name,
+            gender: client[0].gender,
+            profile_image_path: client[0].profile_image_path,
+            enrolled_programs: programs,
+            diagnoses,
+        };
+
+        if (req.authType === 'jwt') {
+            profile.date_of_birth = client[0].date_of_birth;
+            profile.contact_info = client[0].contact_info;
+            profile.address = client[0].address;
+        }
+
+        res.status(200).json(profile);
+    } catch (error) {
+        console.error('Client profile error:', error);
+        next(error);
+    }
+});
+
+// delete a specific client
+router.delete('/v1/clients/:id', authenticateJWT, async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        const [client] = await db.execute('SELECT * FROM clients WHERE id = ? AND user_id = ?', [id, req.user.id]);
+        if (client.length === 0) {
+            return res.status(404).json({ error: 'Client not found or not authorized' });
+        }
+
+        await db.execute('DELETE FROM clients WHERE id = ?', [id]);
+        res.status(200).json({ id: parseInt(id) });
+    } catch (error) {
+        console.error('Client deletion error:', error);
+        next(error);
+    }
+});
+
 export default router;
