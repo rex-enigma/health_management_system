@@ -26,17 +26,9 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    IF NOT EXISTS health_programs (
+    IF NOT EXISTS diagnoses (
         id INT PRIMARY KEY AUTO_INCREMENT,
-        image_path VARCHAR(255),
-        name VARCHAR(255) NOT NULL,
-        description TEXT NOT NULL,
-        start_date DATETIME NOT NULL,
-        end_date DATETIME,
-        eligibility_criteria_id INT,
-        created_by_user_id INT NOT NULL,
-        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (eligibility_criteria_id) REFERENCES eligibility_criteria (id) FOREIGN KEY (created_by_user_id) REFERENCES users (id)
+        diagnosis_name VARCHAR(255) NOT NULL UNIQUE
     );
 
 CREATE TABLE
@@ -49,9 +41,18 @@ CREATE TABLE
     );
 
 CREATE TABLE
-    IF NOT EXISTS diagnoses (
+    IF NOT EXISTS health_programs (
         id INT PRIMARY KEY AUTO_INCREMENT,
-        diagnosis_name VARCHAR(255) NOT NULL UNIQUE
+        image_path VARCHAR(255),
+        name VARCHAR(255) NOT NULL,
+        description TEXT NOT NULL,
+        start_date DATETIME NOT NULL,
+        end_date DATETIME,
+        eligibility_criteria_id INT,
+        created_by_user_id INT NOT NULL,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (eligibility_criteria_id) REFERENCES eligibility_criteria (id),
+        FOREIGN KEY (created_by_user_id) REFERENCES users (id)
     );
 
 CREATE TABLE
