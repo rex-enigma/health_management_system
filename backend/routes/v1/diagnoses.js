@@ -20,3 +20,6 @@ router.get('/v1/diagnoses', authenticateJWT, async (req, res, next) => {
         next(error);
     }
 });
+
+
+export default router;
