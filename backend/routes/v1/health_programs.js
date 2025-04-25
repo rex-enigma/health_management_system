@@ -1,7 +1,15 @@
 import express from 'express';
+import mysql from 'mysql2/promise';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import crypto from 'crypto';
+import helmet from 'helmet';
+import cors from 'cors';
+import dotenv from 'dotenv';
 import db from '../../database_connection.js';
 const router = express.Router();
 
+// create a health program
 router.post('/v1/health-programs', authenticateJWT, async (req, res, next) => {
     const { name, description, start_date, end_date, image_path, eligibility_criteria } = req.body;
     if (!name || !description || !start_date) {
@@ -72,3 +80,88 @@ router.post('/v1/health-programs', authenticateJWT, async (req, res, next) => {
         next(error);
     }
 });
+
+// get a specific health program
+router.get('/v1/health-programs/:id', requireAuth, async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        const [program] = await db.execute('SELECT * FROM health_programs WHERE id = ?', [id]);
+        if (program.length === 0) return res.status(404).json({ error: 'Health program not found' });
+
+        let eligibilityCriteria = null;
+        if (program[0].eligibility_criteria_id) {
+            const [criteria] = await db.execute(
+                'SELECT ec.id, ec.min_age AS minAge, ec.max_age AS maxAge, d.diagnosis_name AS diagnosis_name ' +
+                'FROM eligibility_criteria ec JOIN diagnoses d ON ec.required_diagnosis_id = d.id WHERE ec.id = ?',
+                [program[0].eligibility_criteria_id]
+            );
+            eligibilityCriteria = criteria.length > 0 ? criteria[0] : null;
+        }
+
+        const programData = {
+            id: program[0].id,
+            name: program[0].name,
+            image_path: program[0].image_path,
+            eligibility_criteria: eligibilityCriteria,
+        };
+
+        if (req.authType === 'jwt') {
+            programData.description = program[0].description;
+            programData.start_date = program[0].start_date;
+            programData.end_date = program[0].end_date;
+        }
+
+        res.status(200).json(programData);
+    } catch (error) {
+        console.error('Health program retrieval error:', error);
+        next(error);
+    }
+});
+
+// get all health programs with pagination
+router.get('/v1/health-programs', requireAuth, async (req, res, next) => {
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (page - 1) * limit;
+
+    try {
+        const [programs] = await db.execute(
+            'SELECT * FROM health_programs ORDER BY id LIMIT ? OFFSET ?',
+            [parseInt(limit), parseInt(offset)]
+        );
+
+        const programsData = await Promise.all(
+            programs.map(async (program) => {
+                let eligibilityCriteria = null;
+                if (program.eligibility_criteria_id) {
+                    const [criteria] = await db.execute(
+                        'SELECT ec.id, ec.min_age AS minAge, ec.max_age AS maxAge, d.diagnosis_name AS diagnosis_name ' +
+                        'FROM eligibility_criteria ec JOIN diagnoses d ON ec.required_diagnosis_id = d.id WHERE ec.id = ?',
+                        [program[0].eligibility_criteria_id]
+                    );
+                    eligibilityCriteria = criteria.length > 0 ? criteria[0] : null;
+                }
+
+                const programData = {
+                    id: program.id,
+                    name: program.name,
+                    image_path: program.image_path,
+                    eligibility_criteria: eligibilityCriteria,
+                };
+                if (req.authType === 'jwt') {
+                    programData.description = program.description;
+                    programData.start_date = program.start_date;
+                    programData.end_date = program.end_date;
+                }
+                return programData;
+            })
+        );
+
+        res.status(200).json(programsData);
+    } catch (error) {
+        console.error('Health program retrieval error:', error);
+        next(error);
+    }
+});
+
+export default router;
