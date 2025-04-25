@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticateJWT } from '../../middlewares/middlewares.js'
+import { authenticateJWT, requireAuth } from '../../middlewares/middlewares.js'
 import db from '../../database_connection.js';
 const router = express.Router();
 
