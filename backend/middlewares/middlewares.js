@@ -1,4 +1,5 @@
-const JWT_SECRET = process.env.JWT_SECRET;
+// key to generate the signature of the jwt token as well as verify the jtw token
+export const JWT_SECRET = process.env.JWT_SECRET;
 
 export const authenticateJWT = (req, res, next) => {
     const authHeader = req.headers['authorization'];
