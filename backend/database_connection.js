@@ -20,4 +20,5 @@ const pool = mysql.createPool({
     queueLimit: 0,
 });
 
+//export a promise_based db connection pool
 export default pool.promise();
