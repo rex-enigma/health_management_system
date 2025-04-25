@@ -1,11 +1,4 @@
 import express from 'express';
-import mysql from 'mysql2/promise';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import crypto from 'crypto';
-import helmet from 'helmet';
-import cors from 'cors';
-import dotenv from 'dotenv';
 import { authenticateJWT } from '../../middlewares/middlewares.js'
 import db from '../../database_connection.js';
 const router = express.Router();
