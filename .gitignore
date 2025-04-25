@@ -10,6 +10,7 @@
 .history
 backend/node_modules/
 backend/.env
+backend/eslint.config.mjs
 .svn/
 .swiftpm/
 migrate_working_dir/
