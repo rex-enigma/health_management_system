@@ -9,6 +9,7 @@
 .buildlog/
 .history
 backend/node_modules/
+backend/.env
 .svn/
 .swiftpm/
 migrate_working_dir/
