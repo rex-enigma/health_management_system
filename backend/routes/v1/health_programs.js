@@ -229,4 +229,22 @@ router.delete('/v1/health-programs/:id', authenticateJWT, async (req, res, next)
     }
 });
 
+// delete a specific health program
+router.delete('/v1/health-programs/:id', authenticateJWT, async (req, res, next) => {
+    const { id } = req.params;
+
+    try {
+        const [program] = await db.execute('SELECT * FROM health_programs WHERE id = ? AND created_by_user_id = ?', [id, req.user.id]);
+        if (program.length === 0) {
+            return res.status(404).json({ error: 'Health program not found or not authorized' });
+        }
+
+        await db.execute('DELETE FROM health_programs WHERE id = ?', [id]);
+        res.status(200).json({ id: parseInt(id) });
+    } catch (error) {
+        console.error('Health program deletion error:', error);
+        next(error);
+    }
+});
+
 export default router;
