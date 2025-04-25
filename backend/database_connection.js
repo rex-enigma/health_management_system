@@ -1,14 +1,5 @@
-import express from 'express';
+import 'dotenv/config';
 import mysql from 'mysql2/promise';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt';
-import crypto from 'crypto';
-import helmet from 'helmet';
-import cors from 'cors';
-import dotenv from 'dotenv';
-
-
-dotenv.config();
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST || 'localhost',
@@ -21,4 +12,4 @@ const pool = mysql.createPool({
 });
 
 //export a promise_based db connection pool
-export default pool.promise();
+export default pool;
