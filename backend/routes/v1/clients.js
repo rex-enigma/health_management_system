@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticateJWT } from '../../middlewares/middlewares.js'
+import { authenticateJWT, requireAuth } from '../../middlewares/middlewares.js'
 import db from '../../database_connection.js';
 const router = express.Router();
 
@@ -108,5 +108,52 @@ router.post('/v1/clients/:id/enroll', authenticateJWT, async (req, res, next) =>
         next(error);
     }
 });
+
+// get all clients with pagination support
+router.get('/v1/clients', requireAuth, async (req, res, next) => {
+    const { page = 1, limit = 10 } = req.query;
+    const offset = (page - 1) * limit;
+
+    try {
+        const [clients] = await db.execute(
+            'SELECT * FROM clients WHERE user_id = ? ORDER BY id LIMIT ? OFFSET ?',
+            [req.authType === 'jwt' ? req.user.id : 0, parseInt(limit), parseInt(offset)]
+        );
+
+        const clientsWithData = await Promise.all(
+            clients.map(async (client) => {
+                const [programs] = await db.execute(
+                    'SELECT hp.* FROM health_programs hp JOIN health_program_enrollments hpe ON hp.id = hpe.health_program_id WHERE hpe.client_id = ?',
+                    [client.id]
+                );
+                const [diagnoses] = await db.execute(
+                    'SELECT d.id, d.diagnosis_name FROM diagnoses d JOIN client_diagnoses cd ON d.id = cd.diagnosis_id WHERE cd.client_id = ?',
+                    [client.id]
+                );
+                const clientData = {
+                    id: client.id,
+                    first_name: client.first_name,
+                    last_name: client.last_name,
+                    gender: client.gender,
+                    profile_image_path: client.profile_image_path,
+                    enrolled_programs: programs,
+                    diagnoses,
+                };
+                if (req.authType === 'jwt') {
+                    clientData.date_of_birth = client.date_of_birth;
+                    clientData.contact_info = client.contact_info;
+                    clientData.address = client.address;
+                }
+                return clientData;
+            })
+        );
+
+        res.status(200).json(clientsWithData);
+    } catch (error) {
+        console.error('Client retrieval error:', error);
+        next(error);
+    }
+});
+
 
 export default router;
