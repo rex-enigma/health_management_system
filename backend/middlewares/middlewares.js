@@ -72,3 +72,30 @@ export const globalErrorHandler = (err, req, res, next) => {
     console.error('Error:', err.stack);
     res.status(500).json({ error: 'Internal server error' });
 };
+
+export const validatePagination = (req, res, next) => {
+    const { page = 1, limit = 10 } = req.query;
+
+    // Parse and validate
+    const parsedPage = parseInt(page, 10);
+    const parsedLimit = parseInt(limit, 10);
+    const offset = (parsedPage - 1) * parsedLimit;
+
+    if (isNaN(parsedPage) || parsedPage < 1) {
+        return res.status(400).json({ error: 'Invalid page value. Must be a positive integer.' });
+    }
+    if (isNaN(parsedLimit) || parsedLimit < 1 || parsedLimit > 100) { // Optional: cap max limit
+        return res.status(400).json({ error: 'Invalid limit value. Must be between 1 and 100.' });
+    }
+    if (offset < 0) {
+        return res.status(400).json({ error: 'Invalid offset. Check page and limit values.' });
+    }
+
+    req.pagination = {
+        limit: parsedLimit,
+        offset,
+        page: parsedPage,
+    };
+
+    next();
+};
