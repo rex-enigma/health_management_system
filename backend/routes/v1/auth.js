@@ -1,6 +1,6 @@
-const express = require('express');
-const bcrypt = require('bcrypt');
-const db = require('../../database_connection.js')
+import express from 'express';
+import bcrypt from 'bcrypt';
+import db from '../../database_connection.js';
 const router = express.Router();
 
 router.post('/v1/auth/signup', async (req, res, next) => {
@@ -25,4 +25,4 @@ router.post('/v1/auth/signup', async (req, res, next) => {
     }
 });
 
-module.exports = router;
+export default router;

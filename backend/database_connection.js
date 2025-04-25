@@ -1,11 +1,12 @@
-const express = require('express');
-const mysql = require('mysql2/promise');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const crypto = require('crypto');
-const helmet = require('helmet');
-const cors = require('cors');
-const dotenv = require('dotenv');
+import express from 'express';
+import mysql from 'mysql2/promise';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import crypto from 'crypto';
+import helmet from 'helmet';
+import cors from 'cors';
+import dotenv from 'dotenv';
+
 
 dotenv.config();
 
@@ -19,4 +20,4 @@ const pool = mysql.createPool({
     queueLimit: 0,
 });
 
-module.exports = pool.promise();
+export default pool.promise();
