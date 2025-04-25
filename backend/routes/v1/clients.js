@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticateJWT, requireAuth } from '../../middlewares/middlewares.js'
+import { authenticateJWT, requireAuth, validatePagination } from '../../middlewares/middlewares.js'
 import db from '../../database_connection.js';
 const router = express.Router();
 
@@ -110,14 +110,13 @@ router.post('/v1/clients/:id/enroll', authenticateJWT, async (req, res, next) =>
 });
 
 // get all clients with pagination support. External systems with api keys can use this endpoint
-router.get('/v1/clients', requireAuth, async (req, res, next) => {
-    const { page = 1, limit = 10 } = req.query;
-    const offset = (page - 1) * limit;
+router.get('/v1/clients', requireAuth, validatePagination, async (req, res, next) => {
+    const { limit, offset } = req.pagination;
 
     try {
+        // sanitize the arguments later
         const [clients] = await db.execute(
-            'SELECT * FROM clients WHERE user_id = ? ORDER BY id LIMIT ? OFFSET ?',
-            [req.authType === 'jwt' ? req.user.id : 0, parseInt(limit), parseInt(offset)]
+            `SELECT * FROM clients ORDER BY id LIMIT ${limit} OFFSET ${offset}`
         );
 
         const clientsWithData = await Promise.all(
@@ -156,16 +155,16 @@ router.get('/v1/clients', requireAuth, async (req, res, next) => {
 });
 
 // search for clients (with pagination support). External systems with api keys can use this endpoint
-router.get('/v1/clients/search', requireAuth, async (req, res, next) => {
-    const { query, page = 1, limit = 10 } = req.query;
+router.get('/v1/clients/search', requireAuth, validatePagination, async (req, res, next) => {
+    const { limit, offset } = req.pagination;
+    const { query } = req.query;
     if (!query) return res.status(400).json({ error: 'Query parameter is required' });
 
-    const offset = (page - 1) * limit;
-
     try {
+        // sanitize the arguments later
         const [clients] = await db.execute(
-            'SELECT * FROM clients WHERE (first_name LIKE ? OR last_name LIKE ?) AND user_id = ? ORDER BY id LIMIT ? OFFSET ?',
-            [`%${query}%`, `%${query}%`, req.authType === 'jwt' ? req.user.id : 0, parseInt(limit), parseInt(offset)]
+            `SELECT * FROM clients WHERE (first_name LIKE ? OR last_name LIKE ?) ORDER BY id LIMIT ${limit} OFFSET ${offset}`,
+            [`%${query}%`, `%${query}%`, parseInt(limit), parseInt(offset)]
         );
 
         const clientsWithData = await Promise.all(

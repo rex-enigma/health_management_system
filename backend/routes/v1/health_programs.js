@@ -1,5 +1,5 @@
 import express from 'express';
-import { authenticateJWT, requireAuth } from '../../middlewares/middlewares.js'
+import { authenticateJWT, requireAuth, validatePagination } from '../../middlewares/middlewares.js'
 import db from '../../database_connection.js';
 const router = express.Router();
 
@@ -114,14 +114,13 @@ router.get('/v1/health-programs/:id', requireAuth, async (req, res, next) => {
 });
 
 // get all health programs with pagination
-router.get('/v1/health-programs', requireAuth, async (req, res, next) => {
-    const { page = 1, limit = 10 } = req.query;
-    const offset = (page - 1) * limit;
+router.get('/v1/health-programs', requireAuth, validatePagination, async (req, res, next) => {
+    const { limit, offset } = req.pagination;
 
     try {
+        // sanitize the arguments later
         const [programs] = await db.execute(
-            'SELECT * FROM health_programs ORDER BY id LIMIT ? OFFSET ?',
-            [parseInt(limit), parseInt(offset)]
+            `SELECT * FROM health_programs ORDER BY id LIMIT ${limit} OFFSET ${offset}`
         );
 
         const programsData = await Promise.all(
@@ -159,16 +158,15 @@ router.get('/v1/health-programs', requireAuth, async (req, res, next) => {
 });
 
 // search for health programs with pagination
-router.get('/v1/health-programs/search', requireAuth, async (req, res, next) => {
-    const { query, page = 1, limit = 10 } = req.query;
+router.get('/v1/health-programs/search', requireAuth, validatePagination, async (req, res, next) => {
+    const { limit, offset } = req.pagination;
+    const { query } = req.query;
     if (!query) return res.status(400).json({ error: 'Query parameter is required' });
-
-    const offset = (page - 1) * limit;
 
     try {
         const [programs] = await db.execute(
-            'SELECT * FROM health_programs WHERE name LIKE ? ORDER BY id LIMIT ? OFFSET ?',
-            [`%${query}%`, parseInt(limit), parseInt(offset)]
+            `SELECT * FROM health_programs WHERE name LIKE ? ORDER BY id LIMIT ${limit} OFFSET ${offset}`,
+            [`%${query}%`]
         );
 
         const programsData = await Promise.all(
