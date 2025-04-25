@@ -164,4 +164,51 @@ router.get('/v1/health-programs', requireAuth, async (req, res, next) => {
     }
 });
 
+// search for health programs with pagination
+router.get('/v1/health-programs/search', requireAuth, async (req, res, next) => {
+    const { query, page = 1, limit = 10 } = req.query;
+    if (!query) return res.status(400).json({ error: 'Query parameter is required' });
+
+    const offset = (page - 1) * limit;
+
+    try {
+        const [programs] = await db.execute(
+            'SELECT * FROM health_programs WHERE name LIKE ? ORDER BY id LIMIT ? OFFSET ?',
+            [`%${query}%`, parseInt(limit), parseInt(offset)]
+        );
+
+        const programsData = await Promise.all(
+            programs.map(async (program) => {
+                let eligibilityCriteria = null;
+                if (program.eligibility_criteria_id) {
+                    const [criteria] = await db.execute(
+                        'SELECT ec.id, ec.min_age AS minAge, ec.max_age AS maxAge, d.diagnosis_name AS diagnosis_name ' +
+                        'FROM eligibility_criteria ec JOIN diagnoses d ON ec.required_diagnosis_id = d.id WHERE ec.id = ?',
+                        [program.eligibility_criteria_id]
+                    );
+                    eligibilityCriteria = criteria.length > 0 ? criteria[0] : null;
+                }
+
+                const programData = {
+                    id: program.id,
+                    name: program.name,
+                    image_path: program.image_path,
+                    eligibility_criteria: eligibilityCriteria,
+                };
+                if (req.authType === 'jwt') {
+                    programData.description = program.description;
+                    programData.start_date = program.start_date;
+                    programData.end_date = program.end_date;
+                }
+                return programData;
+            })
+        );
+
+        res.status(200).json(programsData);
+    } catch (error) {
+        console.error('Health program search error:', error);
+        next(error);
+    }
+});
+
 export default router;
