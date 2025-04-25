@@ -8,6 +8,7 @@
 .build/
 .buildlog/
 .history
+./backend/node_modules
 .svn/
 .swiftpm/
 migrate_working_dir/
