@@ -4,6 +4,7 @@ import db from '../../database_connection.js';
 
 const router = express.Router();
 
+// get all diagnoses
 router.get('/v1/diagnoses', authenticateJWT, async (req, res, next) => {
     const { page = 1, limit = 10 } = req.query;
     const offset = (page - 1) * limit;
