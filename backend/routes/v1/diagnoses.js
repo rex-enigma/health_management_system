@@ -1,18 +1,16 @@
 import express from 'express';
-import { authenticateJWT } from '../../middlewares/middlewares.js'
+import { authenticateJWT, validatePagination } from '../../middlewares/middlewares.js'
 import db from '../../database_connection.js';
 
 const router = express.Router();
 
 // get all diagnoses
-router.get('/v1/diagnoses', authenticateJWT, async (req, res, next) => {
-    const { page = 1, limit = 10 } = req.query;
-    const offset = (page - 1) * limit;
+router.get('/v1/diagnoses', validatePagination, async (req, res, next) => {
+    const { limit, offset } = req.pagination;
 
     try {
         const [diagnoses] = await db.execute(
-            'SELECT id, diagnosis_name FROM diagnoses ORDER BY diagnosis_name LIMIT ? OFFSET ?',
-            [parseInt(limit), parseInt(offset)]
+            `SELECT id, diagnosis_name FROM diagnoses ORDER BY diagnosis_name LIMIT ${limit} OFFSET ${offset}`,
         );
         res.status(200).json({ diagnoses });
     } catch (error) {
