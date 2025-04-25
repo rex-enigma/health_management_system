@@ -65,3 +65,9 @@ export const requireAuth = (req, res, next) => {
         return authenticateJWT(req, res, next);
     }
 };
+
+
+export const globalErrorHandler = (err, req, res, next) => {
+    console.error('Error:', err.stack);
+    res.status(500).json({ error: 'Internal server error' });
+};
