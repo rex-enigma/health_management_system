@@ -64,7 +64,7 @@ router.post('/v1/clients', authenticateJWT, async (req, res, next) => {
                 contact_info,
                 address,
                 diagnoses: diagnosisObjects,
-                created_by: user[0]
+                registered_by: user[0]
             });
         } catch (error) {
             await connection.rollback();
@@ -144,7 +144,7 @@ router.get('/v1/clients', requireAuth, validatePagination, async (req, res, next
                     profile_image_path: client.profile_image_path,
                     enrolled_programs: programs,
                     diagnoses,
-                    created_by: {
+                    registered_by: {
                         id: client.user_id,
                         first_name: client.first_name,
                         last_name: client.last_name,
@@ -201,7 +201,7 @@ router.get('/v1/clients/search', requireAuth, validatePagination, async (req, re
                     profile_image_path: client.profile_image_path,
                     enrolled_programs: programs,
                     diagnoses,
-                    created_by: {
+                    registered_by: {
                         id: client.user_id,
                         first_name: client.first_name,
                         last_name: client.last_name,
@@ -252,7 +252,7 @@ router.get('/v1/clients/:id', requireAuth, async (req, res, next) => {
             profile_image_path: client[0].profile_image_path,
             enrolled_programs: programs,
             diagnoses,
-            created_by: {
+            registered_by: {
                 id: client[0].user_id,
                 first_name: client[0].first_name,
                 last_name: client[0].last_name,
