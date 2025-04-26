@@ -49,6 +49,11 @@ router.post('/v1/clients', authenticateJWT, async (req, res, next) => {
                 );
             }
 
+            const [user] = await connection.execute(
+                'SELECT id, first_name, last_name, email, phone_number, profile_image_path FROM users WHERE id = ?',
+                [req.user.id]
+            );
+
             await connection.commit();
             res.status(201).json({
                 id: clientId,
@@ -58,7 +63,8 @@ router.post('/v1/clients', authenticateJWT, async (req, res, next) => {
                 date_of_birth,
                 contact_info,
                 address,
-                diagnoses: diagnosisObjects
+                diagnoses: diagnosisObjects,
+                created_by: user[0]
             });
         } catch (error) {
             await connection.rollback();
@@ -116,7 +122,8 @@ router.get('/v1/clients', requireAuth, validatePagination, async (req, res, next
     try {
         // sanitize the arguments later
         const [clients] = await db.execute(
-            `SELECT * FROM clients ORDER BY id LIMIT ${limit} OFFSET ${offset}`
+            'SELECT c.*, u.id AS user_id, u.first_name, u.last_name, u.email, u.phone_number, u.profile_image_path ' +
+            `FROM clients c JOIN users u ON c.user_id = u.id WHERE c.user_id = ? ORDER BY c.id LIMIT ${limit} OFFSET ${offset}`
         );
 
         const clientsWithData = await Promise.all(
@@ -137,6 +144,14 @@ router.get('/v1/clients', requireAuth, validatePagination, async (req, res, next
                     profile_image_path: client.profile_image_path,
                     enrolled_programs: programs,
                     diagnoses,
+                    created_by: {
+                        id: client.user_id,
+                        first_name: client.first_name,
+                        last_name: client.last_name,
+                        email: client.email,
+                        phone_number: client.phone_number,
+                        profile_image_path: client.profile_image_path
+                    }
                 };
                 if (req.authType === 'jwt') {
                     clientData.date_of_birth = client.date_of_birth;
@@ -163,8 +178,9 @@ router.get('/v1/clients/search', requireAuth, validatePagination, async (req, re
     try {
         // sanitize the arguments later
         const [clients] = await db.execute(
-            `SELECT * FROM clients WHERE (first_name LIKE ? OR last_name LIKE ?) ORDER BY id LIMIT ${limit} OFFSET ${offset}`,
-            [`%${query}%`, `%${query}%`, parseInt(limit), parseInt(offset)]
+            'SELECT c.*, u.id AS user_id, u.first_name, u.last_name, u.email, u.phone_number, u.profile_image_path ' +
+            `FROM clients c JOIN users u ON c.user_id = u.id WHERE (c.first_name LIKE ? OR c.last_name LIKE ?) AND c.user_id = ? ORDER BY c.id LIMIT ${limit} OFFSET ${offset}`,
+            [`%${query}%`, `%${query}%`]
         );
 
         const clientsWithData = await Promise.all(
@@ -185,6 +201,14 @@ router.get('/v1/clients/search', requireAuth, validatePagination, async (req, re
                     profile_image_path: client.profile_image_path,
                     enrolled_programs: programs,
                     diagnoses,
+                    created_by: {
+                        id: client.user_id,
+                        first_name: client.first_name,
+                        last_name: client.last_name,
+                        email: client.email,
+                        phone_number: client.phone_number,
+                        profile_image_path: client.profile_image_path
+                    }
                 };
                 if (req.authType === 'jwt') {
                     clientData.date_of_birth = client.date_of_birth;
@@ -207,7 +231,8 @@ router.get('/v1/clients/:id', requireAuth, async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const [client] = await db.execute('SELECT * FROM clients WHERE id = ? AND user_id = ?', [id, req.authType === 'jwt' ? req.user.id : 0]);
+        const [client] = await db.execute('SELECT c.*, u.id AS user_id, u.first_name, u.last_name, u.email, u.phone_number, u.profile_image_path ' +
+            'FROM clients c JOIN users u ON c.user_id = u.id WHERE c.id = ?', [id]);
         if (client.length === 0) return res.status(404).json({ error: 'Client not found or not authorized' });
 
         const [programs] = await db.execute(
@@ -227,6 +252,14 @@ router.get('/v1/clients/:id', requireAuth, async (req, res, next) => {
             profile_image_path: client[0].profile_image_path,
             enrolled_programs: programs,
             diagnoses,
+            created_by: {
+                id: client[0].user_id,
+                first_name: client[0].first_name,
+                last_name: client[0].last_name,
+                email: client[0].email,
+                phone_number: client[0].phone_number,
+                profile_image_path: client[0].profile_image_path
+            }
         };
 
         if (req.authType === 'jwt') {

@@ -52,6 +52,11 @@ router.post('/v1/health-programs', authenticateJWT, async (req, res, next) => {
                 [name, description, start_date, end_date, req.user.id, image_path, eligibilityCriteriaId]
             );
 
+            const [user] = await connection.execute(
+                'SELECT id, first_name, last_name, email, phone_number, profile_image_path FROM users WHERE id = ?',
+                [req.user.id]
+            );
+
             await connection.commit();
 
             res.status(201).json({
@@ -62,6 +67,7 @@ router.post('/v1/health-programs', authenticateJWT, async (req, res, next) => {
                 end_date,
                 image_path,
                 eligibility_criteria: eligibilityCriteriaResponse,
+                created_by: user[0]
             });
         } catch (error) {
             await connection.rollback();
@@ -80,7 +86,11 @@ router.get('/v1/health-programs/:id', requireAuth, async (req, res, next) => {
     const { id } = req.params;
 
     try {
-        const [program] = await db.execute('SELECT * FROM health_programs WHERE id = ?', [id]);
+        const [program] = await db.execute(
+            'SELECT hp.*, u.id AS user_id, u.first_name, u.last_name, u.email, u.phone_number, u.profile_image_path ' +
+            'FROM health_programs hp JOIN users u ON hp.created_by_user_id = u.id WHERE hp.id = ?',
+            [id]
+        );
         if (program.length === 0) return res.status(404).json({ error: 'Health program not found' });
 
         let eligibilityCriteria = null;
@@ -98,6 +108,14 @@ router.get('/v1/health-programs/:id', requireAuth, async (req, res, next) => {
             name: program[0].name,
             image_path: program[0].image_path,
             eligibility_criteria: eligibilityCriteria,
+            created_by: {
+                id: program[0].user_id,
+                first_name: program[0].first_name,
+                last_name: program[0].last_name,
+                email: program[0].email,
+                phone_number: program[0].phone_number,
+                profile_image_path: program[0].profile_image_path
+            }
         };
 
         if (req.authType === 'jwt') {
@@ -120,7 +138,8 @@ router.get('/v1/health-programs', requireAuth, validatePagination, async (req, r
     try {
         // sanitize the arguments later
         const [programs] = await db.execute(
-            `SELECT * FROM health_programs ORDER BY id LIMIT ${limit} OFFSET ${offset}`
+            'SELECT hp.*, u.id AS user_id, u.first_name, u.last_name, u.email, u.phone_number, u.profile_image_path ' +
+            `FROM health_programs hp JOIN users u ON hp.created_by_user_id = u.id ORDER BY hp.id LIMIT ${limit} OFFSET ${offset}`
         );
 
         const programsData = await Promise.all(
@@ -140,6 +159,14 @@ router.get('/v1/health-programs', requireAuth, validatePagination, async (req, r
                     name: program.name,
                     image_path: program.image_path,
                     eligibility_criteria: eligibilityCriteria,
+                    created_by: {
+                        id: program.user_id,
+                        first_name: program.first_name,
+                        last_name: program.last_name,
+                        email: program.email,
+                        phone_number: program.phone_number,
+                        profile_image_path: program.profile_image_path
+                    }
                 };
                 if (req.authType === 'jwt') {
                     programData.description = program.description;
@@ -165,7 +192,8 @@ router.get('/v1/health-programs/search', requireAuth, validatePagination, async 
 
     try {
         const [programs] = await db.execute(
-            `SELECT * FROM health_programs WHERE name LIKE ? ORDER BY id LIMIT ${limit} OFFSET ${offset}`,
+            'SELECT hp.*, u.id AS user_id, u.first_name, u.last_name, u.email, u.phone_number, u.profile_image_path ' +
+            `FROM health_programs hp JOIN users u ON hp.created_by_user_id = u.id WHERE hp.name LIKE ? ORDER BY hp.id LIMIT ${limit} OFFSET ${offset}`,
             [`%${query}%`]
         );
 
@@ -186,6 +214,14 @@ router.get('/v1/health-programs/search', requireAuth, validatePagination, async 
                     name: program.name,
                     image_path: program.image_path,
                     eligibility_criteria: eligibilityCriteria,
+                    created_by: {
+                        id: program.user_id,
+                        first_name: program.first_name,
+                        last_name: program.last_name,
+                        email: program.email,
+                        phone_number: program.phone_number,
+                        profile_image_path: program.profile_image_path
+                    }
                 };
                 if (req.authType === 'jwt') {
                     programData.description = program.description;
