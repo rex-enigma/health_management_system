@@ -4,9 +4,11 @@ import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/app/app.router.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load();
   await setupLocator();
   setupDialogUi();
   setupBottomSheetUi();
