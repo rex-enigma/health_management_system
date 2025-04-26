@@ -117,32 +117,38 @@ class EligibilityCriteria {
     required this.requiredDiagnosis,
   });
 
-  bool get isEmpty => minAge == null && maxAge == null && requiredDiagnosis == null;
+  bool get isEmpty => minAge == null && maxAge == null;
 
   bool isClientEligible(ClientEntity client) {
-    throw Exception();
+    // Check age eligibility
+    final clientAge = _getClientAge(client.dateOfBirth);
+    if (minAge != null && clientAge < minAge!) {
+      return false;
+    }
+    if (maxAge != null && clientAge > maxAge!) {
+      return false;
+    }
+
+    // Check diagnosis eligibility
+    return client.currentDiagnoses.any((diagnosis) => diagnosis.name == requiredDiagnosis.name);
   }
 
-  int _getClientAge() {
-    throw Exception();
+  int _getClientAge(DateTime dateOfBirth) {
+    final now = DateTime.now();
+    int age = now.year - dateOfBirth.year;
+    if (now.month < dateOfBirth.month || (now.month == dateOfBirth.month && now.day < dateOfBirth.day)) {
+      age--;
+    }
+    return age;
   }
 
-  /// Named constructor to create an `EligibilityCriteria` from a map.
-  factory EligibilityCriteria.fromMap({required Map<String, dynamic> eligibilityCriteriaMap}) {
-    return EligibilityCriteria(
-      id: eligibilityCriteriaMap['id'] as int,
-      minAge: eligibilityCriteriaMap['min_age'] as int?,
-      maxAge: eligibilityCriteriaMap['max_age'] as int?,
-      requiredDiagnosis: Diagnosis.fromString(eligibilityCriteriaMap['diagnosis_name'] as String),
-    );
+  @override
+  bool operator ==(Object other) {
+    return other is EligibilityCriteria && id == other.id && minAge == other.minAge && maxAge == other.maxAge && requiredDiagnosis == other.requiredDiagnosis;
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'min_age': minAge,
-      'max_age': maxAge,
-      'diagnosis_name': requiredDiagnosis.name,
-    };
+  @override
+  int get hashCode {
+    return id.hashCode ^ minAge.hashCode ^ maxAge.hashCode ^ requiredDiagnosis.hashCode;
   }
 }
