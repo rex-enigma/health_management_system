@@ -136,4 +136,13 @@ class EligibilityCriteria {
       requiredDiagnosis: Diagnosis.fromString(eligibilityCriteriaMap['diagnosis_name'] as String),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'min_age': minAge,
+      'max_age': maxAge,
+      'diagnosis_name': requiredDiagnosis.name,
+    };
+  }
 }
