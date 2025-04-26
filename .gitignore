@@ -10,6 +10,7 @@
 .history
 backend/node_modules/
 backend/.env
+.env
 backend/eslint.config.mjs
 .svn/
 .swiftpm/
