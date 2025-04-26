@@ -27,7 +27,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     required String contactInfo,
     String? address,
     String? profileImagePath,
-    required List<Diagnosis> diagnosisNames,
+    required List<String> diagnosisNames,
   }) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
@@ -48,7 +48,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
         'contact_info': contactInfo,
         'address': address,
         'profile_image_path': profileImagePath,
-        'diagnosis_names': diagnosisNames.map((diagnosis) => diagnosis.name),
+        'diagnosis_names': diagnosisNames,
       }),
     );
 

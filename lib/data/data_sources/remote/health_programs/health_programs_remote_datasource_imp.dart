@@ -8,7 +8,7 @@ abstract class HealthProgramsRemoteDataSource {
     required String startDate,
     String? endDate,
     String? imagePath,
-    EligibilityCriteria? eligibilityCriteria,
+    Map<String, dynamic>? eligibilityCriteria,
   });
 
   Future<HealthProgramModel> getHealthProgram(int healthProgramId);

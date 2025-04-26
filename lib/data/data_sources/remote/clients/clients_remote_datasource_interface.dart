@@ -10,7 +10,7 @@ abstract class ClientsRemoteDataSource {
     required String contactInfo,
     String? address,
     String? profileImagePath,
-    required List<Diagnosis> diagnosisNames,
+    required List<String> diagnosisNames,
   });
 
   Future<List<ClientModel>> getAllClients({int page = 1, int limit = 10});

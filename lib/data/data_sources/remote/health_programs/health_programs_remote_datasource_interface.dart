@@ -25,7 +25,7 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
     required String startDate,
     String? endDate,
     String? imagePath,
-    EligibilityCriteria? eligibilityCriteria,
+    Map<String, dynamic>? eligibilityCriteria,
   }) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
@@ -44,7 +44,7 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
         'start_date': startDate,
         'end_date': endDate,
         'image_path': imagePath,
-        'eligibility_criteria': eligibilityCriteria?.toJson(),
+        'eligibility_criteria': eligibilityCriteria,
       }),
     );
 
