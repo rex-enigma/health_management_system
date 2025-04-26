@@ -6,6 +6,20 @@ import 'package:health_managment_system/data/repositories/clients/clients_repo_i
 import 'package:health_managment_system/data/repositories/diagnoses/diagnoses_repo_imp.dart';
 import 'package:health_managment_system/data/repositories/health_programs/health_progams_repo_imp.dart';
 import 'package:health_managment_system/data/repositories/users/users_repo_imp.dart';
+import 'package:health_managment_system/domain/usecases/create_client_usecase.dart';
+import 'package:health_managment_system/domain/usecases/create_health_program_usecase.dart';
+import 'package:health_managment_system/domain/usecases/delete_client_usecase.dart';
+import 'package:health_managment_system/domain/usecases/delete_health_program_usecase.dart';
+import 'package:health_managment_system/domain/usecases/enroll_client_usecase.dart';
+import 'package:health_managment_system/domain/usecases/get_all_clients_usecase.dart';
+import 'package:health_managment_system/domain/usecases/get_all_diagnoses_usecase.dart';
+import 'package:health_managment_system/domain/usecases/get_all_health_programs_usecase.dart';
+import 'package:health_managment_system/domain/usecases/get_client_usecase.dart';
+import 'package:health_managment_system/domain/usecases/get_health_programs_usecase.dart';
+import 'package:health_managment_system/domain/usecases/login_use_usecase.dart';
+import 'package:health_managment_system/domain/usecases/search_clients_usecase.dart';
+import 'package:health_managment_system/domain/usecases/search_health_programs_usecase.dart';
+import 'package:health_managment_system/domain/usecases/sign_up_usecase.dart';
 import 'package:health_managment_system/ui/bottom_sheets/notice/notice_sheet.dart';
 import 'package:health_managment_system/ui/dialogs/info_alert/info_alert_dialog.dart';
 import 'package:health_managment_system/ui/views/home/home_view.dart';
@@ -35,6 +49,21 @@ import 'package:stacked_services/stacked_services.dart';
     LazySingleton(classType: HealthProgramsRepositoryImpl),
     LazySingleton(classType: DiagnosesRepositoryImpl),
     LazySingleton(classType: ClientsRepositoryImpl),
+    // usecases
+    LazySingleton(classType: CreateClientUseCase),
+    LazySingleton(classType: CreateHealthProgramUseCase),
+    LazySingleton(classType: DeleteClientUseCase),
+    LazySingleton(classType: DeleteHealthProgramUseCase),
+    LazySingleton(classType: EnrollClientUseCase),
+    LazySingleton(classType: GetAllClientsUseCase),
+    LazySingleton(classType: GetAllDiagnosesUseCase),
+    LazySingleton(classType: GetAllHealthProgramsUseCase),
+    LazySingleton(classType: GetClientUseCase),
+    LazySingleton(classType: GetHealthProgramUseCase),
+    LazySingleton(classType: LoginUseCase),
+    LazySingleton(classType: SearchClientsUseCase),
+    LazySingleton(classType: SearchHealthProgramsUseCase),
+    LazySingleton(classType: SignupUseCase),
   ],
   bottomsheets: [
     StackedBottomsheet(classType: NoticeSheet),
