@@ -1,8 +1,9 @@
 import 'package:health_managment_system/data/models/health_program_model.dart';
-import 'package:health_managment_system/domain/entities/health_program_entity.dart';
+import 'package:dartz/dartz.dart';
+import 'package:health_managment_system/errors/failures.dart';
 
 abstract class HealthProgramsRemoteDataSource {
-  Future<HealthProgramModel> createHealthProgram({
+  Future<Either<Failure, HealthProgramModel>> createHealthProgram({
     required String name,
     required String description,
     required String startDate,
@@ -11,15 +12,15 @@ abstract class HealthProgramsRemoteDataSource {
     Map<String, dynamic>? eligibilityCriteria,
   });
 
-  Future<HealthProgramModel> getHealthProgram(int healthProgramId);
+  Future<Either<Failure, HealthProgramModel>> getHealthProgram(int healthProgramId);
 
-  Future<List<HealthProgramModel>> getAllHealthPrograms({int page = 1, int limit = 10});
+  Future<Either<Failure, List<HealthProgramModel>>> getAllHealthPrograms({int page = 1, int limit = 10});
 
-  Future<List<HealthProgramModel>> searchHealthPrograms({
+  Future<Either<Failure, List<HealthProgramModel>>> searchHealthPrograms({
     required String query,
     int page = 1,
     int limit = 10,
   });
 
-  Future<void> deleteHealthProgram(int healthProgramId);
+  Future<Either<Failure, int>> deleteHealthProgram(int healthProgramId);
 }

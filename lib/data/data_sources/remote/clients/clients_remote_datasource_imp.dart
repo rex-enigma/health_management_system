@@ -1,10 +1,10 @@
 import 'dart:convert';
+import 'package:dartz/dartz.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:health_managment_system/data/data_sources/remote/clients/clients_remote_datasource_interface.dart';
 import 'package:health_managment_system/data/models/client_model.dart';
-import 'package:health_managment_system/enums/diagnosis.dart';
-import 'package:health_managment_system/errors/exceptions.dart';
+import 'package:health_managment_system/errors/failures.dart';
 import 'package:http/http.dart' as http;
 
 class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
@@ -19,7 +19,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
   }
 
   @override
-  Future<ClientModel> createClient({
+  Future<Either<Failure, ClientModel>> createClient({
     required String firstName,
     required String lastName,
     required String gender,
@@ -31,7 +31,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
   }) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
-      throw AuthenticationException('No token found');
+      return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.post(
@@ -53,18 +53,18 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     );
 
     if (response.statusCode == 201) {
-      return ClientModel.fromMap(clientMap: jsonDecode(response.body));
+      return Right(ClientModel.fromMap(clientMap: jsonDecode(response.body)));
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to create client';
-      throw ServerException(error, statusCode: response.statusCode);
+      return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<List<ClientModel>> getAllClients({int page = 1, int limit = 10}) async {
+  Future<Either<Failure, List<ClientModel>>> getAllClients({int page = 1, int limit = 10}) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
-      throw AuthenticationException('No token found');
+      return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.get(
@@ -76,22 +76,22 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      return data.map((clientData) => ClientModel.fromMap(clientMap: clientData)).toList();
+      return Right(data.map((clientData) => ClientModel.fromMap(clientMap: clientData)).toList());
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to fetch clients';
-      throw ServerException(error, statusCode: response.statusCode);
+      return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<List<ClientModel>> searchClients({
+  Future<Either<Failure, List<ClientModel>>> searchClients({
     required String query,
     int page = 1,
     int limit = 10,
   }) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
-      throw AuthenticationException('No token found');
+      return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.get(
@@ -103,18 +103,18 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      return data.map((map) => ClientModel.fromMap(clientMap: map)).toList();
+      return Right(data.map((map) => ClientModel.fromMap(clientMap: map)).toList());
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to search clients';
-      throw ServerException(error, statusCode: response.statusCode);
+      return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<ClientModel> getClient(int id) async {
+  Future<Either<Failure, ClientModel>> getClient(int id) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
-      throw AuthenticationException('No token found');
+      return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.get(
@@ -125,18 +125,18 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     );
 
     if (response.statusCode == 200) {
-      return ClientModel.fromMap(clientMap: jsonDecode(response.body));
+      return Right(ClientModel.fromMap(clientMap: jsonDecode(response.body)));
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to fetch client';
-      throw ServerException(error, statusCode: response.statusCode);
+      return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<void> enrollClient(int clientId, List<int> healthProgramIds) async {
+  Future<Either<Failure, Unit>> enrollClient(int clientId, List<int> healthProgramIds) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
-      throw AuthenticationException('No token found');
+      return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.post(
@@ -151,18 +151,18 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     );
 
     if (response.statusCode == 200) {
-      return;
+      return Right(unit);
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to enroll client';
-      throw ServerException(error, statusCode: response.statusCode);
+      return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<int> deleteClient(int clientId) async {
+  Future<Either<Failure, int>> deleteClient(int clientId) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
-      throw AuthenticationException('No token found');
+      return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.delete(
@@ -176,7 +176,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
       return jsonDecode(response.body)['id'];
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to delete client';
-      throw ServerException(error, statusCode: response.statusCode);
+      return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 }

@@ -3,9 +3,9 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:health_managment_system/data/data_sources/remote/health_programs/health_programs_remote_datasource_imp.dart';
 import 'package:health_managment_system/data/models/health_program_model.dart';
-import 'package:health_managment_system/domain/entities/health_program_entity.dart';
-import 'package:health_managment_system/errors/exceptions.dart';
+import 'package:health_managment_system/errors/failures.dart';
 import 'package:http/http.dart' as http;
+import 'package:dartz/dartz.dart';
 
 class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSource {
   late http.Client client;
@@ -19,7 +19,7 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
   }
 
   @override
-  Future<HealthProgramModel> createHealthProgram({
+  Future<Either<Failure, HealthProgramModel>> createHealthProgram({
     required String name,
     required String description,
     required String startDate,
@@ -29,7 +29,7 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
   }) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
-      throw AuthenticationException('No token found');
+      return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.post(
@@ -49,18 +49,18 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
     );
 
     if (response.statusCode == 201) {
-      return HealthProgramModel.fromMap(healthProgramMap: jsonDecode(response.body));
+      return Right(HealthProgramModel.fromMap(healthProgramMap: jsonDecode(response.body)));
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to create health program';
-      throw ServerException(error, statusCode: response.statusCode);
+      return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<HealthProgramModel> getHealthProgram(int healthProgramId) async {
+  Future<Either<Failure, HealthProgramModel>> getHealthProgram(int healthProgramId) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
-      throw AuthenticationException('No token found');
+      return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.get(
@@ -71,18 +71,18 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
     );
 
     if (response.statusCode == 200) {
-      return HealthProgramModel.fromMap(healthProgramMap: jsonDecode(response.body));
+      return Right(HealthProgramModel.fromMap(healthProgramMap: jsonDecode(response.body)));
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to fetch health program';
-      throw ServerException(error, statusCode: response.statusCode);
+      return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<List<HealthProgramModel>> getAllHealthPrograms({int page = 1, int limit = 10}) async {
+  Future<Either<Failure, List<HealthProgramModel>>> getAllHealthPrograms({int page = 1, int limit = 10}) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
-      throw AuthenticationException('No token found');
+      return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.get(
@@ -94,22 +94,22 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      return data.map((healthProgramData) => HealthProgramModel.fromMap(healthProgramMap: healthProgramData)).toList();
+      return Right(data.map((healthProgramData) => HealthProgramModel.fromMap(healthProgramMap: healthProgramData)).toList());
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to fetch health programs';
-      throw ServerException(error, statusCode: response.statusCode);
+      return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<List<HealthProgramModel>> searchHealthPrograms({
+  Future<Either<Failure, List<HealthProgramModel>>> searchHealthPrograms({
     required String query,
     int page = 1,
     int limit = 10,
   }) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
-      throw AuthenticationException('No token found');
+      return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.get(
@@ -121,18 +121,18 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      return data.map((healthProgramData) => HealthProgramModel.fromMap(healthProgramMap: healthProgramData)).toList();
+      return Right(data.map((healthProgramData) => HealthProgramModel.fromMap(healthProgramMap: healthProgramData)).toList());
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to search health programs';
-      throw ServerException(error, statusCode: response.statusCode);
+      return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<int> deleteHealthProgram(int healthProgramId) async {
+  Future<Either<Failure, int>> deleteHealthProgram(int healthProgramId) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
-      throw AuthenticationException('No token found');
+      return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.delete(
@@ -143,10 +143,10 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
     );
 
     if (response.statusCode == 200) {
-      return jsonDecode(response.body)['id'];
+      return Right(jsonDecode(response.body)['id']);
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to delete health program';
-      throw ServerException(error, statusCode: response.statusCode);
+      return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 }

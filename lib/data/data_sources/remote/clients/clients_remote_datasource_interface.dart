@@ -1,8 +1,10 @@
 import 'package:health_managment_system/data/models/client_model.dart';
 import 'package:health_managment_system/enums/diagnosis.dart';
+import 'package:dartz/dartz.dart';
+import 'package:health_managment_system/errors/failures.dart';
 
 abstract class ClientsRemoteDataSource {
-  Future<ClientModel> createClient({
+  Future<Either<Failure, ClientModel>> createClient({
     required String firstName,
     required String lastName,
     required String gender,
@@ -13,17 +15,17 @@ abstract class ClientsRemoteDataSource {
     required List<String> diagnosisNames,
   });
 
-  Future<List<ClientModel>> getAllClients({int page = 1, int limit = 10});
+  Future<Either<Failure, List<ClientModel>>> getAllClients({int page = 1, int limit = 10});
 
-  Future<List<ClientModel>> searchClients({
+  Future<Either<Failure, List<ClientModel>>> searchClients({
     required String query,
     int page = 1,
     int limit = 10,
   });
 
-  Future<ClientModel> getClient(int id);
+  Future<Either<Failure, ClientModel>> getClient(int id);
 
-  Future<void> enrollClient(int clientId, List<int> healthProgramIds);
+  Future<Either<Failure, Unit>> enrollClient(int clientId, List<int> healthProgramIds);
 
-  Future<void> deleteClient(int clientId);
+  Future<Either<Failure, int>> deleteClient(int clientId);
 }
