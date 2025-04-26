@@ -233,7 +233,7 @@ router.get('/v1/clients/:id', requireAuth, async (req, res, next) => {
     try {
         const [client] = await db.execute('SELECT c.*, u.id AS user_id, u.first_name, u.last_name, u.email, u.phone_number, u.profile_image_path ' +
             'FROM clients c JOIN users u ON c.user_id = u.id WHERE c.id = ?', [id]);
-        if (client.length === 0) return res.status(404).json({ error: 'Client not found or not authorized' });
+        if (client.length === 0) return res.status(404).json({ error: 'Client not found' });
 
         const [programs] = await db.execute(
             'SELECT hp.* FROM health_programs hp JOIN health_program_enrollments hpe ON hp.id = hpe.health_program_id WHERE hpe.client_id = ?',
@@ -282,7 +282,7 @@ router.delete('/v1/clients/:id', authenticateJWT, async (req, res, next) => {
     try {
         const [client] = await db.execute('SELECT * FROM clients WHERE id = ? AND user_id = ?', [id, req.user.id]);
         if (client.length === 0) {
-            return res.status(404).json({ error: 'Client not found or not authorized' });
+            return res.status(404).json({ error: 'Client not found' });
         }
 
         await db.execute('DELETE FROM clients WHERE id = ?', [id]);

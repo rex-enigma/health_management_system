@@ -245,7 +245,7 @@ router.delete('/v1/health-programs/:id', authenticateJWT, async (req, res, next)
     try {
         const [program] = await db.execute('SELECT * FROM health_programs WHERE id = ? AND created_by_user_id = ?', [id, req.user.id]);
         if (program.length === 0) {
-            return res.status(404).json({ error: 'Health program not found or not authorized' });
+            return res.status(404).json({ error: 'Health program not found' });
         }
 
         await db.execute('DELETE FROM health_programs WHERE id = ?', [id]);
