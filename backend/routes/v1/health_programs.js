@@ -202,7 +202,7 @@ router.get('/v1/health-programs/search', requireAuth, validatePagination, async 
                 let eligibilityCriteria = null;
                 if (program.eligibility_criteria_id) {
                     const [criteria] = await db.execute(
-                        'SELECT ec.id, ec.min_age AS minAge, ec.max_age AS maxAge, d.diagnosis_name AS diagnosis_name ' +
+                        'SELECT ec.id, ec.min_age, ec.max_age, d.diagnosis_name ' +
                         'FROM eligibility_criteria ec JOIN diagnoses d ON ec.required_diagnosis_id = d.id WHERE ec.id = ?',
                         [program.eligibility_criteria_id]
                     );
