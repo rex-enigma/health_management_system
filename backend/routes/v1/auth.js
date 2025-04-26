@@ -19,7 +19,7 @@ router.post('/v1/auth/signup', async (req, res, next) => {
             'INSERT INTO users (first_name, last_name, email, password, phone_number, profile_image_path) VALUES (?, ?, ?, ?, ?, ?)',
             [first_name, last_name, email, hashedPassword, phone_number, profile_image_path]
         );
-        res.status(201).json({ id: result.insertId, first_name, last_name, email });
+        res.status(201).json({ id: result.insertId, first_name, last_name, email, phone_number, profile_image_path });
     } catch (error) {
         console.error('Signup error:', error);
         next(error);
