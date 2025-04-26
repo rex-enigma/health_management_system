@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:health_managment_system/app/app.locator.dart';
-import 'package:health_managment_system/data/data_sources/remote/health_programs/health_programs_remote_datasource_imp.dart';
+import 'package:health_managment_system/data/data_sources/remote/health_programs/health_programs_remote_datasource_interface.dart';
 import 'package:health_managment_system/domain/entities/health_program_entity.dart';
 import 'package:health_managment_system/domain/repository_interface/health_programs/health_programs_repo_interface.dart';
 import 'package:health_managment_system/errors/failures.dart';
