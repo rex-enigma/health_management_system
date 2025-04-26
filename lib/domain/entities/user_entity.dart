@@ -18,15 +18,15 @@ class UserEntity {
   });
 
   /// Constructor for creating a new user instance before persistence.
-  UserEntity.insert({
-    required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    this.phoneNumber,
-    this.profileImagePath,
-    required this.createdAt,
-  });
+  // UserEntity.insert({
+  //   required this.id,
+  //   required this.firstName,
+  //   required this.lastName,
+  //   required this.email,
+  //   this.phoneNumber,
+  //   this.profileImagePath,
+  //   required this.createdAt,
+  // });
 
   /// Allows creating a modified copy of the current instance.
   UserEntity copyWith({

@@ -33,21 +33,21 @@ class ClientEntity {
     required this.createdAt,
   });
 
-  /// Constructor for creating a new client instance before persistence.
-  ClientEntity.insert({
-    required this.id,
-    this.profileImagePath,
-    required this.firstName,
-    required this.lastName,
-    required this.gender,
-    required this.dateOfBirth,
-    required this.contactInfo,
-    this.address,
-    this.currentDiagnoses = const [],
-    this.enrolledPrograms = const [],
-    required this.registeredByUser,
-    required this.createdAt,
-  });
+  // /// Constructor for creating a new client instance before persistence.
+  // ClientEntity.insert({
+  //   required this.id,
+  //   this.profileImagePath,
+  //   required this.firstName,
+  //   required this.lastName,
+  //   required this.gender,
+  //   required this.dateOfBirth,
+  //   required this.contactInfo,
+  //   this.address,
+  //   this.currentDiagnoses = const [],
+  //   this.enrolledPrograms = const [],
+  //   required this.registeredByUser,
+  //   required this.createdAt,
+  // });
 
   /// Allows creating a modified copy of the current instance.
   ClientEntity copyWith({

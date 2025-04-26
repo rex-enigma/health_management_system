@@ -26,17 +26,17 @@ class HealthProgramEntity {
   });
 
   /// Constructor for creating a new health program instance before persistence.
-  HealthProgramEntity.insert({
-    required this.id,
-    this.imagePath,
-    required this.name,
-    required this.description,
-    required this.startDate,
-    this.endDate,
-    this.eligibilityCriteria,
-    required this.createdByUser,
-    required this.createdAt,
-  });
+  // HealthProgramEntity.insert({
+  //   required this.id,
+  //   this.imagePath,
+  //   required this.name,
+  //   required this.description,
+  //   required this.startDate,
+  //   this.endDate,
+  //   this.eligibilityCriteria,
+  //   required this.createdByUser,
+  //   required this.createdAt,
+  // });
 
   /// Allows creating a modified copy of the current instance.
   HealthProgramEntity copyWith({
@@ -125,5 +125,15 @@ class EligibilityCriteria {
 
   int _getClientAge() {
     throw Exception();
+  }
+
+  /// Named constructor to create an `EligibilityCriteria` from a map.
+  factory EligibilityCriteria.fromMap({required Map<String, dynamic> eligibilityCriteriaMap}) {
+    return EligibilityCriteria(
+      id: eligibilityCriteriaMap['id'] as int,
+      minAge: eligibilityCriteriaMap['min_age'] as int?,
+      maxAge: eligibilityCriteriaMap['max_age'] as int?,
+      requiredDiagnosis: Diagnosis.fromString(eligibilityCriteriaMap['diagnosis_name'] as String),
+    );
   }
 }
