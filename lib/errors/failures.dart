@@ -13,3 +13,12 @@ class ServerFailure extends Failure {
 class AuthenticationFailure extends Failure {
   AuthenticationFailure(super.message);
 }
+
+class NotFoundFailure extends Failure {
+  final int? statusCode;
+  NotFoundFailure(super.message, {this.statusCode});
+}
+
+class IneligibleClientFailure extends Failure {
+  IneligibleClientFailure(super.message);
+}
