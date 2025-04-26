@@ -111,14 +111,14 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, ClientModel>> getClient(int id) async {
+  Future<Either<Failure, ClientModel>> getClient(int clientId) async {
     final token = await secureStorage.read(key: 'jwt_token');
     if (token == null) {
       return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.get(
-      Uri.parse('$baseUrl/v1/clients/$id'),
+      Uri.parse('$baseUrl/v1/clients/$clientId'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -126,6 +126,8 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
 
     if (response.statusCode == 200) {
       return Right(ClientModel.fromMap(clientMap: jsonDecode(response.body)));
+    } else if (response.statusCode == 404) {
+      return Left(NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to fetch client';
       return Left(ServerFailure(error, statusCode: response.statusCode));
@@ -152,6 +154,8 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
 
     if (response.statusCode == 200) {
       return Right(unit);
+    } else if (response.statusCode == 404) {
+      return Left(NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to enroll client';
       return Left(ServerFailure(error, statusCode: response.statusCode));
@@ -174,6 +178,8 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['id'];
+    } else if (response.statusCode == 404) {
+      return Left(NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to delete client';
       return Left(ServerFailure(error, statusCode: response.statusCode));
