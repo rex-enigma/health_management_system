@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:health_managment_system/ui/common/app_colors.dart';
 import 'package:health_managment_system/ui/common/ui_helpers.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-
 import 'notice_sheet_model.dart';
 
 class NoticeSheet extends StackedView<NoticeSheetModel> {
-  final Function(SheetResponse)? completer;
   final SheetRequest request;
+  final Function(SheetResponse) completer;
+
   const NoticeSheet({
     Key? key,
-    required this.completer,
     required this.request,
+    required this.completer,
   }) : super(key: key);
 
   @override
@@ -22,35 +21,28 @@ class NoticeSheet extends StackedView<NoticeSheetModel> {
     Widget? child,
   ) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
-        ),
-      ),
+      padding: const EdgeInsets.all(16.0),
+      color: Colors.white,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            request.title!,
-            style: const TextStyle(fontSize: 25, fontWeight: FontWeight.w900),
+            'Notice',
+            style: Theme.of(context).textTheme.headlineSmall,
           ),
-          verticalSpaceTiny,
-          Text(
-            request.description!,
-            style: const TextStyle(fontSize: 14, color: kcMediumGrey),
-            maxLines: 3,
-            softWrap: true,
+          verticalSpaceMedium,
+          Text(viewModel.message),
+          verticalSpaceMedium,
+          ElevatedButton(
+            onPressed: viewModel.onConfirm,
+            child: const Text('OK'),
           ),
-          verticalSpaceLarge,
         ],
       ),
     );
   }
 
   @override
-  NoticeSheetModel viewModelBuilder(BuildContext context) => NoticeSheetModel();
+  NoticeSheetModel viewModelBuilder(BuildContext context) =>
+      NoticeSheetModel(completer, request.data as String);
 }
