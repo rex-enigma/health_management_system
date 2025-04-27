@@ -47,7 +47,7 @@ class SignupViewModel extends BaseViewModel {
         );
       },
       (user) {
-        _navigationService.clearStackAndShow(Routes.homeView);
+        _navigationService.clearStackAndShow(Routes.loginView);
       },
     );
   }
