@@ -12,7 +12,10 @@ class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
   late FlutterSecureStorage secureStorage;
   late String baseUrl;
 
-  UsersRemoteDataSourceImpl({http.Client? client, FlutterSecureStorage? flutterSecureStorage, String? baseUrl}) {
+  UsersRemoteDataSourceImpl(
+      {http.Client? client,
+      FlutterSecureStorage? flutterSecureStorage,
+      String? baseUrl}) {
     this.client = client ?? http.Client();
     this.secureStorage = flutterSecureStorage ?? FlutterSecureStorage();
     this.baseUrl = baseUrl ?? dotenv.env['BASE_URL'] as String;
@@ -53,7 +56,8 @@ class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, UserModel>> login(String email, String password) async {
+  Future<Either<Failure, UserModel>> login(
+      String email, String password) async {
     try {
       final response = await client.post(
         Uri.parse('$baseUrl/v1/auth/login'),

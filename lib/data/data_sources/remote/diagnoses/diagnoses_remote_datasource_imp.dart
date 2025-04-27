@@ -23,7 +23,8 @@ class DiagnosesRemoteDataSourceImpl implements DiagnosesRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, List<Diagnosis>>> getAllDiagnoses({int page = 1, int limit = 10}) async {
+  Future<Either<Failure, List<Diagnosis>>> getAllDiagnoses(
+      {int page = 1, int limit = 10}) async {
     try {
       final token = await secureStorage.read(key: 'jwt_token');
       if (token == null) {
@@ -39,10 +40,12 @@ class DiagnosesRemoteDataSourceImpl implements DiagnosesRemoteDataSource {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        final diagnoses = data.map((diagnosis) => Diagnosis.fromString(diagnosis)).toList();
+        final diagnoses =
+            data.map((diagnosis) => Diagnosis.fromString(diagnosis)).toList();
         return Right(diagnoses);
       } else {
-        final error = jsonDecode(response.body)['error'] ?? 'Failed to fetch diagnoses';
+        final error =
+            jsonDecode(response.body)['error'] ?? 'Failed to fetch diagnoses';
         return Left(ServerFailure(error, statusCode: response.statusCode));
       }
     } catch (e) {
