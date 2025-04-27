@@ -27,6 +27,7 @@ class SignupView extends StackedView<SignupViewModel> {
               label: 'First Name',
               controller: viewModel.firstNameController,
             ),
+            verticalSpaceMedium,
             AppTextField(
               label: 'Last Name',
               controller: viewModel.lastNameController,
