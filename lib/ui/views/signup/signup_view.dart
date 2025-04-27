@@ -40,6 +40,12 @@ class SignupView extends StackedView<SignupViewModel> {
             ),
             verticalSpaceMedium,
             AppTextField(
+              label: 'Phone number (Optional)',
+              controller: viewModel.phoneNumberController,
+              keyboardType: TextInputType.emailAddress,
+            ),
+            verticalSpaceMedium,
+            AppTextField(
               label: 'Password',
               controller: viewModel.passwordController,
               obscureText: true,
