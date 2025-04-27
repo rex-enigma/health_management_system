@@ -1,5 +1,6 @@
 enum Diagnosis {
-  hivPositive;
+  hivPositive,
+  none;
 
   static Diagnosis fromString(String value) {
     switch (value) {
