@@ -13,22 +13,21 @@ Stacked_cli_version: 1.14.0
 
 ## Implemented Functionality
 1. User Authentication with JWT
-2. **View Health Programs**: Users can view a paginated list of health programs in HealthProgramsView, with infinite scrolling to load more programs.
+2. **View Health Programs**: Users can view a paginated list of health programs.
 3. **Search Health Programs**: Users can search health programs by name or description, with results paginated.
-4. **View Health Program Details**: Users can view detailed information about a specific health program in HealthProgramView, including eligibility criteria and creator details.
+4. **View Health Program Details**: Users can view detailed information about a specific health program, including eligibility criteria and creator details.
 5. **Create Health Program**: Users can create a new health program with details like name, description, dates, and eligibility criteria (min/max age, required diagnosis)
 6. **Delete Health Program:** Users can delete a health program
-   
 7. **View Clients**: Users can view a paginated list of clients with infinite scrolling.
 8. **Search Clients**: Users can search clients by first or last name, with results paginated.
 View Client Profile: Users can view detailed client information in ClientProfileView, including enrolled programs, diagnoses, and personal details.
-9.  **Register Client**: Users can register a new client with details like name, gender, date of birth, contact info, address, and diagnoses.
-10.  **Delete Client**: Users can delete a client
-11.  **Enroll Client in Programs**: Users can enroll a client in eligible health programs with eligibility checks based on age and diagnoses.
-12.  The system has the ability to generate api key for external system integration.
+1.  **Register Client**: Users can register a new client with details like name, gender, date of birth, contact info, address, and diagnoses.
+2.   **Delete Client**: Users can delete a client
+3.   **Enroll Client in Programs**: Users can enroll a client in eligible health programs with eligibility checks based on age and diagnoses.
+4.   The system has the ability to generate api key for external system integration.
 
 
-**Find API Documentation in docs folder in the root directory of this project**
+**Find API Documentation in docs folder in the root directory of this project (its in a draft mode)**
 
 <!-- ## Screens -->
 

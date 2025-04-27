@@ -1,4 +1,4 @@
-to be refined
+Draft
 
 # Health Management System API Documentation
 
