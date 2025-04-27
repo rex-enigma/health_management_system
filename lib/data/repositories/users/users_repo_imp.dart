@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:health_managment_system/app/app.locator.dart';
+import 'package:health_managment_system/data/data_sources/remote/users/users_remote_datasource_imp.dart';
 import 'package:health_managment_system/data/data_sources/remote/users/users_remote_datasource_interface.dart';
 import 'package:health_managment_system/domain/entities/user_entity.dart';
 import 'package:health_managment_system/domain/repository_interface/users/users_repo_interface.dart';
@@ -11,8 +12,7 @@ class UsersRepositoryImpl implements UsersRepo {
   UsersRepositoryImpl({
     UsersRemoteDataSource? usersRemoteDataSource,
   }) {
-    _usersRemoteDataSource =
-        usersRemoteDataSource ?? locator<UsersRemoteDataSource>();
+    _usersRemoteDataSource = usersRemoteDataSource ?? locator<UsersRemoteDataSourceImpl>();
   }
 
   @override
@@ -35,8 +35,7 @@ class UsersRepositoryImpl implements UsersRepo {
 
     // success
     if (result.isRight()) {
-      final userModel =
-          result.fold((failure) => null, (userModel) => userModel);
+      final userModel = result.fold((failure) => null, (userModel) => userModel);
       UserEntity userEntity = userModel!.toEntity();
       return Right(userEntity);
     }
@@ -46,12 +45,10 @@ class UsersRepositoryImpl implements UsersRepo {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> login(
-      String email, String password) async {
+  Future<Either<Failure, UserEntity>> login(String email, String password) async {
     final result = await _usersRemoteDataSource.login(email, password);
     if (result.isRight()) {
-      final userModel =
-          result.fold((failure) => null, (userModel) => userModel);
+      final userModel = result.fold((failure) => null, (userModel) => userModel);
       UserEntity userEntity = userModel!.toEntity();
       return Right(userEntity);
     }

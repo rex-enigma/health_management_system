@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:health_managment_system/app/app.locator.dart';
+import 'package:health_managment_system/data/data_sources/remote/diagnoses/diagnoses_remote_datasource_imp.dart';
 import 'package:health_managment_system/data/data_sources/remote/diagnoses/diagnoses_remote_datasource_interface.dart';
 import 'package:health_managment_system/domain/repository_interface/diagnoses/diagnoses_repo_interface.dart';
 import 'package:health_managment_system/enums/diagnosis.dart';
@@ -11,8 +12,7 @@ class DiagnosesRepositoryImpl implements DiagnosesRepo {
   DiagnosesRepositoryImpl({
     DiagnosesRemoteDataSource? diagnosesRemoteDataSource,
   }) {
-    _diagnosesRemoteDataSource =
-        diagnosesRemoteDataSource ?? locator<DiagnosesRemoteDataSource>();
+    _diagnosesRemoteDataSource = diagnosesRemoteDataSource ?? locator<DiagnosesRemoteDataSourceImpl>();
   }
 
   @override
@@ -26,8 +26,7 @@ class DiagnosesRepositoryImpl implements DiagnosesRepo {
     );
 
     if (result.isRight()) {
-      final diagnoses =
-          result.fold((failure) => null, (diagnoses) => diagnoses);
+      final diagnoses = result.fold((failure) => null, (diagnoses) => diagnoses);
       return Right(diagnoses!);
     }
 

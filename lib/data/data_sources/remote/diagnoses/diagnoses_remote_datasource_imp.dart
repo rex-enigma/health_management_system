@@ -9,7 +9,7 @@ import 'package:dartz/dartz.dart';
 
 class DiagnosesRemoteDataSourceImpl implements DiagnosesRemoteDataSource {
   late final http.Client client;
-  late final FlutterSecureStorage secureStorage;
+  late final FlutterSecureStorage flutterSecureStorage;
   late final String baseUrl;
 
   DiagnosesRemoteDataSourceImpl({
@@ -17,16 +17,15 @@ class DiagnosesRemoteDataSourceImpl implements DiagnosesRemoteDataSource {
     FlutterSecureStorage? flutterSecureStorage,
     String? baseUrl,
   }) {
-    this.client = client ?? http.Client();
-    this.secureStorage = flutterSecureStorage ?? FlutterSecureStorage();
-    this.baseUrl = baseUrl ?? dotenv.env['BASE_URL'] as String;
+    client = client ?? http.Client();
+    flutterSecureStorage = flutterSecureStorage ?? FlutterSecureStorage();
+    baseUrl = baseUrl ?? dotenv.env['BASE_URL'] as String;
   }
 
   @override
-  Future<Either<Failure, List<Diagnosis>>> getAllDiagnoses(
-      {int page = 1, int limit = 10}) async {
+  Future<Either<Failure, List<Diagnosis>>> getAllDiagnoses({int page = 1, int limit = 10}) async {
     try {
-      final token = await secureStorage.read(key: 'jwt_token');
+      final token = await flutterSecureStorage.read(key: 'jwt_token');
       if (token == null) {
         return Left(AuthenticationFailure('No token found'));
       }
@@ -40,12 +39,10 @@ class DiagnosesRemoteDataSourceImpl implements DiagnosesRemoteDataSource {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        final diagnoses =
-            data.map((diagnosis) => Diagnosis.fromString(diagnosis)).toList();
+        final diagnoses = data.map((diagnosis) => Diagnosis.fromString(diagnosis)).toList();
         return Right(diagnoses);
       } else {
-        final error =
-            jsonDecode(response.body)['error'] ?? 'Failed to fetch diagnoses';
+        final error = jsonDecode(response.body)['error'] ?? 'Failed to fetch diagnoses';
         return Left(ServerFailure(error, statusCode: response.statusCode));
       }
     } catch (e) {

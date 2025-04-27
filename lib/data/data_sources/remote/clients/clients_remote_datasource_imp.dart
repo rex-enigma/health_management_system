@@ -9,13 +9,10 @@ import 'package:http/http.dart' as http;
 
 class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
   late http.Client client;
-  late FlutterSecureStorage secureStorage;
+  late FlutterSecureStorage flutterSecureStorage;
   late String baseUrl;
 
-  ClientsRemoteDataSourceImpl(
-      {http.Client? client,
-      FlutterSecureStorage? flutterSecureStorage,
-      String? baseUrl}) {
+  ClientsRemoteDataSourceImpl({http.Client? client, FlutterSecureStorage? flutterSecureStorage, String? baseUrl}) {
     client = client ?? http.Client();
     flutterSecureStorage = flutterSecureStorage ?? FlutterSecureStorage();
     baseUrl = baseUrl ?? dotenv.env['BASE_URL'] as String;
@@ -32,7 +29,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     String? profileImagePath,
     required List<String> diagnosisNames,
   }) async {
-    final token = await secureStorage.read(key: 'jwt_token');
+    final token = await flutterSecureStorage.read(key: 'jwt_token');
     if (token == null) {
       return Left(AuthenticationFailure('No token found'));
     }
@@ -58,16 +55,14 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     if (response.statusCode == 201) {
       return Right(ClientModel.fromMap(clientMap: jsonDecode(response.body)));
     } else {
-      final error =
-          jsonDecode(response.body)['error'] ?? 'Failed to create client';
+      final error = jsonDecode(response.body)['error'] ?? 'Failed to create client';
       return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<Either<Failure, List<ClientModel>>> getAllClients(
-      {int page = 1, int limit = 10}) async {
-    final token = await secureStorage.read(key: 'jwt_token');
+  Future<Either<Failure, List<ClientModel>>> getAllClients({int page = 1, int limit = 10}) async {
+    final token = await flutterSecureStorage.read(key: 'jwt_token');
     if (token == null) {
       return Left(AuthenticationFailure('No token found'));
     }
@@ -81,12 +76,9 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      return Right(data
-          .map((clientData) => ClientModel.fromMap(clientMap: clientData))
-          .toList());
+      return Right(data.map((clientData) => ClientModel.fromMap(clientMap: clientData)).toList());
     } else {
-      final error =
-          jsonDecode(response.body)['error'] ?? 'Failed to fetch clients';
+      final error = jsonDecode(response.body)['error'] ?? 'Failed to fetch clients';
       return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
@@ -97,14 +89,13 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     int page = 1,
     int limit = 10,
   }) async {
-    final token = await secureStorage.read(key: 'jwt_token');
+    final token = await flutterSecureStorage.read(key: 'jwt_token');
     if (token == null) {
       return Left(AuthenticationFailure('No token found'));
     }
 
     final response = await client.get(
-      Uri.parse(
-          '$baseUrl/v1/clients/search?query=$query&page=$page&limit=$limit'),
+      Uri.parse('$baseUrl/v1/clients/search?query=$query&page=$page&limit=$limit'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -112,18 +103,16 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      return Right(
-          data.map((map) => ClientModel.fromMap(clientMap: map)).toList());
+      return Right(data.map((map) => ClientModel.fromMap(clientMap: map)).toList());
     } else {
-      final error =
-          jsonDecode(response.body)['error'] ?? 'Failed to search clients';
+      final error = jsonDecode(response.body)['error'] ?? 'Failed to search clients';
       return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
   Future<Either<Failure, ClientModel>> getClient(int clientId) async {
-    final token = await secureStorage.read(key: 'jwt_token');
+    final token = await flutterSecureStorage.read(key: 'jwt_token');
     if (token == null) {
       return Left(AuthenticationFailure('No token found'));
     }
@@ -138,19 +127,16 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     if (response.statusCode == 200) {
       return Right(ClientModel.fromMap(clientMap: jsonDecode(response.body)));
     } else if (response.statusCode == 404) {
-      return Left(NotFoundFailure(jsonDecode(response.body)['error'],
-          statusCode: response.statusCode));
+      return Left(NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
     } else {
-      final error =
-          jsonDecode(response.body)['error'] ?? 'Failed to fetch client';
+      final error = jsonDecode(response.body)['error'] ?? 'Failed to fetch client';
       return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> enrollClient(
-      int clientId, List<int> healthProgramIds) async {
-    final token = await secureStorage.read(key: 'jwt_token');
+  Future<Either<Failure, Unit>> enrollClient(int clientId, List<int> healthProgramIds) async {
+    final token = await flutterSecureStorage.read(key: 'jwt_token');
     if (token == null) {
       return Left(AuthenticationFailure('No token found'));
     }
@@ -169,18 +155,16 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     if (response.statusCode == 200) {
       return Right(unit);
     } else if (response.statusCode == 404) {
-      return Left(NotFoundFailure(jsonDecode(response.body)['error'],
-          statusCode: response.statusCode));
+      return Left(NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
     } else {
-      final error =
-          jsonDecode(response.body)['error'] ?? 'Failed to enroll client';
+      final error = jsonDecode(response.body)['error'] ?? 'Failed to enroll client';
       return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
   Future<Either<Failure, int>> deleteClient(int clientId) async {
-    final token = await secureStorage.read(key: 'jwt_token');
+    final token = await flutterSecureStorage.read(key: 'jwt_token');
     if (token == null) {
       return Left(AuthenticationFailure('No token found'));
     }
@@ -195,11 +179,9 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['id'];
     } else if (response.statusCode == 404) {
-      return Left(NotFoundFailure(jsonDecode(response.body)['error'],
-          statusCode: response.statusCode));
+      return Left(NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
     } else {
-      final error =
-          jsonDecode(response.body)['error'] ?? 'Failed to delete client';
+      final error = jsonDecode(response.body)['error'] ?? 'Failed to delete client';
       return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }

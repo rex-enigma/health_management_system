@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:health_managment_system/app/app.locator.dart';
+import 'package:health_managment_system/data/data_sources/remote/health_programs/health_programs_remote_datasource_imp.dart';
 import 'package:health_managment_system/data/data_sources/remote/health_programs/health_programs_remote_datasource_interface.dart';
 import 'package:health_managment_system/domain/entities/health_program_entity.dart';
 import 'package:health_managment_system/domain/repository_interface/health_programs/health_programs_repo_interface.dart';
@@ -11,8 +12,7 @@ class HealthProgramsRepositoryImpl implements HealthProgramsRepo {
   HealthProgramsRepositoryImpl({
     HealthProgramsRemoteDataSource? healthProgramsRemoteDataSource,
   }) {
-    _healthProgramsRemoteDataSource = healthProgramsRemoteDataSource ??
-        locator<HealthProgramsRemoteDataSource>();
+    _healthProgramsRemoteDataSource = healthProgramsRemoteDataSource ?? locator<HealthProgramsRemoteDataSourceImpl>();
   }
 
   @override
@@ -69,9 +69,7 @@ class HealthProgramsRepositoryImpl implements HealthProgramsRepo {
 
     if (result.isRight()) {
       final programsModel = result.fold((failure) => null, (models) => models);
-      final entities = programsModel!
-          .map((programModel) => programModel.toEntity())
-          .toList();
+      final entities = programsModel!.map((programModel) => programModel.toEntity()).toList();
       return Right(entities);
     }
 
@@ -103,8 +101,7 @@ class HealthProgramsRepositoryImpl implements HealthProgramsRepo {
 
   @override
   Future<Either<Failure, int>> deleteHealthProgram(int id) async {
-    final result =
-        await _healthProgramsRemoteDataSource.deleteHealthProgram(id);
+    final result = await _healthProgramsRemoteDataSource.deleteHealthProgram(id);
 
     if (result.isRight()) {
       final deletedId = result.fold((failure) => null, (id) => id);

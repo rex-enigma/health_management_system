@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:health_managment_system/app/app.locator.dart';
+import 'package:health_managment_system/data/data_sources/remote/clients/clients_remote_datasource_imp.dart';
 import 'package:health_managment_system/data/data_sources/remote/clients/clients_remote_datasource_interface.dart';
 import 'package:health_managment_system/domain/entities/client.dart';
 import 'package:health_managment_system/domain/repository_interface/clients/clients_repo_interface.dart';
@@ -11,8 +12,7 @@ class ClientsRepositoryImpl implements ClientsRepo {
   ClientsRepositoryImpl({
     ClientsRemoteDataSource? clientsRemoteDataSource,
   }) {
-    _clientsRemoteDataSource =
-        clientsRemoteDataSource ?? locator<ClientsRemoteDataSource>();
+    _clientsRemoteDataSource = clientsRemoteDataSource ?? locator<ClientsRemoteDataSourceImpl>();
   }
 
   @override
@@ -52,13 +52,11 @@ class ClientsRepositoryImpl implements ClientsRepo {
     int page = 1,
     int limit = 10,
   }) async {
-    final result =
-        await _clientsRemoteDataSource.getAllClients(page: page, limit: limit);
+    final result = await _clientsRemoteDataSource.getAllClients(page: page, limit: limit);
 
     if (result.isRight()) {
       final clients = result.fold((failure) => null, (clients) => clients);
-      final entities =
-          clients?.map((clientModel) => clientModel.toEntity()).toList();
+      final entities = clients?.map((clientModel) => clientModel.toEntity()).toList();
       return Right(entities!);
     }
 
@@ -72,13 +70,11 @@ class ClientsRepositoryImpl implements ClientsRepo {
     int page = 1,
     int limit = 10,
   }) async {
-    final result = await _clientsRemoteDataSource.searchClients(
-        query: query, page: page, limit: limit);
+    final result = await _clientsRemoteDataSource.searchClients(query: query, page: page, limit: limit);
 
     if (result.isRight()) {
       final clients = result.fold((failure) => null, (clients) => clients);
-      final entities =
-          clients?.map((clientModel) => clientModel.toEntity()).toList();
+      final entities = clients?.map((clientModel) => clientModel.toEntity()).toList();
       return Right(entities!);
     }
 
@@ -101,10 +97,8 @@ class ClientsRepositoryImpl implements ClientsRepo {
   }
 
   @override
-  Future<Either<Failure, Unit>> enrollClient(
-      int id, List<int> healthProgramIds) async {
-    final result =
-        await _clientsRemoteDataSource.enrollClient(id, healthProgramIds);
+  Future<Either<Failure, Unit>> enrollClient(int id, List<int> healthProgramIds) async {
+    final result = await _clientsRemoteDataSource.enrollClient(id, healthProgramIds);
 
     if (result.isRight()) {
       return const Right(unit);
