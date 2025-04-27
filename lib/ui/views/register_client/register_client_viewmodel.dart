@@ -21,8 +21,8 @@ class RegisterClientViewModel extends BaseViewModel {
   Gender? _selectedGender = Gender.other;
   Gender? get selectedGender => _selectedGender;
 
-  late DateTime _dateOfBirth;
-  DateTime get dateOfBirth => _dateOfBirth;
+  DateTime? _dateOfBirth;
+  DateTime? get dateOfBirth => _dateOfBirth;
 
   List<Diagnosis> _selectedDiagnoses = [];
   List<Diagnosis> get selectedDiagnoses => _selectedDiagnoses;
@@ -78,7 +78,7 @@ class RegisterClientViewModel extends BaseViewModel {
       firstName: firstNameController.text,
       lastName: lastNameController.text,
       gender: _selectedGender?.name ?? Gender.other.name,
-      dateOfBirth: _dateOfBirth.toIso8601String(),
+      dateOfBirth: _dateOfBirth!.toIso8601String(),
       contactInfo: contactInfoController.text,
       address: addressController.text,
       diagnosisNames: _selectedDiagnoses.map((diagnosis) => diagnosis.name).toList(),
