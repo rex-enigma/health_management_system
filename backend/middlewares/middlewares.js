@@ -1,3 +1,5 @@
+import dotenv from 'dotenv';
+dotenv.config();
 // key to generate the signature of the jwt token as well as verify the jtw token
 export const JWT_SECRET = process.env.JWT_SECRET;
 
