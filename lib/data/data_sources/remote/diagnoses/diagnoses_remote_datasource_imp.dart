@@ -17,9 +17,9 @@ class DiagnosesRemoteDataSourceImpl implements DiagnosesRemoteDataSource {
     FlutterSecureStorage? flutterSecureStorage,
     String? baseUrl,
   }) {
-    client = client ?? http.Client();
-    flutterSecureStorage = flutterSecureStorage ?? FlutterSecureStorage();
-    baseUrl = baseUrl ?? dotenv.env['BASE_URL'] as String;
+    this.client = client ?? http.Client();
+    this.flutterSecureStorage = flutterSecureStorage ?? FlutterSecureStorage();
+    this.baseUrl = baseUrl ?? dotenv.env['BASE_URL'] as String;
   }
 
   @override
