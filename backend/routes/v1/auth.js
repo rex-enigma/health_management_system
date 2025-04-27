@@ -45,12 +45,12 @@ router.post('/v1/auth/login', async (req, res, next) => {
         res.status(200).json({
             token,
             user: {
-                id: user.id,
-                first_name: user.first_name,
-                last_name: user.last_name,
-                email: user.email,
-                phone_number: user.phone_number,
-                profile_image_path: user.profile_image_path
+                id: user[0].id,
+                first_name: user[0].first_name,
+                last_name: user[0].last_name,
+                email: user[0].email,
+                phone_number: user[0].phone_number,
+                profile_image_path: user[0].profile_image_path
             }
         });
     } catch (error) {
