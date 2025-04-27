@@ -123,7 +123,7 @@ router.get('/v1/clients', requireAuth, validatePagination, async (req, res, next
         // sanitize the arguments later
         const [clients] = await db.execute(
             'SELECT c.*, u.id AS user_id, u.first_name, u.last_name, u.email, u.phone_number, u.profile_image_path ' +
-            `FROM clients c JOIN users u ON c.user_id = u.id WHERE c.user_id = ? ORDER BY c.id LIMIT ${limit} OFFSET ${offset}`
+            `FROM clients c JOIN users u ON c.user_id = u.id ORDER BY c.id LIMIT ${limit} OFFSET ${offset}`
         );
 
         const clientsWithData = await Promise.all(
@@ -179,7 +179,7 @@ router.get('/v1/clients/search', requireAuth, validatePagination, async (req, re
         // sanitize the arguments later
         const [clients] = await db.execute(
             'SELECT c.*, u.id AS user_id, u.first_name, u.last_name, u.email, u.phone_number, u.profile_image_path ' +
-            `FROM clients c JOIN users u ON c.user_id = u.id WHERE (c.first_name LIKE ? OR c.last_name LIKE ?) AND c.user_id = ? ORDER BY c.id LIMIT ${limit} OFFSET ${offset}`,
+            `FROM clients c JOIN users u ON c.user_id = u.id WHERE (c.first_name LIKE ? OR c.last_name LIKE ?) ORDER BY c.id LIMIT ${limit} OFFSET ${offset}`,
             [`%${query}%`, `%${query}%`]
         );
 
