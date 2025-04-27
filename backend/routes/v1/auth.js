@@ -29,10 +29,11 @@ router.post('/v1/auth/signup', async (req, res, next) => {
 // 
 router.post('/v1/auth/login', async (req, res, next) => {
     const { email, password } = req.body;
-
+    console.log(email)
+    console.log(password)
     try {
         const [user] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
-        if (user.length === 0 || !(await bcrypt.compare(password, user[0].password))) {
+        if (user.length === 0 || !(await bcrypt.compare(password, user[0].password_hash))) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
 
