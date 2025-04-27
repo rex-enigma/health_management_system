@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:golden_toolkit/golden_toolkit.dart';
 import 'package:health_managment_system/app/app.locator.dart';
-import 'package:health_managment_system/ui/views/home/home_view.dart';
+import 'package:health_managment_system/ui/views/home_view/home_view.dart';
 
 void main() {
   setUpAll(() => setupLocator());
