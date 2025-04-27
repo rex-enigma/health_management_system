@@ -15,6 +15,7 @@ class SignupViewModel extends BaseViewModel {
   final firstNameController = TextEditingController();
   final lastNameController = TextEditingController();
   final emailController = TextEditingController();
+  final phoneNumberController = TextEditingController();
   final passwordController = TextEditingController();
 
   Future<void> signup() async {
@@ -32,6 +33,7 @@ class SignupViewModel extends BaseViewModel {
       firstName: firstNameController.text.trim(),
       lastName: lastNameController.text.trim(),
       email: emailController.text.trim(),
+      phoneNumber: phoneNumberController.text,
       password: passwordController.text,
     ));
     setBusy(false);
@@ -59,6 +61,7 @@ class SignupViewModel extends BaseViewModel {
     firstNameController.dispose();
     lastNameController.dispose();
     emailController.dispose();
+    phoneNumberController.dispose();
     passwordController.dispose();
     super.dispose();
   }
