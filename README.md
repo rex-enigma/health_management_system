@@ -5,11 +5,11 @@ A new Flutter project.
 ## Getting Started
 
 ## Dependencies versions
-nodejs_version: v16.20.2
-Flutter_version: 3.27.1
-JDK_version: 17
-MySQL_version: 8.0.41
-Stacked_cli_version: 1.14.0
+- nodejs_version: v16.20.2
+- Flutter_version: 3.27.1
+- JDK_version: 17
+- MySQL_version: 8.0.41
+- Stacked_cli_version: 1.14.0
 
 ## Implemented Functionality
 1. User Authentication with JWT
