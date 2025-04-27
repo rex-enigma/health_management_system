@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_managment_system/ui/common/ui_helpers.dart';
 import 'package:stacked/stacked.dart';
 import 'startup_viewmodel.dart';
 
@@ -11,9 +12,22 @@ class StartupView extends StackedView<StartupViewModel> {
     StartupViewModel viewModel,
     Widget? child,
   ) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: CircularProgressIndicator(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 20,
+          children: [
+            Icon(
+              Icons.health_and_safety,
+              size: 100,
+              color: Theme.of(context).primaryColor,
+            ),
+            Text('HEALTH MANAGEMENT SYSTEM'),
+            CircularProgressIndicator(),
+          ],
+        ),
       ),
     );
   }
