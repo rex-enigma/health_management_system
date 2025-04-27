@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/domain/entities/client.dart';
 import 'package:health_managment_system/domain/usecases/get_all_clients_usecase.dart';
@@ -37,17 +38,13 @@ class ClientsViewModel extends BaseViewModel {
 
   ClientsViewModel() {
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-              _scrollController.position.maxScrollExtent &&
-          _hasMoreData) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent && _hasMoreData) {
         loadClients();
       }
     });
 
     _searchScrollController.addListener(() {
-      if (_searchScrollController.position.pixels ==
-              _searchScrollController.position.maxScrollExtent &&
-          _hasMoreSearchData) {
+      if (_searchScrollController.position.pixels == _searchScrollController.position.maxScrollExtent && _hasMoreSearchData) {
         loadMoreSearchClients(_lastQuery);
       }
     });
@@ -55,14 +52,13 @@ class ClientsViewModel extends BaseViewModel {
 
   Future<void> loadClients() async {
     setBusy(true);
-    final result =
-        await _getAllClientsUseCase(GetAllClientsParams(page: _currentPage));
+    final result = await _getAllClientsUseCase(GetAllClientsParams(page: _currentPage));
     setBusy(false);
 
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(
-          variant: InfoAlertDialog,
+          variant: DialogType.infoAlert,
           title: 'Error',
           description: 'Failed to load clients: ${failure.message}',
         );
@@ -89,8 +85,7 @@ class ClientsViewModel extends BaseViewModel {
       return;
     }
 
-    final result = await _searchClientsUseCase(
-        SearchClientsParams(query: query, page: _searchPage));
+    final result = await _searchClientsUseCase(SearchClientsParams(query: query, page: _searchPage));
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(

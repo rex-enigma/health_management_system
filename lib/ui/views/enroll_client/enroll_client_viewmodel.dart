@@ -1,3 +1,5 @@
+import 'package:health_managment_system/app/app.bottomsheets.dart';
+import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/domain/entities/client.dart';
 import 'package:health_managment_system/domain/usecases/enroll_client_usecase.dart';
@@ -37,13 +39,12 @@ class EnrollClientViewModel extends BaseViewModel {
     setBusy(true);
 
     final clientResult = await _getClientUseCase(GetClientParams(id: clientId));
-    final programsResult =
-        await _getAllHealthProgramsUseCase(GetAllHealthProgramsParams(page: 1));
+    final programsResult = await _getAllHealthProgramsUseCase(GetAllHealthProgramsParams(page: 1));
 
     clientResult.fold(
       (failure) {
         _dialogService.showCustomDialog(
-          variant: InfoAlertDialog,
+          variant: DialogType.infoAlert,
           title: 'Error',
           description: 'Failed to load client: ${failure.message}',
         );
@@ -56,38 +57,28 @@ class EnrollClientViewModel extends BaseViewModel {
     programsResult.fold(
       (failure) {
         _dialogService.showCustomDialog(
-          variant: InfoAlertDialog,
+          variant: DialogType.infoAlert,
           title: 'Error',
           description: 'Failed to load health programs: ${failure.message}',
         );
       },
       (programs) {
         _healthPrograms = programs;
-        _healthPrograms.removeWhere((program) =>
-            _client!.enrolledPrograms.any((p) => p.id == program.id));
+        _healthPrograms.removeWhere((program) => _client!.enrolledPrograms.any((p) => p.id == program.id));
 
         _eligibilityInfo = {};
         for (var program in _healthPrograms) {
           if (program.eligibilityCriteria != null) {
-            final isEligible =
-                program.eligibilityCriteria!.isClientEligible(_client!);
+            final isEligible = program.eligibilityCriteria!.isClientEligible(_client!);
             String? reason;
             if (!isEligible) {
-              final age = _client!.dateOfBirth != null
-                  ? DateTime.now().year - _client!.dateOfBirth!.year
-                  : null;
-              if (program.eligibilityCriteria!.minAge != null &&
-                  (age == null || age < program.eligibilityCriteria!.minAge!)) {
-                reason =
-                    'Client is too young (Min age: ${program.eligibilityCriteria!.minAge})';
-              } else if (program.eligibilityCriteria!.maxAge != null &&
-                  (age == null || age > program.eligibilityCriteria!.maxAge!)) {
-                reason =
-                    'Client is too old (Max age: ${program.eligibilityCriteria!.maxAge})';
-              } else if (!_client!.currentDiagnoses
-                  .contains(program.eligibilityCriteria!.requiredDiagnosis)) {
-                reason =
-                    'Client does not have required diagnosis: ${program.eligibilityCriteria!.requiredDiagnosis}';
+              final age = _client!.dateOfBirth != null ? DateTime.now().year - _client!.dateOfBirth!.year : null;
+              if (program.eligibilityCriteria!.minAge != null && (age == null || age < program.eligibilityCriteria!.minAge!)) {
+                reason = 'Client is too young (Min age: ${program.eligibilityCriteria!.minAge})';
+              } else if (program.eligibilityCriteria!.maxAge != null && (age == null || age > program.eligibilityCriteria!.maxAge!)) {
+                reason = 'Client is too old (Max age: ${program.eligibilityCriteria!.maxAge})';
+              } else if (!_client!.currentDiagnoses.contains(program.eligibilityCriteria!.requiredDiagnosis)) {
+                reason = 'Client does not have required diagnosis: ${program.eligibilityCriteria!.requiredDiagnosis}';
               }
             }
             _eligibilityInfo[program.id] = (isEligible, reason);
@@ -114,7 +105,7 @@ class EnrollClientViewModel extends BaseViewModel {
   Future<void> enrollClient() async {
     if (_selectedPrograms.isEmpty) {
       _dialogService.showCustomDialog(
-        variant: InfoAlertDialog,
+        variant: DialogType.infoAlert,
         title: 'Error',
         description: 'Please select at least one program.',
       );
@@ -130,13 +121,12 @@ class EnrollClientViewModel extends BaseViewModel {
       (failure) {
         if (failure is IneligibleClientFailure) {
           _bottomSheetService.showCustomSheet(
-            variant: NoticeSheet,
-            data:
-                'Client is not eligible for programs with IDs: ${failure.ineligibleHealthProgramIds.join(", ")}',
+            variant: BottomSheetType.notice,
+            data: 'Client is not eligible for programs with IDs: ${failure.ineligibleHealthProgramIds.join(", ")}',
           );
         } else {
           _dialogService.showCustomDialog(
-            variant: InfoAlertDialog,
+            variant: DialogType.infoAlert,
             title: 'Error',
             description: 'Failed to enroll client: ${failure.message}',
           );

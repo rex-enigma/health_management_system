@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/domain/usecases/create_health_program_usecase.dart';
 import 'package:health_managment_system/ui/dialogs/info_alert/info_alert_dialog.dart';
@@ -61,7 +62,7 @@ class CreateHealthProgramViewModel extends BaseViewModel {
   Future<void> createHealthProgram() async {
     if (nameController.text.isEmpty || descriptionController.text.isEmpty) {
       _dialogService.showCustomDialog(
-        variant: InfoAlertDialog,
+        variant: DialogType.infoAlert,
         title: 'Error',
         description: 'Name and description are required.',
       );
@@ -70,35 +71,24 @@ class CreateHealthProgramViewModel extends BaseViewModel {
 
     if (_startDate == null) {
       _dialogService.showCustomDialog(
-        variant: InfoAlertDialog,
+        variant: DialogType.infoAlert,
         title: 'Error',
         description: 'Start date is required.',
       );
       return;
     }
 
-    final minAge = minAgeController.text.isEmpty
-        ? null
-        : int.tryParse(minAgeController.text);
-    final maxAge = maxAgeController.text.isEmpty
-        ? null
-        : int.tryParse(maxAgeController.text);
+    final minAge = minAgeController.text.isEmpty ? null : int.tryParse(minAgeController.text);
+    final maxAge = maxAgeController.text.isEmpty ? null : int.tryParse(maxAgeController.text);
 
-    final user = UserEntity(
-        id: 1,
-        firstName: 'admin',
-        email: 'admin@example.com',
-        lastName: '',
-        createdAt: DateTime.now());
+    final user = UserEntity(id: 1, firstName: 'admin', email: 'admin@example.com', lastName: '', createdAt: DateTime.now());
     final program = HealthProgramEntity(
       id: DateTime.now().millisecondsSinceEpoch,
       name: nameController.text,
       description: descriptionController.text,
       startDate: _startDate!,
       endDate: _endDate,
-      eligibilityCriteria: (minAge != null ||
-              maxAge != null ||
-              _requiredDiagnosis != Diagnosis.none)
+      eligibilityCriteria: (minAge != null || maxAge != null || _requiredDiagnosis != Diagnosis.none)
           ? EligibilityCriteria(
               id: DateTime.now().millisecondsSinceEpoch,
               minAge: minAge,
@@ -110,13 +100,12 @@ class CreateHealthProgramViewModel extends BaseViewModel {
       createdAt: DateTime.now(),
     );
 
-    final result = await _createHealthProgramUseCase(
-        CreateHealthProgramParams(description: '', name: '', startDate: ''));
+    final result = await _createHealthProgramUseCase(CreateHealthProgramParams(description: '', name: '', startDate: ''));
 
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(
-          variant: InfoAlertDialog,
+          variant: DialogType.infoAlert,
           title: 'Error',
           description: 'Failed to create health program: ${failure.message}',
         );

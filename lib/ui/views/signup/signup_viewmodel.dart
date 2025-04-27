@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/app/app.router.dart';
 import 'package:health_managment_system/domain/usecases/sign_up_usecase.dart';
@@ -18,12 +19,9 @@ class SignupViewModel extends BaseViewModel {
   final passwordController = TextEditingController();
 
   Future<void> signup() async {
-    if (firstNameController.text.isEmpty ||
-        lastNameController.text.isEmpty ||
-        emailController.text.isEmpty ||
-        passwordController.text.isEmpty) {
+    if (firstNameController.text.isEmpty || lastNameController.text.isEmpty || emailController.text.isEmpty || passwordController.text.isEmpty) {
       _dialogService.showCustomDialog(
-        variant: InfoAlertDialog,
+        variant: DialogType.infoAlert,
         title: 'Error',
         description: 'Username, email, and password are required.',
       );
@@ -42,7 +40,7 @@ class SignupViewModel extends BaseViewModel {
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(
-          variant: InfoAlertDialog,
+          variant: DialogType.infoAlert,
           title: 'Error',
           description: 'Signup failed: ${failure.message}',
         );

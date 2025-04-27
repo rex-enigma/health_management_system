@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/app/app.router.dart';
 import 'package:health_managment_system/domain/usecases/login_use_usecase.dart';
@@ -17,7 +18,7 @@ class LoginViewModel extends BaseViewModel {
   Future<void> login() async {
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       _dialogService.showCustomDialog(
-        variant: InfoAlertDialog,
+        variant: DialogType.infoAlert,
         title: 'Error',
         description: 'Email and password are required.',
       );
@@ -34,7 +35,7 @@ class LoginViewModel extends BaseViewModel {
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(
-          variant: InfoAlertDialog,
+          variant: DialogType.infoAlert,
           title: 'Error',
           description: 'Login failed: ${failure.message}',
         );

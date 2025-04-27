@@ -1,3 +1,4 @@
+import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/domain/usecases/delete_health_program_usecase.dart';
 import 'package:health_managment_system/domain/usecases/get_health_programs_usecase.dart';
@@ -20,14 +21,13 @@ class HealthProgramViewModel extends BaseViewModel {
 
   Future<void> loadHealthProgram() async {
     setBusy(true);
-    final result =
-        await _getHealthProgramUseCase(GetHealthProgramParams(id: programId));
+    final result = await _getHealthProgramUseCase(GetHealthProgramParams(id: programId));
     setBusy(false);
 
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(
-          variant: InfoAlertDialog,
+          variant: DialogType.infoAlert,
           title: 'Error',
           description: 'Failed to load health program: ${failure.message}',
         );
@@ -41,17 +41,16 @@ class HealthProgramViewModel extends BaseViewModel {
 
   Future<void> showDeleteProgramDialog() async {
     final response = await _dialogService.showCustomDialog(
-      variant: InfoAlertDialog,
+      variant: DialogType.infoAlert,
       title: 'Delete Health Program',
       description: 'Are you sure you want to delete this health program?',
     );
     if (response?.confirmed ?? false) {
-      final result = await _deleteHealthProgramUseCase(
-          DeleteHealthProgramParams(id: programId));
+      final result = await _deleteHealthProgramUseCase(DeleteHealthProgramParams(id: programId));
       result.fold(
         (failure) {
           _dialogService.showCustomDialog(
-            variant: InfoAlertDialog,
+            variant: DialogType.infoAlert,
             title: 'Error',
             description: 'Failed to delete health program: ${failure.message}',
           );

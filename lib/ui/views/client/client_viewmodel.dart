@@ -1,3 +1,4 @@
+import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/app/app.router.dart';
 import 'package:health_managment_system/domain/entities/client.dart';
@@ -27,7 +28,7 @@ class ClientViewModel extends BaseViewModel {
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(
-          variant: InfoAlertDialog,
+          variant: DialogType.infoAlert,
           title: 'Error',
           description: 'Failed to load client: ${failure.message}',
         );
@@ -41,7 +42,7 @@ class ClientViewModel extends BaseViewModel {
 
   Future<void> showDeleteClientDialog() async {
     final response = await _dialogService.showCustomDialog(
-      variant: InfoAlertDialog,
+      variant: DialogType.infoAlert,
       title: 'Delete Client',
       description: 'Are you sure you want to delete this client?',
     );
@@ -50,7 +51,7 @@ class ClientViewModel extends BaseViewModel {
       result.fold(
         (failure) {
           _dialogService.showCustomDialog(
-            variant: InfoAlertDialog,
+            variant: DialogType.infoAlert,
             title: 'Error',
             description: 'Failed to delete client: ${failure.message}',
           );

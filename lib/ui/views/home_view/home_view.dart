@@ -18,8 +18,7 @@ class HomeView extends StackedView<HomeViewModel> {
       body: IndexedStack(
         index: viewModel.currentIndex,
         children: const [
-          MyWidget(),
-          // HealthProgramsView(),
+          HealthProgramsView(),
           ClientsView(),
           SettingsView(),
         ],
@@ -51,18 +50,5 @@ class HomeView extends StackedView<HomeViewModel> {
   @override
   void onViewModelReady(HomeViewModel viewModel) {
     viewModel.initialize();
-  }
-}
-
-class MyWidget extends StatelessWidget {
-  const MyWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        decoration: BoxDecoration(color: Colors.red),
-      ),
-    );
   }
 }

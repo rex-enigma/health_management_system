@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/domain/usecases/create_client_usecase.dart';
 import 'package:health_managment_system/ui/dialogs/info_alert/info_alert_dialog.dart';
@@ -54,11 +55,9 @@ class RegisterClientViewModel extends BaseViewModel {
   }
 
   Future<void> registerClient() async {
-    if (firstNameController.text.isEmpty ||
-        lastNameController.text.isEmpty ||
-        contactInfoController.text.isEmpty) {
+    if (firstNameController.text.isEmpty || lastNameController.text.isEmpty || contactInfoController.text.isEmpty) {
       _dialogService.showCustomDialog(
-        variant: InfoAlertDialog,
+        variant: DialogType.infoAlert,
         title: 'Error',
         description: 'First name, last name, and contact info are required.',
       );
@@ -67,7 +66,7 @@ class RegisterClientViewModel extends BaseViewModel {
 
     if (_dateOfBirth == null) {
       _dialogService.showCustomDialog(
-        variant: InfoAlertDialog,
+        variant: DialogType.infoAlert,
         title: 'Error',
         description: 'Date of birth is required.',
       );
@@ -82,8 +81,7 @@ class RegisterClientViewModel extends BaseViewModel {
       dateOfBirth: _dateOfBirth.toIso8601String(),
       contactInfo: contactInfoController.text,
       address: addressController.text,
-      diagnosisNames:
-          _selectedDiagnoses.map((diagnosis) => diagnosis.name).toList(),
+      diagnosisNames: _selectedDiagnoses.map((diagnosis) => diagnosis.name).toList(),
     );
 
     final result = await _createClientUseCase(client);
@@ -91,7 +89,7 @@ class RegisterClientViewModel extends BaseViewModel {
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(
-          variant: InfoAlertDialog,
+          variant: DialogType.infoAlert,
           title: 'Error',
           description: 'Failed to register client: ${failure.message}',
         );
