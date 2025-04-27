@@ -1,4 +1,6 @@
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
+import db from '../database_connection.js';
 dotenv.config();
 // key to generate the signature of the jwt token as well as verify the jtw token
 export const JWT_SECRET = process.env.JWT_SECRET;
@@ -13,9 +15,9 @@ export const authenticateJWT = (req, res, next) => {
     jwt.verify(token, JWT_SECRET, async (err, user) => {
         if (err) return res.status(403).json({ error: 'Invalid token' });
 
-        // Check if token is revoked
-        const [revoked] = await db.execute('SELECT 1 FROM revoked_tokens WHERE token = ?', [token]);
-        if (revoked.length > 0) return res.status(403).json({ error: 'Token revoked' });
+        // Check if token is revoked. Implement revoked_tokens later
+        // const [revoked] = await db.execute('SELECT 1 FROM revoked_tokens WHERE token = ?', [token]);
+        // if (revoked.length > 0) return res.status(403).json({ error: 'Token revoked' });
 
         req.user = user;
         req.authType = 'jwt';
