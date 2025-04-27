@@ -27,7 +27,8 @@ abstract class ClientsRepo {
 
   Future<Either<Failure, ClientEntity>> getClient(int clientId);
 
-  Future<Either<Failure, Unit>> enrollClient(int clientId, List<int> healthProgramIds);
+  Future<Either<Failure, Unit>> enrollClient(
+      int clientId, List<int> healthProgramIds);
 
   Future<Either<Failure, int>> deleteClient(int clientId);
 }

@@ -7,7 +7,8 @@ import 'package:health_managment_system/domain/usecases/get_health_programs_usec
 import 'package:health_managment_system/domain/usecases/usecase.dart';
 import 'package:health_managment_system/errors/failures.dart';
 
-class EnrollClientUseCase implements UseCase<Either<Failure, Unit>, EnrollClientParams> {
+class EnrollClientUseCase
+    implements UseCase<Either<Failure, Unit>, EnrollClientParams> {
   final GetClientUseCase _getClientUseCase;
   final GetHealthProgramUseCase _getHealthProgramUseCase;
   final ClientsRepo _clientsRepo;
@@ -17,26 +18,33 @@ class EnrollClientUseCase implements UseCase<Either<Failure, Unit>, EnrollClient
     GetHealthProgramUseCase? getHealthProgramUseCase,
     ClientsRepo? clientsRepository,
   })  : _getClientUseCase = getClientUseCase ?? locator<GetClientUseCase>(),
-        _getHealthProgramUseCase = getHealthProgramUseCase ?? locator<GetHealthProgramUseCase>(),
+        _getHealthProgramUseCase =
+            getHealthProgramUseCase ?? locator<GetHealthProgramUseCase>(),
         _clientsRepo = clientsRepository ?? locator<ClientsRepositoryImpl>();
 
   @override
   Future<Either<Failure, Unit>> call(EnrollClientParams params) async {
     // Fetch the client
-    final clientResult = await _getClientUseCase(GetClientParams(id: params.clientId));
+    final clientResult =
+        await _getClientUseCase(GetClientParams(id: params.clientId));
     if (clientResult.isRight()) {
-      final clientEntity = clientResult.fold((failure) => null, (entity) => entity);
+      final clientEntity =
+          clientResult.fold((failure) => null, (entity) => entity);
 
       // Check eligibility for each health program and collect ineligible IDs
       final ineligibleHealthProgramIds = <int>[];
 
       for (final programId in params.healthProgramIds) {
-        final programResult = await _getHealthProgramUseCase(GetHealthProgramParams(id: programId));
+        final programResult = await _getHealthProgramUseCase(
+            GetHealthProgramParams(id: programId));
         if (programResult.isRight()) {
-          final programEntity = programResult.fold((failure) => null, (entity) => entity);
+          final programEntity =
+              programResult.fold((failure) => null, (entity) => entity);
 
           // Check eligibility
-          if (programEntity!.eligibilityCriteria != null && !programEntity.eligibilityCriteria!.isClientEligible(clientEntity!)) {
+          if (programEntity!.eligibilityCriteria != null &&
+              !programEntity.eligibilityCriteria!
+                  .isClientEligible(clientEntity!)) {
             ineligibleHealthProgramIds.add(programId);
           }
         }
@@ -44,11 +52,13 @@ class EnrollClientUseCase implements UseCase<Either<Failure, Unit>, EnrollClient
 
       // If any programs are ineligible, return failure
       if (ineligibleHealthProgramIds.isNotEmpty) {
-        return Left(IneligibleClientFailure(ineligibleHealthProgramIds: ineligibleHealthProgramIds));
+        return Left(IneligibleClientFailure(
+            ineligibleHealthProgramIds: ineligibleHealthProgramIds));
       }
 
       // All eligibility checks passed, proceed with enrollment
-      return await _clientsRepo.enrollClient(params.clientId, params.healthProgramIds);
+      return await _clientsRepo.enrollClient(
+          params.clientId, params.healthProgramIds);
     } else {
       final failure = clientResult.fold((failure) => failure, (model) => null);
       return Left(failure!);

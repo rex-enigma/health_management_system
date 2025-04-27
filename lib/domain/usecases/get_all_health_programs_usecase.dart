@@ -6,13 +6,19 @@ import 'package:health_managment_system/domain/repository_interface/health_progr
 import 'package:health_managment_system/domain/usecases/usecase.dart';
 import 'package:health_managment_system/errors/failures.dart';
 
-class GetAllHealthProgramsUseCase implements UseCase<Either<Failure, List<HealthProgramEntity>>, GetAllHealthProgramsParams> {
+class GetAllHealthProgramsUseCase
+    implements
+        UseCase<Either<Failure, List<HealthProgramEntity>>,
+            GetAllHealthProgramsParams> {
   final HealthProgramsRepo _healthProgramsRepo;
 
-  GetAllHealthProgramsUseCase({HealthProgramsRepo? healthProgramsRepo}) : _healthProgramsRepo = healthProgramsRepo ?? locator<HealthProgramsRepositoryImpl>();
+  GetAllHealthProgramsUseCase({HealthProgramsRepo? healthProgramsRepo})
+      : _healthProgramsRepo =
+            healthProgramsRepo ?? locator<HealthProgramsRepositoryImpl>();
 
   @override
-  Future<Either<Failure, List<HealthProgramEntity>>> call(GetAllHealthProgramsParams params) {
+  Future<Either<Failure, List<HealthProgramEntity>>> call(
+      GetAllHealthProgramsParams params) {
     return _healthProgramsRepo.getAllHealthPrograms(
       page: params.page,
       limit: params.limit,

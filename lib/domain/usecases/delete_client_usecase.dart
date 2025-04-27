@@ -5,10 +5,12 @@ import 'package:health_managment_system/domain/repository_interface/clients/clie
 import 'package:health_managment_system/domain/usecases/usecase.dart';
 import 'package:health_managment_system/errors/failures.dart';
 
-class DeleteClientUseCase implements UseCase<Either<Failure, int>, DeleteClientParams> {
+class DeleteClientUseCase
+    implements UseCase<Either<Failure, int>, DeleteClientParams> {
   final ClientsRepo _clientsRepo;
 
-  DeleteClientUseCase({ClientsRepo? clientsRepo}) : _clientsRepo = clientsRepo ?? locator<ClientsRepositoryImpl>();
+  DeleteClientUseCase({ClientsRepo? clientsRepo})
+      : _clientsRepo = clientsRepo ?? locator<ClientsRepositoryImpl>();
 
   @override
   Future<Either<Failure, int>> call(DeleteClientParams params) {

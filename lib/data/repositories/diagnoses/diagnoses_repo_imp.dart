@@ -11,7 +11,8 @@ class DiagnosesRepositoryImpl implements DiagnosesRepo {
   DiagnosesRepositoryImpl({
     DiagnosesRemoteDataSource? diagnosesRemoteDataSource,
   }) {
-    _diagnosesRemoteDataSource = diagnosesRemoteDataSource ?? locator<DiagnosesRemoteDataSource>();
+    _diagnosesRemoteDataSource =
+        diagnosesRemoteDataSource ?? locator<DiagnosesRemoteDataSource>();
   }
 
   @override
@@ -25,7 +26,8 @@ class DiagnosesRepositoryImpl implements DiagnosesRepo {
     );
 
     if (result.isRight()) {
-      final diagnoses = result.fold((failure) => null, (diagnoses) => diagnoses);
+      final diagnoses =
+          result.fold((failure) => null, (diagnoses) => diagnoses);
       return Right(diagnoses!);
     }
 

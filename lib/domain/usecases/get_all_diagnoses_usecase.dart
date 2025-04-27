@@ -6,10 +6,13 @@ import 'package:health_managment_system/domain/usecases/usecase.dart';
 import 'package:health_managment_system/enums/diagnosis.dart';
 import 'package:health_managment_system/errors/failures.dart';
 
-class GetAllDiagnosesUseCase implements UseCase<Either<Failure, List<Diagnosis>>, GetAllDiagnosesParams> {
+class GetAllDiagnosesUseCase
+    implements
+        UseCase<Either<Failure, List<Diagnosis>>, GetAllDiagnosesParams> {
   final DiagnosesRepo _diagnosesRepo;
 
-  GetAllDiagnosesUseCase({DiagnosesRepo? diagnosesRepo}) : _diagnosesRepo = diagnosesRepo ?? locator<DiagnosesRepositoryImpl>();
+  GetAllDiagnosesUseCase({DiagnosesRepo? diagnosesRepo})
+      : _diagnosesRepo = diagnosesRepo ?? locator<DiagnosesRepositoryImpl>();
 
   @override
   Future<Either<Failure, List<Diagnosis>>> call(GetAllDiagnosesParams params) {

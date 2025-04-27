@@ -6,10 +6,12 @@ import 'package:health_managment_system/domain/repository_interface/users/users_
 import 'package:health_managment_system/domain/usecases/usecase.dart';
 import 'package:health_managment_system/errors/failures.dart';
 
-class SignupUseCase implements UseCase<Either<Failure, UserEntity>, SignupParams> {
+class SignupUseCase
+    implements UseCase<Either<Failure, UserEntity>, SignupParams> {
   final UsersRepo _usersRepo;
 
-  SignupUseCase({UsersRepo? usersRepo}) : _usersRepo = usersRepo ?? locator<UsersRepositoryImpl>();
+  SignupUseCase({UsersRepo? usersRepo})
+      : _usersRepo = usersRepo ?? locator<UsersRepositoryImpl>();
 
   @override
   Future<Either<Failure, UserEntity>> call(SignupParams params) {
