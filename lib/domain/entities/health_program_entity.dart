@@ -11,7 +11,7 @@ class HealthProgramEntity {
   final DateTime? endDate;
   final EligibilityCriteria? eligibilityCriteria;
   final UserEntity createdByUser;
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   HealthProgramEntity({
     required this.id,
@@ -22,7 +22,7 @@ class HealthProgramEntity {
     this.endDate,
     this.eligibilityCriteria,
     required this.createdByUser,
-    required this.createdAt,
+    this.createdAt,
   });
 
   /// Constructor for creating a new health program instance before persistence.
@@ -130,15 +130,13 @@ class EligibilityCriteria {
     }
 
     // Check diagnosis eligibility
-    return client.currentDiagnoses
-        .any((diagnosis) => diagnosis.name == requiredDiagnosis.name);
+    return client.currentDiagnoses.any((diagnosis) => diagnosis.name == requiredDiagnosis.name);
   }
 
   int _getClientAge(DateTime dateOfBirth) {
     final now = DateTime.now();
     int age = now.year - dateOfBirth.year;
-    if (now.month < dateOfBirth.month ||
-        (now.month == dateOfBirth.month && now.day < dateOfBirth.day)) {
+    if (now.month < dateOfBirth.month || (now.month == dateOfBirth.month && now.day < dateOfBirth.day)) {
       age--;
     }
     return age;
@@ -146,28 +144,19 @@ class EligibilityCriteria {
 
   @override
   bool operator ==(Object other) {
-    return other is EligibilityCriteria &&
-        id == other.id &&
-        minAge == other.minAge &&
-        maxAge == other.maxAge &&
-        requiredDiagnosis == other.requiredDiagnosis;
+    return other is EligibilityCriteria && id == other.id && minAge == other.minAge && maxAge == other.maxAge && requiredDiagnosis == other.requiredDiagnosis;
   }
 
-  factory EligibilityCriteria.fromMap(
-      {required Map<String, dynamic> eligibilityCriteriaMap}) {
+  factory EligibilityCriteria.fromMap({required Map<String, dynamic> eligibilityCriteriaMap}) {
     return EligibilityCriteria(
       id: eligibilityCriteriaMap['id'] as int,
       minAge: eligibilityCriteriaMap['min_age'] as int?,
       maxAge: eligibilityCriteriaMap['max_age'] as int?,
-      requiredDiagnosis:
-          Diagnosis.fromString(eligibilityCriteriaMap['diagnosis_name']),
+      requiredDiagnosis: Diagnosis.fromString(eligibilityCriteriaMap['required_diagnosis']),
     );
   }
   @override
   int get hashCode {
-    return id.hashCode ^
-        minAge.hashCode ^
-        maxAge.hashCode ^
-        requiredDiagnosis.hashCode;
+    return id.hashCode ^ minAge.hashCode ^ maxAge.hashCode ^ requiredDiagnosis.hashCode;
   }
 }

@@ -5,7 +5,7 @@ class UserEntity {
   final String email;
   final String? phoneNumber;
   final String? profileImagePath;
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   UserEntity({
     required this.id,
@@ -14,7 +14,7 @@ class UserEntity {
     required this.email,
     this.phoneNumber,
     this.profileImagePath,
-    required this.createdAt,
+    this.createdAt,
   });
 
   /// Constructor for creating a new user instance before persistence.
@@ -61,13 +61,7 @@ class UserEntity {
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        firstName.hashCode ^
-        lastName.hashCode ^
-        email.hashCode ^
-        phoneNumber.hashCode ^
-        profileImagePath.hashCode ^
-        createdAt.hashCode;
+    return id.hashCode ^ firstName.hashCode ^ lastName.hashCode ^ email.hashCode ^ phoneNumber.hashCode ^ profileImagePath.hashCode ^ createdAt.hashCode;
   }
 
   @override

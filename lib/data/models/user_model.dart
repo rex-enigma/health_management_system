@@ -8,7 +8,7 @@ class UserModel extends UserEntity {
     required super.email,
     super.phoneNumber,
     super.profileImagePath,
-    required super.createdAt,
+    super.createdAt,
   });
 
   factory UserModel.fromEntity(UserEntity entity) {
@@ -32,7 +32,7 @@ class UserModel extends UserEntity {
       phoneNumber: userMap['phone_number'] as String?,
       profileImagePath: userMap['profile_image_path'] as String?,
       // modify the backend to return this data
-      createdAt: DateTime.parse(userMap['created_at'] as String),
+      // createdAt: DateTime.parse(userMap['created_at'] as String),
     );
   }
 

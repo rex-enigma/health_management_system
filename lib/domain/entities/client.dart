@@ -13,11 +13,10 @@ class ClientEntity {
   final DateTime dateOfBirth;
   final String contactInfo;
   final String? address;
-  final List<Diagnosis>
-      currentDiagnoses; // The primary conditions or reasons for enrollment
+  final List<Diagnosis> currentDiagnoses; // The primary conditions or reasons for enrollment
   final List<HealthProgramEntity> enrolledPrograms; // List of enrolled programs
   final UserEntity registeredByUser;
-  final DateTime createdAt;
+  final DateTime? createdAt;
 
   ClientEntity({
     required this.id,
@@ -31,7 +30,7 @@ class ClientEntity {
     required this.currentDiagnoses,
     required this.enrolledPrograms,
     required this.registeredByUser,
-    required this.createdAt,
+    this.createdAt,
   });
 
   // /// Constructor for creating a new client instance before persistence.
