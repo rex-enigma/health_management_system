@@ -8,6 +8,6 @@ class StartupViewModel extends BaseViewModel {
 
   Future<void> initialize() async {
     await Future.delayed(const Duration(seconds: 2));
-    _navigationService.replaceWithHomeView();
+    _navigationService.replaceWithLoginView();
   }
 }
