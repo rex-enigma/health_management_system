@@ -4,21 +4,16 @@ import 'package:health_managment_system/data/repositories/health_programs/health
 import 'package:health_managment_system/domain/entities/health_program_entity.dart';
 import 'package:health_managment_system/domain/repository_interface/health_programs/health_programs_repo_interface.dart';
 import 'package:health_managment_system/domain/usecases/usecase.dart';
+import 'package:health_managment_system/enums/diagnosis.dart';
 import 'package:health_managment_system/errors/failures.dart';
 
-class CreateHealthProgramUseCase
-    implements
-        UseCase<Either<Failure, HealthProgramEntity>,
-            CreateHealthProgramParams> {
+class CreateHealthProgramUseCase implements UseCase<Either<Failure, HealthProgramEntity>, CreateHealthProgramParams> {
   final HealthProgramsRepo _healthProgramsRepo;
 
-  CreateHealthProgramUseCase({HealthProgramsRepo? healthProgramsRepo})
-      : _healthProgramsRepo =
-            healthProgramsRepo ?? locator<HealthProgramsRepositoryImpl>();
+  CreateHealthProgramUseCase({HealthProgramsRepo? healthProgramsRepo}) : _healthProgramsRepo = healthProgramsRepo ?? locator<HealthProgramsRepositoryImpl>();
 
   @override
-  Future<Either<Failure, HealthProgramEntity>> call(
-      CreateHealthProgramParams params) {
+  Future<Either<Failure, HealthProgramEntity>> call(CreateHealthProgramParams params) {
     return _healthProgramsRepo.createHealthProgram(
       name: params.name,
       description: params.description,
@@ -47,3 +42,12 @@ class CreateHealthProgramParams {
     this.eligibilityCriteria,
   });
 }
+
+// to be considered instead of using a Map
+// class EligibilityCriteriaParams {
+//   final int? minAge;
+//   final int? maxAge;
+//   final Diagnosis requiredDiagnosis;
+
+//   EligibilityCriteriaParams({this.maxAge, this.minAge, required this.requiredDiagnosis});
+// }

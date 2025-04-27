@@ -117,7 +117,7 @@ class HealthProgramsViewModel extends BaseViewModel {
   }
 
   void navigateToCreateHealthProgram() {
-    _navigationService.navigateToCreateHealthProgramView();
+    _navigationService.navigateToCreateHealthProgramView(); // later check on this if  health program  created isn't displayed
   }
 
   void navigateToHealthProgram(int programId) {

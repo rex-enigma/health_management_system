@@ -7,21 +7,3 @@ abstract class UseCase<RT, PT> {
 class NoParams {
   const NoParams();
 }
-
-class SignupParams {
-  final String firstName;
-  final String lastName;
-  final String email;
-  final String password;
-  final String? phoneNumber;
-  final String? profileImagePath;
-
-  SignupParams({
-    required this.firstName,
-    required this.lastName,
-    required this.email,
-    required this.password,
-    this.phoneNumber,
-    this.profileImagePath,
-  });
-}
