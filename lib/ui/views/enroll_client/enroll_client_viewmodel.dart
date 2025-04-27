@@ -5,8 +5,6 @@ import 'package:health_managment_system/domain/entities/client.dart';
 import 'package:health_managment_system/domain/usecases/enroll_client_usecase.dart';
 import 'package:health_managment_system/domain/usecases/get_all_health_programs_usecase.dart';
 import 'package:health_managment_system/domain/usecases/get_client_usecase.dart';
-import 'package:health_managment_system/ui/bottom_sheets/notice/notice_sheet.dart';
-import 'package:health_managment_system/ui/dialogs/info_alert/info_alert_dialog.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 import '../../../domain/entities/health_program_entity.dart';

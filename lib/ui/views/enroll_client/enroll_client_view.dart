@@ -35,10 +35,8 @@ class EnrollClientView extends StackedView<EnrollClientViewModel> {
                 itemCount: viewModel.healthPrograms.length,
                 itemBuilder: (context, index) {
                   final program = viewModel.healthPrograms[index];
-                  final isSelected =
-                      viewModel.selectedPrograms.contains(program.id);
-                  final eligibilityInfo =
-                      viewModel.eligibilityInfo[program.id] ?? (true, null);
+                  final isSelected = viewModel.selectedPrograms.contains(program.id);
+                  final eligibilityInfo = viewModel.eligibilityInfo[program.id] ?? (true, null);
                   return SelectableProgramCard(
                     program: program,
                     isSelected: isSelected,
@@ -61,8 +59,7 @@ class EnrollClientView extends StackedView<EnrollClientViewModel> {
   }
 
   @override
-  EnrollClientViewModel viewModelBuilder(BuildContext context) =>
-      EnrollClientViewModel(clientId);
+  EnrollClientViewModel viewModelBuilder(BuildContext context) => EnrollClientViewModel(clientId);
 
   @override
   void onViewModelReady(EnrollClientViewModel viewModel) {

@@ -130,8 +130,7 @@ class ClientView extends StackedView<ClientViewModel> {
   }
 
   @override
-  ClientViewModel viewModelBuilder(BuildContext context) =>
-      ClientViewModel(clientId);
+  ClientViewModel viewModelBuilder(BuildContext context) => ClientViewModel(clientId);
 
   @override
   void onViewModelReady(ClientViewModel viewModel) {
