@@ -83,12 +83,10 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
   @override
   Future<Either<Failure, List<HealthProgramModel>>> getAllHealthPrograms({int page = 1, int limit = 10}) async {
     final token = await flutterSecureStorage.read(key: 'jwt_token');
-    print('test1');
 
     if (token == null) {
       return Left(AuthenticationFailure('No token found'));
     }
-    print('test2');
 
     final response = await client.get(
       Uri.parse('$baseUrl/v1/health-programs?page=$page&limit=$limit'),
