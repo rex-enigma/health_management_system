@@ -1,53 +1,96 @@
-Health Management System API Documentation
-This document outlines the RESTful APIs for the Health Management System. The APIs use JWT for user authentication and an API key for third-party service integration. 
-Table of Contents
+to be refined
 
-**Authentication APIs
-**Login
-Signup
+# Health Management System API Documentation
 
+This document provides detailed specifications for the RESTful APIs used in the Health Management System. The APIs utilize **JWT** for user authentication and an **API key** for third-party access to client data. 
 
-**Health Program APIs**
-Get All Health Programs
-Search Health Programs
-Get Health Program by ID
-Create Health Program
-Delete Health Program
+## Overview
 
+- **Authentication:** All requests (except `/v1/auth/login` and `/v1/auth/signup`) require a JWT token in the `Authorization` header.
+- **Third-Party Access:** Third-party applications can access client data via `/v1/clients`, `/v1/clients/{id}` and `/v1/clients/search` endpoints, authenticated using an API key in the `X-API-Key` header.
+- **Error Handling:** Error responses include a `status` field (`error`) and a `message` field.
 
-**Client APIs**
-Get All Clients
-Search Clients
-Get Client by ID
-Create Client
-Delete Client
-Enroll Client in Programs
+## Table of Contents
 
+- [Health Management System API Documentation](#health-management-system-api-documentation)
+  - [Overview](#overview)
+  - [Table of Contents](#table-of-contents)
+  - [Authentication APIs](#authentication-apis)
+    - [1. Login](#1-login)
+      - [Request Body](#request-body)
+      - [Responses](#responses)
+    - [2. Signup](#2-signup)
+      - [Request Body](#request-body-1)
+      - [Responses](#responses-1)
+  - [Health Program APIs](#health-program-apis)
+    - [3. Get All Health Programs](#3-get-all-health-programs)
+      - [Query Parameters](#query-parameters)
+      - [Responses](#responses-2)
+    - [4. Search Health Programs](#4-search-health-programs)
+      - [Query Parameters](#query-parameters-1)
+      - [Responses](#responses-3)
+    - [5. Get Health Program by ID](#5-get-health-program-by-id)
+      - [Responses](#responses-4)
+    - [6. Create Health Program](#6-create-health-program)
+      - [Request Body](#request-body-2)
+      - [Responses](#responses-5)
+    - [7. Delete Health Program](#7-delete-health-program)
+      - [Responses](#responses-6)
+  - [Client APIs](#client-apis)
+    - [8. Get All Clients](#8-get-all-clients)
+      - [Query Parameters](#query-parameters-2)
+      - [Responses](#responses-7)
+    - [9. Search Clients](#9-search-clients)
+      - [Query Parameters](#query-parameters-3)
+      - [Responses](#responses-8)
+    - [10. Get Client by ID](#10-get-client-by-id)
+      - [Responses](#responses-9)
+    - [11. Create Client](#11-create-client)
+      - [Request Body](#request-body-3)
+      - [Responses](#responses-10)
+    - [12. Delete Client](#12-delete-client)
+      - [Responses](#responses-11)
+    - [13. Enroll Client in Programs](#13-enroll-client-in-programs)
+      - [Responses](#responses-12)
+  - [Third-Party Access API](#third-party-access-api)
+    - [14. Get All Clients (Third-Party)](#14-get-all-clients-third-party)
+      - [Query Parameters](#query-parameters-4)
+      - [Responses](#responses-13)
+    - [15. Search Clients (Third-Party)](#15-search-clients-third-party)
+      - [Query Parameters](#query-parameters-5)
+      - [Responses](#responses-14)
+    - [16. Get Client Health Data (Third-Party)](#16-get-client-health-data-third-party)
+      - [Responses](#responses-15)
+  - [Additional Notes](#additional-notes)
+  - [Additional Notes](#additional-notes-1)
 
-**Third-Party Health Data API**
-Get Client Health Data
+---
 
+## Authentication APIs
 
+### 1. Login
 
+**Authenticate a user and return a JWT token.**
 
-Authentication APIs
-1. Login
-Authenticate a user and return a JWT token.
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `POST`                         |
+| **Endpoint**    | `/v1/auth/login`               |
+| **Headers**     | `Content-Type: application/json` |
 
-Endpoint: POST /auth/login
-Headers:
-Content-Type: application/json
-
-
-Body:{
+#### Request Body
+```json
+{
   "email": "admin@example.com",
   "password": "admin123"
 }
+```
 
+#### Responses
 
-Success Response (200):{
-  "status": "success",
-  "data": {
+- **Success (200):**
+  ```json
+  {
     "user": {
       "id": 1,
       "username": "admin",
@@ -55,34 +98,42 @@ Success Response (200):{
     },
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
   }
-}
+  ```
 
+- **Error (401):**
+  ```json
+  {
+    "status": "error",
+    "message": "Invalid credentials"
+  }
+  ```
 
-Error Response (401):{
-  "status": "error",
-  "message": "Invalid credentials"
-}
+---
 
+### 2. Signup
 
+**Register a new user and return a JWT token.**
 
-2. Signup
-Register a new user and return a JWT token.
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `POST`                         |
+| **Endpoint**    | `/v1/auth/signup`              |
+| **Headers**     | `Content-Type: application/json` |
 
-Endpoint: POST /auth/signup
-Headers:
-Content-Type: application/json
-
-
-Body:{
+#### Request Body
+```json
+{
   "username": "newuser",
   "email": "newuser@example.com",
   "password": "newuser123"
 }
+```
 
+#### Responses
 
-Success Response (201):{
-  "status": "success",
-  "data": {
+- **Success (201):**
+  ```json
+  {
     "user": {
       "id": 3,
       "username": "newuser",
@@ -90,34 +141,41 @@ Success Response (201):{
     },
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
   }
-}
+  ```
 
+- **Error (400):**
+  ```json
+  {
+    "status": "error",
+    "message": "Email already exists"
+  }
+  ```
 
-Error Response (400):{
-  "status": "error",
-  "message": "Email already exists"
-}
+---
 
+## Health Program APIs
 
+### 3. Get All Health Programs
 
+**Retrieve a list of health programs.**
 
-Health Program APIs
-3. Get All Health Programs
-Retrieve a paginated list of health programs.
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `GET`                          |
+| **Endpoint**    | `/v1/health-programs?page={page}&limit={limit}` |
+| **Headers**     | `Authorization: Bearer <JWT_TOKEN>` |
 
-Endpoint: GET /health-programs?page={page}&limit={limit}
-Headers:
-Authorization: Bearer <JWT_TOKEN>
+#### Query Parameters
+| **Parameter** | **Description**           | **Default** |
+|---------------|---------------------------|-------------|
+| `page`        | Page number              | 1           |
+| `limit`       | Items per page           | 10          |
 
+#### Responses
 
-Query Parameters:
-page: Page number (default: 1)
-limit: Number of items per page (default: 10)
-
-
-Success Response (200):{
-  "status": "success",
-  "data": [
+- **Success (200):**
+  ```json
+  [
     {
       "id": 1,
       "name": "Diabetes Management Program",
@@ -137,40 +195,41 @@ Success Response (200):{
       },
       "createdAt": "2024-10-01T00:00:00Z"
     }
-  ],
-  "meta": {
-    "page": 1,
-    "limit": 10,
-    "total": 3,
-    "hasMore": true
+  ]
+  ```
+
+- **Error (401):**
+  ```json
+  {
+    "status": "error",
+    "message": "Unauthorized"
   }
-}
+  ```
 
+---
 
-Error Response (401):{
-  "status": "error",
-  "message": "Unauthorized"
-}
+### 4. Search Health Programs
 
+**Search health programs by name or description.**
 
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `GET`                          |
+| **Endpoint**    | `/v1/health-programs/search?query={query}&page={page}&limit={limit}` |
+| **Headers**     | `Authorization: Bearer <JWT_TOKEN>` |
 
-4. Search Health Programs
-Search health programs by name or description.
+#### Query Parameters
+| **Parameter** | **Description**           | **Default** |
+|---------------|---------------------------|-------------|
+| `query`       | Search term              | N/A         |
+| `page`        | Page number              | 1           |
+| `limit`       | Items per page           | 10          |
 
-Endpoint: GET /health-programs/search?query={query}&page={page}&limit={limit}
-Headers:
-Authorization: Bearer <JWT_TOKEN>
+#### Responses
 
-
-Query Parameters:
-query: Search term
-page: Page number
-limit: Number of items per page
-
-
-Success Response (200):{
-  "status": "success",
-  "data": [
+- **Success (200):**
+  ```json
+  [
     {
       "id": 1,
       "name": "Diabetes Management Program",
@@ -190,28 +249,26 @@ Success Response (200):{
       },
       "createdAt": "2024-10-01T00:00:00Z"
     }
-  ],
-  "meta": {
-    "page": 1,
-    "limit": 10,
-    "total": 1,
-    "hasMore": false
-  }
-}
+  ]
+  ```
 
+---
 
+### 5. Get Health Program by ID
 
-5. Get Health Program by ID
-Retrieve details of a specific health program.
+**Retrieve details of a specific health program.**
 
-Endpoint: GET /health-programs/{id}
-Headers:
-Authorization: Bearer <JWT_TOKEN>
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `GET`                          |
+| **Endpoint**    | `/v1/health-programs/{id}`     |
+| **Headers**     | `Authorization: Bearer <JWT_TOKEN>` |
 
+#### Responses
 
-Success Response (200):{
-  "status": "success",
-  "data": {
+- **Success (200):**
+  ```json
+  {
     "id": 1,
     "name": "Diabetes Management Program",
     "description": "A program to manage diabetes through diet and exercise.",
@@ -230,20 +287,23 @@ Success Response (200):{
     },
     "createdAt": "2024-10-01T00:00:00Z"
   }
-}
+  ```
 
+---
 
+### 6. Create Health Program
 
-6. Create Health Program
-Create a new health program.
+**Create a new health program.**
 
-Endpoint: POST /health-programs
-Headers:
-Authorization: Bearer <JWT_TOKEN>
-Content-Type: application/json
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `POST`                         |
+| **Endpoint**    | `/v1/health-programs`          |
+| **Headers**     | `Authorization: Bearer <JWT_TOKEN>` <br> `Content-Type: application/json` |
 
-
-Body:{
+#### Request Body
+```json
+{
   "name": "New Program",
   "description": "A new health program.",
   "startDate": "2025-06-01T00:00:00Z",
@@ -254,11 +314,13 @@ Body:{
     "requiredDiagnosis": "none"
   }
 }
+```
 
+#### Responses
 
-Success Response (201):{
-  "status": "success",
-  "data": {
+- **Success (201):**
+  ```json
+  {
     "id": 4,
     "name": "New Program",
     "description": "A new health program.",
@@ -277,44 +339,56 @@ Success Response (201):{
     },
     "createdAt": "2025-04-27T00:00:00Z"
   }
-}
+  ```
 
+---
 
+### 7. Delete Health Program
 
-7. Delete Health Program
-Delete a health program by ID.
+**Delete a health program by ID.**
 
-Endpoint: DELETE /health-programs/{id}
-Headers:
-Authorization: Bearer <JWT_TOKEN>
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `DELETE`                       |
+| **Endpoint**    | `/v1/health-programs/{id}`     |
+| **Headers**     | `Authorization: Bearer <JWT_TOKEN>` |
 
+#### Responses
 
-Success Response (204): No content.
-Error Response (404):{
-  "status": "error",
-  "message": "Health program not found"
-}
+- **Success (204):** No content.
+- **Error (404):**
+  ```json
+  {
+    "status": "error",
+    "message": "Health program not found"
+  }
+  ```
 
+---
 
+## Client APIs
 
+### 8. Get All Clients
 
-Client APIs
-8. Get All Clients
-Retrieve a paginated list of clients.
+**Retrieve a list of clients.**
 
-Endpoint: GET /clients?page={page}&limit={limit}
-Headers:
-Authorization: Bearer <JWT_TOKEN>
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `GET`                          |
+| **Endpoint**    | `/v1/clients?page={page}&limit={limit}` |
+| **Headers**     | `Authorization: Bearer <JWT_TOKEN>` |
 
+#### Query Parameters
+| **Parameter** | **Description**           | **Default** |
+|---------------|---------------------------|-------------|
+| `page`        | Page number              | 1           |
+| `limit`       | Items per page           | 10          |
 
-Query Parameters:
-page: Page number (default: 1)
-limit: Number of items per page (default: 10)
+#### Responses
 
-
-Success Response (200):{
-  "status": "success",
-  "data": [
+- **Success (200):**
+  ```json
+  [
     {
       "id": 1,
       "firstName": "John",
@@ -340,34 +414,33 @@ Success Response (200):{
       },
       "createdAt": "2024-10-10T00:00:00Z"
     }
-  ],
-  "meta": {
-    "page": 1,
-    "limit": 10,
-    "total": 3,
-    "hasMore": true
-  }
-}
+  ]
+  ```
 
+---
 
+### 9. Search Clients
 
-9. Search Clients
-Search clients by name.
+**Search clients by name.**
 
-Endpoint: GET /clients/search?query={query}&page={page}&limit={limit}
-Headers:
-Authorization: Bearer <JWT_TOKEN>
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `GET`                          |
+| **Endpoint**    | `/v1/clients/search?query={query}&page={page}&limit={limit}` |
+| **Headers**     | `Authorization: Bearer <JWT_TOKEN>` |
 
+#### Query Parameters
+| **Parameter** | **Description**           | **Default** |
+|---------------|---------------------------|-------------|
+| `query`       | Search term              | N/A         |
+| `page`        | Page number              | 1           |
+| `limit`       | Items per page           | 10          |
 
-Query Parameters:
-query: Search term
-page: Page number
-limit: Number of items per page
+#### Responses
 
-
-Success Response (200):{
-  "status": "success",
-  "data": [
+- **Success (200):**
+  ```json
+  [
     {
       "id": 1,
       "firstName": "John",
@@ -385,28 +458,26 @@ Success Response (200):{
       },
       "createdAt": "2024-10-10T00:00:00Z"
     }
-  ],
-  "meta": {
-    "page": 1,
-    "limit": 10,
-    "total": 1,
-    "hasMore": false
-  }
-}
+  ]
+  ```
 
+---
 
+### 10. Get Client by ID
 
-10. Get Client by ID
-Retrieve details of a specific client.
+**Retrieve details of a specific client.**
 
-Endpoint: GET /clients/{id}
-Headers:
-Authorization: Bearer <JWT_TOKEN>
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `GET`                          |
+| **Endpoint**    | `/v1/clients/{id}`             |
+| **Headers**     | `Authorization: Bearer <JWT_TOKEN>` |
 
+#### Responses
 
-Success Response (200):{
-  "status": "success",
-  "data": {
+- **Success (200):**
+  ```json
+  {
     "id": 1,
     "firstName": "John",
     "lastName": "Doe",
@@ -423,20 +494,23 @@ Success Response (200):{
     },
     "createdAt": "2024-10-10T00:00:00Z"
   }
-}
+  ```
 
+---
 
+### 11. Create Client
 
-11. Create Client
-Register a new client.
+**Register a new client.**
 
-Endpoint: POST /clients
-Headers:
-Authorization: Bearer <JWT_TOKEN>
-Content-Type: application/json
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `POST`                         |
+| **Endpoint**    | `/v1/clients`                  |
+| **Headers**     | `Authorization: Bearer <JWT_TOKEN>` <br> `Content-Type: application/json` |
 
-
-Body:{
+#### Request Body
+```json
+{
   "firstName": "New",
   "lastName": "Client",
   "gender": "female",
@@ -445,11 +519,13 @@ Body:{
   "address": "789 Elm St, City",
   "currentDiagnoses": ["hypertension"]
 }
+```
 
+#### Responses
 
-Success Response (201):{
-  "status": "success",
-  "data": {
+- **Success (201):**
+  ```json
+  {
     "id": 4,
     "firstName": "New",
     "lastName": "Client",
@@ -466,86 +542,223 @@ Success Response (201):{
     },
     "createdAt": "2025-04-27T00:00:00Z"
   }
-}
+  ```
 
+---
 
+### 12. Delete Client
 
-12. Delete Client
-Delete a client by ID.
+**Delete a client by ID.**
 
-Endpoint: DELETE /clients/{id}
-Headers:
-Authorization: Bearer <JWT_TOKEN>
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `DELETE`                       |
+| **Endpoint**    | `/v1/clients/{id}`             |
+| **Headers**     | `Authorization: Bearer <JWT_TOKEN>` |
 
+#### Responses
 
-Success Response (204): No content.
+- **Success (204):** No content.
 
-13. Enroll Client in Programs
-Enroll a client in one or more health programs.
+---
 
-Endpoint: POST /clients/{clientId}/enroll
-Headers:
-Authorization: Bearer <JWT_TOKEN>
-Content-Type: application/json
+### 13. Enroll Client in Programs
 
+**Enroll a client in one or more health programs.**
 
-Body:{
-  "healthProgramIds": [1, 3]
-}
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `POST`                         |
+| **Endpoint**    | `/v1/clients/{clientId}/enroll` |
+| **Headers**     | `Authorization: Bearer <JWT_TOKEN>` <br> `Content-Type: application/json` |
 
+#### Responses
 
-Success Response (200):{
-  "status": "success",
-  "message": "Client enrolled successfully"
-}
+- **Success (200):**
+  ```json
+  {
+    "message": "Client enrolled successfully"
+  }
+  ```
 
+---
 
-Error Response (400):{
-  "status": "error",
-  "message": "Client is not eligible for programs with IDs: 1",
-  "ineligibleHealthProgramIds": [1]
-}
+## Third-Party Access API
 
+### 14. Get All Clients (Third-Party)
 
+**Allow third-party applications to retrieve a list of clients.**
 
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `GET`                          |
+| **Endpoint**    | `/v1/clients?page={page}&limit={limit}` |
+| **Headers**     | `X-API-Key: <API_KEY>`         |
 
-Third-Party Health Data API
-14. Get Client Health Data
-Fetch additional health data for a client from a third-party service.
+#### Query Parameters
+| **Parameter** | **Description**           | **Default** |
+|---------------|---------------------------|-------------|
+| `page`        | Page number              | 1           |
+| `limit`       | Items per page           | 10          |
 
-Endpoint: GET https://thirdparty.healthapi.com/v1/clients/{clientId}/health-data
-Headers:
-X-API-Key: <API_KEY>
+#### Responses
 
+- **Success (200):**
+  ```json
+  [
+    {
+      "id": 1,
+      "firstName": "John",
+      "lastName": "Doe",
+      "gender": "male",
+      "dateOfBirth": "1980-05-15T00:00:00Z",
+      "contactInfo": "john.doe@example.com",
+      "address": "123 Main St, City",
+      "currentDiagnoses": ["diabetes"],
+      "enrolledPrograms": [
+        {
+          "id": 3,
+          "name": "General Wellness Program",
+          "description": "A program for overall health and wellness.",
+          "startDate": "2025-03-01T00:00:00Z",
+          "endDate": "2025-09-30T00:00:00Z"
+        }
+      ],
+      "registeredByUser": {
+        "id": 1,
+        "username": "admin",
+        "email": "admin@example.com"
+      },
+      "createdAt": "2024-10-10T00:00:00Z"
+    }
+  ]
+  ```
 
-Success Response (200):{
-  "status": "success",
-  "data": {
+- **Error (403):**
+  ```json
+  {
+    "status": "error",
+    "message": "Invalid API key"
+  }
+  ```
+
+---
+
+### 15. Search Clients (Third-Party)
+
+**Allow third-party applications to search clients by name.**
+
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `GET`                          |
+| **Endpoint**    | `/v1/clients/search?query={query}&page={page}&limit={limit}` |
+| **Headers**     | `X-API-Key: <API_KEY>`         |
+
+#### Query Parameters
+| **Parameter** | **Description**           | **Default** |
+|---------------|---------------------------|-------------|
+| `query`       | Search term              | N/A         |
+| `page`        | Page number              | 1           |
+| `limit`       | Items per page           | 10          |
+
+#### Responses
+
+- **Success (200):**
+  ```json
+  [
+    {
+      "id": 1,
+      "firstName": "John",
+      "lastName": "Doe",
+      "gender": "male",
+      "dateOfBirth": "1980-05-15T00:00:00Z",
+      "contactInfo": "john.doe@example.com",
+      "address": "123 Main St, City",
+      "currentDiagnoses": ["diabetes"],
+      "enrolledPrograms": [],
+      "registeredByUser": {
+        "id": 1,
+        "username": "admin",
+        "email": "admin@example.com"
+      },
+      "createdAt": "2024-10-10T00:00:00Z"
+    }
+  ]
+  ```
+
+- **Error (403):**
+  ```json
+  {
+    "status": "error",
+    "message": "Invalid API key"
+  }
+  ```
+
+---
+
+### 16. Get Client Health Data (Third-Party)
+
+**Allow third-party applications to access health data for a specific client.**
+
+| **Field**       | **Value**                       |
+|-----------------|---------------------------------|
+| **Method**      | `GET`                          |
+| **Endpoint**    | `/v1/third-party/clients/{clientId}/health-data` |
+| **Headers**     | `X-API-Key: <API_KEY>`         |
+
+#### Responses
+
+- **Success (200):**
+  ```json
+  {
     "clientId": 1,
-    "bloodPressureHistory": [
+    "firstName": "John",
+    "lastName": "Doe",
+    "gender": "male",
+    "dateOfBirth": "1980-05-15T00:00:00Z",
+    "currentDiagnoses": ["diabetes"],
+    "enrolledPrograms": [
       {
-        "date": "2025-04-01T00:00:00Z",
-        "systolic": 120,
-        "diastolic": 80
+        "id": 3,
+        "name": "General Wellness Program",
+        "description": "A program for overall health and wellness.",
+        "startDate": "2025-03-01T00:00:00Z",
+        "endDate": "2025-09-30T00:00:00Z"
       }
     ]
   }
-}
+  ```
 
+- **Error (403):**
+  ```json
+  {
+    "status": "error",
+    "message": "Invalid API key"
+  }
+  ```
 
-Error Response (403):{
-  "status": "error",
-  "message": "Invalid API key"
-}
+- **Error (404):**
+  ```json
+  {
+    "status": "error",
+    "message": "Client not found"
+  }
+  ```
 
+---
 
+## Additional Notes
 
+- **JWT Token Management:** After login/signup, store the JWT token locally (e.g., using `shared_preferences`). Include it in the `Authorization` header for all authenticated requests. On a 401 response, redirect the user to the login screen and clear the token.
+- **API Key for Third-Party Access:** Generate API keys for trusted third-party applications and validate them on the server side for the `/v1/clients`, `/v1/clients/search`, and `/v1/third-party/clients/{clientId}/health-data` endpoints. Store API keys securely and revoke them if necessary.
+- **Error Handling:** All API error responses include a `status` field (`error`) and a `message` field for errors, making it easy to display user-friendly messages in the app.
 
-Notes
+This documentation provides a comprehensive guide for developers integrating with the Health Management System APIs.
 
-JWT Token: Include the JWT token in the Authorization header for all authenticated requests. If the token is invalid or expired (401 response), the client should redirect to the login screen.
-API Key: The API key for the third-party health data API should be stored securely (e.g., in a .env file) and included in the X-API-Key header.
+## Additional Notes
 
-You should create .env in the root directory of flutter project for holding BASE_URL
-
-This API documentation is designed to support the Health Management System's functionality, including user authentication, health program management, client management, and third-party data integration.
+- **JWT Token Management:** After login/signup, store the JWT token locally (e.g., using `flutter_secure_storage`). Include it in the `Authorization` header for all authenticated requests. On a 401 response, redirect the user to the login screen and clear the token.
+- **API Key Security:** The API key for the third-party health data API should be stored securely (e.g., in a .env file) and included in the X-API-Key header.
+- You should create .`env` in the root directory of flutter project for holding BASE_URL and use `flutter_dotenv` to load the your flutter project based environment variables
+  
+This documentation provides a comprehensive guide for developers integrating with the Health Management System APIs.
