@@ -18,33 +18,33 @@ router.post('/v1/health-programs', authenticateJWT, async (req, res, next) => {
             let eligibilityCriteriaId = null;
             let eligibilityCriteriaResponse = null;
             if (eligibility_criteria) {
-                const { minAge, maxAge, diagnosis_name } = eligibility_criteria;
-                if (!diagnosis_name) {
+                const { min_age, max_age, required_diagnosis } = eligibility_criteria;
+                if (!required_diagnosis) {
                     throw new Error('Eligibility criteria diagnosis_name is required');
                 }
-                if (minAge !== undefined && (typeof minAge !== 'number' || minAge < 0)) {
+                if (min_age !== undefined && (typeof min_age !== 'number' || min_age < 0)) {
                     throw new Error('minAge must be a non-negative number');
                 }
-                if (maxAge !== undefined && (typeof maxAge !== 'number' || maxAge < 0)) {
+                if (max_age !== undefined && (typeof max_age !== 'number' || max_age < 0)) {
                     throw new Error('maxAge must be a non-negative number');
                 }
-                if (minAge !== undefined && maxAge !== undefined && minAge > maxAge) {
+                if (min_age !== undefined && max_age !== undefined && min_age > max_age) {
                     throw new Error('minAge cannot be greater than maxAge');
                 }
 
                 // Look up or create diagnosis
                 const [diagnosisResult] = await connection.execute(
                     'INSERT INTO diagnoses (diagnosis_name) VALUES (?) ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)',
-                    [diagnosis_name]
+                    [required_diagnosis]
                 );
                 const diagnosisId = diagnosisResult.insertId;
 
                 const [criteriaResult] = await connection.execute(
                     'INSERT INTO eligibility_criteria (min_age, max_age, required_diagnosis_id) VALUES (?, ?, ?)',
-                    [minAge || null, maxAge || null, diagnosisId]
+                    [min_age || null, max_age || null, diagnosisId]
                 );
                 eligibilityCriteriaId = criteriaResult.insertId;
-                eligibilityCriteriaResponse = { minAge, maxAge, diagnosis_name };
+                eligibilityCriteriaResponse = { min_age, max_age, required_diagnosis };
             }
 
             const [programResult] = await connection.execute(
@@ -96,7 +96,7 @@ router.get('/v1/health-programs/:id', requireAuth, async (req, res, next) => {
         let eligibilityCriteria = null;
         if (program[0].eligibility_criteria_id) {
             const [criteria] = await db.execute(
-                'SELECT ec.id, ec.min_age AS minAge, ec.max_age AS maxAge, d.diagnosis_name AS diagnosis_name ' +
+                'SELECT ec.id, ec.min_age, ec.max_age, d.diagnosis_name AS diagnosis_name ' +
                 'FROM eligibility_criteria ec JOIN diagnoses d ON ec.required_diagnosis_id = d.id WHERE ec.id = ?',
                 [program[0].eligibility_criteria_id]
             );
