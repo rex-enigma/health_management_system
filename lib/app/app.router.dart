@@ -5,22 +5,72 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i4;
+import 'package:flutter/material.dart' as _i14;
 import 'package:flutter/material.dart';
-import 'package:health_managment_system/ui/views/home/home_view.dart' as _i2;
-import 'package:health_managment_system/ui/views/startup/startup_view.dart'
+import 'package:health_managment_system/ui/views/client/client_view.dart'
+    as _i11;
+import 'package:health_managment_system/ui/views/clients/clients_view.dart'
+    as _i8;
+import 'package:health_managment_system/ui/views/create_health_program/create_health_program_view.dart'
+    as _i12;
+import 'package:health_managment_system/ui/views/enroll_client/enroll_client_view.dart'
+    as _i13;
+import 'package:health_managment_system/ui/views/health_program/health_program_view.dart'
+    as _i4;
+import 'package:health_managment_system/ui/views/health_programs/health_programs_view.dart'
+    as _i5;
+import 'package:health_managment_system/ui/views/home_view/home_view.dart'
+    as _i2;
+import 'package:health_managment_system/ui/views/login/login_view.dart' as _i9;
+import 'package:health_managment_system/ui/views/register_client/register_client_view.dart'
+    as _i6;
+import 'package:health_managment_system/ui/views/settings/settings_view.dart'
+    as _i7;
+import 'package:health_managment_system/ui/views/signup/signup_view.dart'
+    as _i10;
+import 'package:health_managment_system/ui/views/startup_view/startup_view.dart'
     as _i3;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i5;
+import 'package:stacked_services/stacked_services.dart' as _i15;
 
 class Routes {
   static const homeView = '/home-view';
 
   static const startupView = '/startup-view';
 
+  static const healthProgramView = '/health-program-view';
+
+  static const healthProgramsView = '/health-programs-view';
+
+  static const registerClientView = '/register-client-view';
+
+  static const settingsView = '/settings-view';
+
+  static const clientsView = '/clients-view';
+
+  static const loginView = '/login-view';
+
+  static const signupView = '/signup-view';
+
+  static const clientView = '/client-view';
+
+  static const createHealthProgramView = '/create-health-program-view';
+
+  static const enrollClientView = '/enroll-client-view';
+
   static const all = <String>{
     homeView,
     startupView,
+    healthProgramView,
+    healthProgramsView,
+    registerClientView,
+    settingsView,
+    clientsView,
+    loginView,
+    signupView,
+    clientView,
+    createHealthProgramView,
+    enrollClientView,
   };
 }
 
@@ -34,18 +84,118 @@ class StackedRouter extends _i1.RouterBase {
       Routes.startupView,
       page: _i3.StartupView,
     ),
+    _i1.RouteDef(
+      Routes.healthProgramView,
+      page: _i4.HealthProgramView,
+    ),
+    _i1.RouteDef(
+      Routes.healthProgramsView,
+      page: _i5.HealthProgramsView,
+    ),
+    _i1.RouteDef(
+      Routes.registerClientView,
+      page: _i6.RegisterClientView,
+    ),
+    _i1.RouteDef(
+      Routes.settingsView,
+      page: _i7.SettingsView,
+    ),
+    _i1.RouteDef(
+      Routes.clientsView,
+      page: _i8.ClientsView,
+    ),
+    _i1.RouteDef(
+      Routes.loginView,
+      page: _i9.LoginView,
+    ),
+    _i1.RouteDef(
+      Routes.signupView,
+      page: _i10.SignupView,
+    ),
+    _i1.RouteDef(
+      Routes.clientView,
+      page: _i11.ClientView,
+    ),
+    _i1.RouteDef(
+      Routes.createHealthProgramView,
+      page: _i12.CreateHealthProgramView,
+    ),
+    _i1.RouteDef(
+      Routes.enrollClientView,
+      page: _i13.EnrollClientView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.HomeView: (data) {
-      return _i4.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.HomeView(),
         settings: data,
       );
     },
     _i3.StartupView: (data) {
-      return _i4.MaterialPageRoute<dynamic>(
+      return _i14.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.StartupView(),
+        settings: data,
+      );
+    },
+    _i4.HealthProgramView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i4.HealthProgramView(),
+        settings: data,
+      );
+    },
+    _i5.HealthProgramsView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i5.HealthProgramsView(),
+        settings: data,
+      );
+    },
+    _i6.RegisterClientView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i6.RegisterClientView(),
+        settings: data,
+      );
+    },
+    _i7.SettingsView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i7.SettingsView(),
+        settings: data,
+      );
+    },
+    _i8.ClientsView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i8.ClientsView(),
+        settings: data,
+      );
+    },
+    _i9.LoginView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i9.LoginView(),
+        settings: data,
+      );
+    },
+    _i10.SignupView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i10.SignupView(),
+        settings: data,
+      );
+    },
+    _i11.ClientView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i11.ClientView(),
+        settings: data,
+      );
+    },
+    _i12.CreateHealthProgramView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i12.CreateHealthProgramView(),
+        settings: data,
+      );
+    },
+    _i13.EnrollClientView: (data) {
+      return _i14.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i13.EnrollClientView(),
         settings: data,
       );
     },
@@ -58,7 +208,7 @@ class StackedRouter extends _i1.RouterBase {
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
 }
 
-extension NavigatorStateExtension on _i5.NavigationService {
+extension NavigatorStateExtension on _i15.NavigationService {
   Future<dynamic> navigateToHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -87,6 +237,146 @@ extension NavigatorStateExtension on _i5.NavigationService {
         transition: transition);
   }
 
+  Future<dynamic> navigateToHealthProgramView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.healthProgramView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToHealthProgramsView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.healthProgramsView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToRegisterClientView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.registerClientView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToSettingsView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.settingsView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToClientsView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.clientsView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToLoginView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.loginView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToSignupView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.signupView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToClientView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.clientView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToCreateHealthProgramView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.createHealthProgramView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToEnrollClientView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.enrollClientView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
   Future<dynamic> replaceWithHomeView([
     int? routerId,
     bool preventDuplicates = true,
@@ -109,6 +399,146 @@ extension NavigatorStateExtension on _i5.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.startupView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithHealthProgramView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.healthProgramView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithHealthProgramsView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.healthProgramsView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithRegisterClientView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.registerClientView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithSettingsView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.settingsView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithClientsView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.clientsView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithLoginView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.loginView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithSignupView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.signupView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithClientView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.clientView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithCreateHealthProgramView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.createHealthProgramView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithEnrollClientView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.enrollClientView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

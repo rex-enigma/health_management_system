@@ -22,17 +22,37 @@ import 'package:health_managment_system/domain/usecases/search_health_programs_u
 import 'package:health_managment_system/domain/usecases/sign_up_usecase.dart';
 import 'package:health_managment_system/ui/bottom_sheets/notice/notice_sheet.dart';
 import 'package:health_managment_system/ui/dialogs/info_alert/info_alert_dialog.dart';
-import 'package:health_managment_system/ui/views/home/home_view.dart';
-import 'package:health_managment_system/ui/views/startup/startup_view.dart';
+import 'package:health_managment_system/ui/views/home_view/home_view.dart';
+import 'package:health_managment_system/ui/views/startup_view/startup_view.dart';
 import 'package:stacked/stacked_annotations.dart';
 import 'package:stacked_services/stacked_services.dart';
+import 'package:health_managment_system/ui/views/health_program/health_program_view.dart';
+import 'package:health_managment_system/ui/views/health_programs/health_programs_view.dart';
+import 'package:health_managment_system/ui/views/register_client/register_client_view.dart';
+import 'package:health_managment_system/ui/views/settings/settings_view.dart';
+import 'package:health_managment_system/ui/views/clients/clients_view.dart';
+import 'package:health_managment_system/ui/views/login/login_view.dart';
+import 'package:health_managment_system/ui/views/signup/signup_view.dart';
+import 'package:health_managment_system/ui/views/client/client_view.dart';
+import 'package:health_managment_system/ui/views/create_health_program/create_health_program_view.dart';
+import 'package:health_managment_system/ui/views/enroll_client/enroll_client_view.dart';
 // @stacked-import
 
 @StackedApp(
   routes: [
     MaterialRoute(page: HomeView),
     MaterialRoute(page: StartupView),
-    // @stacked-route
+    MaterialRoute(page: HealthProgramView),
+    MaterialRoute(page: HealthProgramsView),
+    MaterialRoute(page: RegisterClientView),
+    MaterialRoute(page: SettingsView),
+    MaterialRoute(page: ClientsView),
+    MaterialRoute(page: LoginView),
+    MaterialRoute(page: SignupView),
+    MaterialRoute(page: ClientView),
+    MaterialRoute(page: CreateHealthProgramView),
+    MaterialRoute(page: EnrollClientView),
+// @stacked-route
   ],
   dependencies: [
     // @stacked-service
