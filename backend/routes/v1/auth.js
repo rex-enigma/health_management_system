@@ -14,10 +14,10 @@ router.post('/v1/auth/signup', async (req, res, next) => {
         const [existing] = await db.execute('SELECT 1 FROM users WHERE email = ?', [email]);
         if (existing.length > 0) return res.status(409).json({ error: 'Email already exists' });
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashed_password = await bcrypt.hash(password, 10);
         const [result] = await db.execute(
-            'INSERT INTO users (first_name, last_name, email, password, phone_number, profile_image_path) VALUES (?, ?, ?, ?, ?, ?)',
-            [first_name, last_name, email, hashedPassword, phone_number, profile_image_path]
+            'INSERT INTO users (first_name, last_name, email, password_hash, phone_number, profile_image_path) VALUES (?, ?, ?, ?, ?, ?)',
+            [first_name, last_name, email, hashed_password, phone_number, profile_image_path]
         );
         res.status(201).json({ id: result.insertId, first_name, last_name, email, phone_number, profile_image_path });
     } catch (error) {
