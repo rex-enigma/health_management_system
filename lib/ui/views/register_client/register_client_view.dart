@@ -59,7 +59,10 @@ class RegisterClientView extends StackedView<RegisterClientViewModel> {
                 child: AppTextField(
                   label: 'Date of Birth',
                   controller: TextEditingController(
-                    text: viewModel.dateOfBirth != null ? DateFormat('dd/MM/yyyy').format(viewModel.dateOfBirth!) : '',
+                    text: viewModel.dateOfBirth != null
+                        ? DateFormat('dd/MM/yyyy')
+                            .format(viewModel.dateOfBirth!)
+                        : '',
                   ),
                 ),
               ),
@@ -105,5 +108,6 @@ class RegisterClientView extends StackedView<RegisterClientViewModel> {
   }
 
   @override
-  RegisterClientViewModel viewModelBuilder(BuildContext context) => RegisterClientViewModel();
+  RegisterClientViewModel viewModelBuilder(BuildContext context) =>
+      RegisterClientViewModel();
 }

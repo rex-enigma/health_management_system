@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:health_managment_system/ui/views/clients/clients_view.dart';
+import 'package:health_managment_system/ui/views/health_programs/health_programs_view.dart';
+import 'package:health_managment_system/ui/views/settings/settings_view.dart';
 import 'package:stacked/stacked.dart';
 import 'home_viewmodel.dart';
 
@@ -15,9 +18,10 @@ class HomeView extends StackedView<HomeViewModel> {
       body: IndexedStack(
         index: viewModel.currentIndex,
         children: const [
+          MyWidget(),
           // HealthProgramsView(),
-          // ClientsView(),
-          // SettingsView(),
+          ClientsView(),
+          SettingsView(),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -47,5 +51,18 @@ class HomeView extends StackedView<HomeViewModel> {
   @override
   void onViewModelReady(HomeViewModel viewModel) {
     viewModel.initialize();
+  }
+}
+
+class MyWidget extends StatelessWidget {
+  const MyWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(color: Colors.red),
+      ),
+    );
   }
 }

@@ -6,13 +6,10 @@ import 'package:health_managment_system/domain/repository_interface/clients/clie
 import 'package:health_managment_system/domain/usecases/usecase.dart';
 import 'package:health_managment_system/errors/failures.dart';
 
-class GetAllClientsUseCase
-    implements
-        UseCase<Either<Failure, List<ClientEntity>>, GetAllClientsParams> {
+class GetAllClientsUseCase implements UseCase<Either<Failure, List<ClientEntity>>, GetAllClientsParams> {
   final ClientsRepo _clientsRepo;
 
-  GetAllClientsUseCase({ClientsRepo? clientsRepo})
-      : _clientsRepo = clientsRepo ?? locator<ClientsRepositoryImpl>();
+  GetAllClientsUseCase({ClientsRepo? clientsRepo}) : _clientsRepo = clientsRepo ?? locator<ClientsRepositoryImpl>();
 
   @override
   Future<Either<Failure, List<ClientEntity>>> call(GetAllClientsParams params) {

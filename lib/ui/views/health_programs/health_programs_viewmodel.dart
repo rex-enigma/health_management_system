@@ -37,13 +37,17 @@ class HealthProgramsViewModel extends BaseViewModel {
 
   HealthProgramsViewModel() {
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent && _hasMoreData) {
+      if (_scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent &&
+          _hasMoreData) {
         loadHealthPrograms();
       }
     });
 
     _searchScrollController.addListener(() {
-      if (_searchScrollController.position.pixels == _searchScrollController.position.maxScrollExtent && _hasMoreSearchData) {
+      if (_searchScrollController.position.pixels ==
+              _searchScrollController.position.maxScrollExtent &&
+          _hasMoreSearchData) {
         loadMoreSearchPrograms(_lastQuery);
       }
     });
@@ -51,7 +55,8 @@ class HealthProgramsViewModel extends BaseViewModel {
 
   Future<void> loadHealthPrograms() async {
     setBusy(true);
-    final result = await _getAllHealthProgramsUseCase(GetAllHealthProgramsParams(page: _currentPage));
+    final result = await _getAllHealthProgramsUseCase(
+        GetAllHealthProgramsParams(page: _currentPage));
     setBusy(false);
 
     result.fold(
@@ -84,7 +89,8 @@ class HealthProgramsViewModel extends BaseViewModel {
       return;
     }
 
-    final result = await _searchHealthProgramsUseCase(SearchHealthProgramsParams(query: query, page: _searchPage));
+    final result = await _searchHealthProgramsUseCase(
+        SearchHealthProgramsParams(query: query, page: _searchPage));
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(

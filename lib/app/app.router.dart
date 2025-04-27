@@ -140,8 +140,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i4.HealthProgramView: (data) {
+      final args = data.getArgs<HealthProgramViewArguments>(nullOk: false);
       return _i14.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i4.HealthProgramView(),
+        builder: (context) =>
+            _i4.HealthProgramView(key: args.key, programId: args.programId),
         settings: data,
       );
     },
@@ -182,8 +184,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i11.ClientView: (data) {
+      final args = data.getArgs<ClientViewArguments>(nullOk: false);
       return _i14.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i11.ClientView(),
+        builder: (context) =>
+            _i11.ClientView(key: args.key, clientId: args.clientId),
         settings: data,
       );
     },
@@ -194,8 +198,10 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i13.EnrollClientView: (data) {
+      final args = data.getArgs<EnrollClientViewArguments>(nullOk: false);
       return _i14.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i13.EnrollClientView(),
+        builder: (context) =>
+            _i13.EnrollClientView(key: args.key, clientId: args.clientId),
         settings: data,
       );
     },
@@ -206,6 +212,87 @@ class StackedRouter extends _i1.RouterBase {
 
   @override
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
+}
+
+class HealthProgramViewArguments {
+  const HealthProgramViewArguments({
+    this.key,
+    required this.programId,
+  });
+
+  final _i14.Key? key;
+
+  final int programId;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "programId": "$programId"}';
+  }
+
+  @override
+  bool operator ==(covariant HealthProgramViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.programId == programId;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ programId.hashCode;
+  }
+}
+
+class ClientViewArguments {
+  const ClientViewArguments({
+    this.key,
+    required this.clientId,
+  });
+
+  final _i14.Key? key;
+
+  final int clientId;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "clientId": "$clientId"}';
+  }
+
+  @override
+  bool operator ==(covariant ClientViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.clientId == clientId;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ clientId.hashCode;
+  }
+}
+
+class EnrollClientViewArguments {
+  const EnrollClientViewArguments({
+    this.key,
+    required this.clientId,
+  });
+
+  final _i14.Key? key;
+
+  final int clientId;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "clientId": "$clientId"}';
+  }
+
+  @override
+  bool operator ==(covariant EnrollClientViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.clientId == clientId;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ clientId.hashCode;
+  }
 }
 
 extension NavigatorStateExtension on _i15.NavigationService {
@@ -237,14 +324,17 @@ extension NavigatorStateExtension on _i15.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToHealthProgramView([
+  Future<dynamic> navigateToHealthProgramView({
+    _i14.Key? key,
+    required int programId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.healthProgramView,
+        arguments: HealthProgramViewArguments(key: key, programId: programId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -335,14 +425,17 @@ extension NavigatorStateExtension on _i15.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToClientView([
+  Future<dynamic> navigateToClientView({
+    _i14.Key? key,
+    required int clientId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.clientView,
+        arguments: ClientViewArguments(key: key, clientId: clientId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -363,14 +456,17 @@ extension NavigatorStateExtension on _i15.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToEnrollClientView([
+  Future<dynamic> navigateToEnrollClientView({
+    _i14.Key? key,
+    required int clientId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.enrollClientView,
+        arguments: EnrollClientViewArguments(key: key, clientId: clientId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -405,14 +501,17 @@ extension NavigatorStateExtension on _i15.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithHealthProgramView([
+  Future<dynamic> replaceWithHealthProgramView({
+    _i14.Key? key,
+    required int programId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.healthProgramView,
+        arguments: HealthProgramViewArguments(key: key, programId: programId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -503,14 +602,17 @@ extension NavigatorStateExtension on _i15.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithClientView([
+  Future<dynamic> replaceWithClientView({
+    _i14.Key? key,
+    required int clientId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.clientView,
+        arguments: ClientViewArguments(key: key, clientId: clientId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -531,14 +633,17 @@ extension NavigatorStateExtension on _i15.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithEnrollClientView([
+  Future<dynamic> replaceWithEnrollClientView({
+    _i14.Key? key,
+    required int clientId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.enrollClientView,
+        arguments: EnrollClientViewArguments(key: key, clientId: clientId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

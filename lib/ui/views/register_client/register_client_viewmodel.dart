@@ -54,7 +54,9 @@ class RegisterClientViewModel extends BaseViewModel {
   }
 
   Future<void> registerClient() async {
-    if (firstNameController.text.isEmpty || lastNameController.text.isEmpty || contactInfoController.text.isEmpty) {
+    if (firstNameController.text.isEmpty ||
+        lastNameController.text.isEmpty ||
+        contactInfoController.text.isEmpty) {
       _dialogService.showCustomDialog(
         variant: InfoAlertDialog,
         title: 'Error',
@@ -80,7 +82,8 @@ class RegisterClientViewModel extends BaseViewModel {
       dateOfBirth: _dateOfBirth.toIso8601String(),
       contactInfo: contactInfoController.text,
       address: addressController.text,
-      diagnosisNames: _selectedDiagnoses.map((diagnosis) => diagnosis.name).toList(),
+      diagnosisNames:
+          _selectedDiagnoses.map((diagnosis) => diagnosis.name).toList(),
     );
 
     final result = await _createClientUseCase(client);

@@ -64,7 +64,7 @@ class ClientViewModel extends BaseViewModel {
   }
 
   void navigateToEnrollClient() async {
-    await _navigationService.navigateToEnrollClientView(clientId);
+    await _navigationService.navigateToEnrollClientView(clientId: clientId);
     await loadClient();
   }
 }

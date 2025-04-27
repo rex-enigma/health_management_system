@@ -20,7 +20,8 @@ class HealthProgramViewModel extends BaseViewModel {
 
   Future<void> loadHealthProgram() async {
     setBusy(true);
-    final result = await _getHealthProgramUseCase(GetHealthProgramParams(id: programId));
+    final result =
+        await _getHealthProgramUseCase(GetHealthProgramParams(id: programId));
     setBusy(false);
 
     result.fold(
@@ -45,7 +46,8 @@ class HealthProgramViewModel extends BaseViewModel {
       description: 'Are you sure you want to delete this health program?',
     );
     if (response?.confirmed ?? false) {
-      final result = await _deleteHealthProgramUseCase(DeleteHealthProgramParams(id: programId));
+      final result = await _deleteHealthProgramUseCase(
+          DeleteHealthProgramParams(id: programId));
       result.fold(
         (failure) {
           _dialogService.showCustomDialog(

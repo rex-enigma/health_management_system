@@ -77,17 +77,28 @@ class CreateHealthProgramViewModel extends BaseViewModel {
       return;
     }
 
-    final minAge = minAgeController.text.isEmpty ? null : int.tryParse(minAgeController.text);
-    final maxAge = maxAgeController.text.isEmpty ? null : int.tryParse(maxAgeController.text);
+    final minAge = minAgeController.text.isEmpty
+        ? null
+        : int.tryParse(minAgeController.text);
+    final maxAge = maxAgeController.text.isEmpty
+        ? null
+        : int.tryParse(maxAgeController.text);
 
-    final user = UserEntity(id: 1, firstName: 'admin', email: 'admin@example.com', lastName: '', createdAt: DateTime.now());
+    final user = UserEntity(
+        id: 1,
+        firstName: 'admin',
+        email: 'admin@example.com',
+        lastName: '',
+        createdAt: DateTime.now());
     final program = HealthProgramEntity(
       id: DateTime.now().millisecondsSinceEpoch,
       name: nameController.text,
       description: descriptionController.text,
       startDate: _startDate!,
       endDate: _endDate,
-      eligibilityCriteria: (minAge != null || maxAge != null || _requiredDiagnosis != Diagnosis.none)
+      eligibilityCriteria: (minAge != null ||
+              maxAge != null ||
+              _requiredDiagnosis != Diagnosis.none)
           ? EligibilityCriteria(
               id: DateTime.now().millisecondsSinceEpoch,
               minAge: minAge,
@@ -99,7 +110,8 @@ class CreateHealthProgramViewModel extends BaseViewModel {
       createdAt: DateTime.now(),
     );
 
-    final result = await _createHealthProgramUseCase(CreateHealthProgramParams(program: program, name: '', description: '', startDate: ''));
+    final result = await _createHealthProgramUseCase(
+        CreateHealthProgramParams(description: '', name: '', startDate: ''));
 
     result.fold(
       (failure) {

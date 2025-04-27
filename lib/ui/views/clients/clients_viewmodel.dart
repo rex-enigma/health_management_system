@@ -37,13 +37,17 @@ class ClientsViewModel extends BaseViewModel {
 
   ClientsViewModel() {
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent && _hasMoreData) {
+      if (_scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent &&
+          _hasMoreData) {
         loadClients();
       }
     });
 
     _searchScrollController.addListener(() {
-      if (_searchScrollController.position.pixels == _searchScrollController.position.maxScrollExtent && _hasMoreSearchData) {
+      if (_searchScrollController.position.pixels ==
+              _searchScrollController.position.maxScrollExtent &&
+          _hasMoreSearchData) {
         loadMoreSearchClients(_lastQuery);
       }
     });
@@ -51,7 +55,8 @@ class ClientsViewModel extends BaseViewModel {
 
   Future<void> loadClients() async {
     setBusy(true);
-    final result = await _getAllClientsUseCase(GetAllClientsParams(page: _currentPage));
+    final result =
+        await _getAllClientsUseCase(GetAllClientsParams(page: _currentPage));
     setBusy(false);
 
     result.fold(
@@ -84,7 +89,8 @@ class ClientsViewModel extends BaseViewModel {
       return;
     }
 
-    final result = await _searchClientsUseCase(SearchClientsParams(query: query, page: _searchPage));
+    final result = await _searchClientsUseCase(
+        SearchClientsParams(query: query, page: _searchPage));
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(
