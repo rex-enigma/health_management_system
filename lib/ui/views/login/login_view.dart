@@ -16,39 +16,49 @@ class LoginView extends StackedView<LoginViewModel> {
   ) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: const Text('Health Management system'),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            AppTextField(
-              label: 'Email',
-              controller: viewModel.emailController,
-              keyboardType: TextInputType.emailAddress,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                Text(
+                  'Login',
+                  style: TextStyle(fontSize: 30),
+                ),
+                verticalSpaceSmall,
+                AppTextField(
+                  label: 'Email',
+                  controller: viewModel.emailController,
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                verticalSpaceMedium,
+                AppTextField(
+                  label: 'Password',
+                  controller: viewModel.passwordController,
+                  obscureText: true,
+                ),
+                verticalSpaceLarge,
+                AppButton(
+                  label: 'Login',
+                  onPressed: viewModel.login,
+                  isLoading: viewModel.isBusy,
+                ),
+                verticalSpaceMedium,
+                Center(
+                  child: TextButton(
+                    onPressed: viewModel.navigateToSignup,
+                    child: const Text("Don't have an account? Sign Up"),
+                  ),
+                ),
+              ],
             ),
-            verticalSpaceMedium,
-            AppTextField(
-              label: 'Password',
-              controller: viewModel.passwordController,
-              obscureText: true,
-            ),
-            verticalSpaceLarge,
-            AppButton(
-              label: 'Login',
-              onPressed: viewModel.login,
-              isLoading: viewModel.isBusy,
-            ),
-            verticalSpaceMedium,
-            Center(
-              child: TextButton(
-                onPressed: viewModel.navigateToSignup,
-                child: const Text("Don't have an account? Sign Up"),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
