@@ -3,7 +3,7 @@ import 'package:mockito/mockito.dart';
 import 'package:health_managment_system/app/app.bottomsheets.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/ui/common/app_strings.dart';
-import 'package:health_managment_system/ui/views/home/home_viewmodel.dart';
+import 'package:health_managment_system/ui/views/home_view/home_viewmodel.dart';
 
 import '../helpers/test_helpers.dart';
 
