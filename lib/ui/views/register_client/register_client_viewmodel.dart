@@ -74,7 +74,6 @@ class RegisterClientViewModel extends BaseViewModel {
     }
 
     final client = CreateClientParams(
-      profileImagePath: null,
       firstName: firstNameController.text,
       lastName: lastNameController.text,
       gender: _selectedGender?.name ?? Gender.other.name,
