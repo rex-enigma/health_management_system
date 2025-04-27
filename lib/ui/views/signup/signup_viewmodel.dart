@@ -4,7 +4,6 @@ import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/app/app.router.dart';
 import 'package:health_managment_system/domain/usecases/sign_up_usecase.dart';
 import 'package:health_managment_system/domain/usecases/usecase.dart';
-import 'package:health_managment_system/ui/dialogs/info_alert/info_alert_dialog.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
 

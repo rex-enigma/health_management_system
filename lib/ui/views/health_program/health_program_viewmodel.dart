@@ -1,5 +1,6 @@
 import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
+import 'package:health_managment_system/app/app.router.dart';
 import 'package:health_managment_system/domain/usecases/delete_health_program_usecase.dart';
 import 'package:health_managment_system/domain/usecases/get_health_programs_usecase.dart';
 import 'package:health_managment_system/ui/dialogs/info_alert/info_alert_dialog.dart';
@@ -56,8 +57,8 @@ class HealthProgramViewModel extends BaseViewModel {
           );
         },
         (_) {
-          // _navigationService.back();
-          // _navigationService.navigateToHomeView();
+          _navigationService.back();
+          _navigationService.navigateToHomeView(); //resets HomeView as the last route in the nav stack.
         },
       );
     }

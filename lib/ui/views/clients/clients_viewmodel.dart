@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
+import 'package:health_managment_system/app/app.router.dart';
 import 'package:health_managment_system/domain/entities/client.dart';
 import 'package:health_managment_system/domain/usecases/get_all_clients_usecase.dart';
 import 'package:health_managment_system/domain/usecases/search_clients_usecase.dart';
@@ -117,11 +118,11 @@ class ClientsViewModel extends BaseViewModel {
   }
 
   void navigateToRegisterClient() {
-    // _navigationService.navigateToRegisterClientView();
+    _navigationService.navigateToRegisterClientView();
   }
 
   void navigateToClientProfile(int clientId) {
-    // _navigationService.navigateToClientProfileView(clientId: clientId);
+    _navigationService.navigateToClientView(clientId: clientId);
   }
 
   @override
