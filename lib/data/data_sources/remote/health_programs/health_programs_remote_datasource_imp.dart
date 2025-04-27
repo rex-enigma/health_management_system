@@ -8,12 +8,10 @@ import 'package:http/http.dart' as http;
 import 'package:dartz/dartz.dart';
 
 class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSource {
-  late http.Client client;
   late FlutterSecureStorage flutterSecureStorage;
   late String baseUrl;
 
-  HealthProgramsRemoteDataSourceImpl({http.Client? client, FlutterSecureStorage? flutterSecureStorage, String? baseUrl}) {
-    this.client = client ?? http.Client();
+  HealthProgramsRemoteDataSourceImpl({FlutterSecureStorage? flutterSecureStorage, String? baseUrl}) {
     this.flutterSecureStorage = flutterSecureStorage ?? FlutterSecureStorage();
     this.baseUrl = baseUrl ?? dotenv.env['BASE_URL'] as String;
   }
@@ -32,7 +30,7 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
       return Left(AuthenticationFailure('No token found'));
     }
 
-    final response = await client.post(
+    final response = await http.post(
       Uri.parse('$baseUrl/v1/health-programs'),
       headers: {
         'Content-Type': 'application/json',
@@ -63,7 +61,7 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
       return Left(AuthenticationFailure('No token found'));
     }
 
-    final response = await client.get(
+    final response = await http.get(
       Uri.parse('$baseUrl/v1/health-programs/$healthProgramId'),
       headers: {
         'Authorization': 'Bearer $token',
@@ -88,7 +86,7 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
       return Left(AuthenticationFailure('No token found'));
     }
 
-    final response = await client.get(
+    final response = await http.get(
       Uri.parse('$baseUrl/v1/health-programs?page=$page&limit=$limit'),
       headers: {
         'Authorization': 'Bearer $token',
@@ -115,7 +113,7 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
       return Left(AuthenticationFailure('No token found'));
     }
 
-    final response = await client.get(
+    final response = await http.get(
       Uri.parse('$baseUrl/v1/health-programs/search?query=$query&page=$page&limit=$limit'),
       headers: {
         'Authorization': 'Bearer $token',
@@ -138,7 +136,7 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
       return Left(AuthenticationFailure('No token found'));
     }
 
-    final response = await client.delete(
+    final response = await http.delete(
       Uri.parse('$baseUrl/v1/health-programs/$healthProgramId'),
       headers: {
         'Authorization': 'Bearer $token',

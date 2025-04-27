@@ -8,12 +8,10 @@ import 'package:health_managment_system/errors/failures.dart';
 import 'package:http/http.dart' as http;
 
 class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
-  late http.Client client;
   late FlutterSecureStorage flutterSecureStorage;
   late String baseUrl;
 
-  ClientsRemoteDataSourceImpl({http.Client? client, FlutterSecureStorage? flutterSecureStorage, String? baseUrl}) {
-    this.client = client ?? http.Client();
+  ClientsRemoteDataSourceImpl({FlutterSecureStorage? flutterSecureStorage, String? baseUrl}) {
     this.flutterSecureStorage = flutterSecureStorage ?? FlutterSecureStorage();
     this.baseUrl = baseUrl ?? dotenv.env['BASE_URL'] as String;
   }
@@ -34,7 +32,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
       return Left(AuthenticationFailure('No token found'));
     }
 
-    final response = await client.post(
+    final response = await http.post(
       Uri.parse('$baseUrl/v1/clients'),
       headers: {
         'Content-Type': 'application/json',
@@ -67,7 +65,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
       return Left(AuthenticationFailure('No token found'));
     }
 
-    final response = await client.get(
+    final response = await http.get(
       Uri.parse('$baseUrl/v1/clients?page=$page&limit=$limit'),
       headers: {
         'Authorization': 'Bearer $token',
@@ -94,7 +92,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
       return Left(AuthenticationFailure('No token found'));
     }
 
-    final response = await client.get(
+    final response = await http.get(
       Uri.parse('$baseUrl/v1/clients/search?query=$query&page=$page&limit=$limit'),
       headers: {
         'Authorization': 'Bearer $token',
@@ -117,7 +115,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
       return Left(AuthenticationFailure('No token found'));
     }
 
-    final response = await client.get(
+    final response = await http.get(
       Uri.parse('$baseUrl/v1/clients/$clientId'),
       headers: {
         'Authorization': 'Bearer $token',
@@ -141,7 +139,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
       return Left(AuthenticationFailure('No token found'));
     }
 
-    final response = await client.post(
+    final response = await http.post(
       Uri.parse('$baseUrl/v1/clients/$clientId/enroll'),
       headers: {
         'Content-Type': 'application/json',
@@ -169,7 +167,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
       return Left(AuthenticationFailure('No token found'));
     }
 
-    final response = await client.delete(
+    final response = await http.delete(
       Uri.parse('$baseUrl/v1/clients/$clientId'),
       headers: {
         'Authorization': 'Bearer $token',

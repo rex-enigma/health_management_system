@@ -8,12 +8,10 @@ import 'package:http/http.dart' as http;
 import 'package:dartz/dartz.dart';
 
 class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
-  late http.Client client;
   late FlutterSecureStorage flutterSecureStorage;
   late String baseUrl;
 
-  UsersRemoteDataSourceImpl({http.Client? client, FlutterSecureStorage? flutterSecureStorage, String? baseUrl}) {
-    this.client = client ?? http.Client();
+  UsersRemoteDataSourceImpl({FlutterSecureStorage? flutterSecureStorage, String? baseUrl}) {
     this.flutterSecureStorage = flutterSecureStorage ?? FlutterSecureStorage();
     this.baseUrl = baseUrl ?? dotenv.env['BASE_URL'] as String;
   }
@@ -28,7 +26,7 @@ class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
     String? profileImagePath,
   }) async {
     try {
-      final response = await client.post(
+      final response = await http.post(
         Uri.parse('$baseUrl/v1/auth/signup'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
@@ -55,7 +53,7 @@ class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
   @override
   Future<Either<Failure, UserModel>> login(String email, String password) async {
     try {
-      final response = await client.post(
+      final response = await http.post(
         Uri.parse('$baseUrl/v1/auth/login'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({'email': email, 'password': password}),

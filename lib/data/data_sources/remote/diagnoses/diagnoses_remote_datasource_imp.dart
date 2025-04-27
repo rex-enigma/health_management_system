@@ -8,16 +8,13 @@ import 'package:http/http.dart' as http;
 import 'package:dartz/dartz.dart';
 
 class DiagnosesRemoteDataSourceImpl implements DiagnosesRemoteDataSource {
-  late final http.Client client;
   late final FlutterSecureStorage flutterSecureStorage;
   late final String baseUrl;
 
   DiagnosesRemoteDataSourceImpl({
-    http.Client? client,
     FlutterSecureStorage? flutterSecureStorage,
     String? baseUrl,
   }) {
-    this.client = client ?? http.Client();
     this.flutterSecureStorage = flutterSecureStorage ?? FlutterSecureStorage();
     this.baseUrl = baseUrl ?? dotenv.env['BASE_URL'] as String;
   }
@@ -30,7 +27,7 @@ class DiagnosesRemoteDataSourceImpl implements DiagnosesRemoteDataSource {
         return Left(AuthenticationFailure('No token found'));
       }
 
-      final response = await client.get(
+      final response = await http.get(
         Uri.parse('$baseUrl/v1/diagnoses?page=$page&limit=$limit'),
         headers: {
           'Authorization': 'Bearer $token',
