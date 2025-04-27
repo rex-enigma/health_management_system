@@ -81,6 +81,7 @@ class CreateHealthProgramViewModel extends BaseViewModel {
     final minAge = minAgeController.text.isEmpty ? null : int.tryParse(minAgeController.text);
     final maxAge = maxAgeController.text.isEmpty ? null : int.tryParse(maxAgeController.text);
 
+    setBusy(true);
     final result = await _createHealthProgramUseCase(CreateHealthProgramParams(
       name: nameController.text,
       description: descriptionController.text,
@@ -90,11 +91,11 @@ class CreateHealthProgramViewModel extends BaseViewModel {
           ? {
               'min_age': minAge,
               'max_age': maxAge,
-              'required_diagnosis': _requiredDiagnosis ?? Diagnosis.none,
+              'required_diagnosis': _requiredDiagnosis?.name ?? Diagnosis.none.name,
             }
           : null,
     ));
-
+    setBusy(false);
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(

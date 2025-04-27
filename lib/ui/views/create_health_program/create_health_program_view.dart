@@ -97,6 +97,7 @@ class CreateHealthProgramView extends StackedView<CreateHealthProgramViewModel> 
             AppButton(
               label: 'Create Program',
               onPressed: () => viewModel.createHealthProgram(),
+              isLoading: viewModel.isBusy,
             ),
           ],
         ),
