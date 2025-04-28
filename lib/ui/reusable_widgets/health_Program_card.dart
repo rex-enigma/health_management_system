@@ -32,9 +32,9 @@ class HealthProgramCard extends StatelessWidget {
                 radius: 24,
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 child: Icon(
-                  Icons.medical_services,
+                  Icons.medical_information,
                   color: Colors.white,
-                  size: getResponsiveMediumFontSize(context) * 1.5,
+                  size: getResponsiveMediumFontSize(context) * 3.5,
                 ),
               ),
               horizontalSpaceMedium,
