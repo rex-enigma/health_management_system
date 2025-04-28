@@ -47,7 +47,8 @@ class ClientViewModel extends BaseViewModel {
       description: 'Are you sure you want to delete this client?',
     );
     if (response?.confirmed ?? false) {
-      final result = await _deleteClientUseCase(DeleteClientParams(id: clientId));
+      final result =
+          await _deleteClientUseCase(DeleteClientParams(id: clientId));
       result.fold(
         (failure) {
           _dialogService.showCustomDialog(

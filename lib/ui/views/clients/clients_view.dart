@@ -34,7 +34,8 @@ class ClientsView extends StackedView<ClientsViewModel> {
             ? const Center(child: Text('No clients available'))
             : ListView.builder(
                 controller: viewModel.scrollController,
-                itemCount: viewModel.clients.length + (viewModel.hasMoreData ? 1 : 0),
+                itemCount:
+                    viewModel.clients.length + (viewModel.hasMoreData ? 1 : 0),
                 itemBuilder: (context, index) {
                   if (index == viewModel.clients.length) {
                     return const Center(
@@ -68,6 +69,8 @@ class ClientsView extends StackedView<ClientsViewModel> {
 
   @override
   void onViewModelReady(ClientsViewModel viewModel) {
+    print('testsssssssssssssssssssssssssss');
+
     viewModel.loadClients();
   }
 }

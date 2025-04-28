@@ -61,7 +61,13 @@ class UserEntity {
 
   @override
   int get hashCode {
-    return id.hashCode ^ firstName.hashCode ^ lastName.hashCode ^ email.hashCode ^ phoneNumber.hashCode ^ profileImagePath.hashCode ^ createdAt.hashCode;
+    return id.hashCode ^
+        firstName.hashCode ^
+        lastName.hashCode ^
+        email.hashCode ^
+        phoneNumber.hashCode ^
+        profileImagePath.hashCode ^
+        createdAt.hashCode;
   }
 
   @override

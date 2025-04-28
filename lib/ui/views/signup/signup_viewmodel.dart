@@ -19,7 +19,10 @@ class SignupViewModel extends BaseViewModel {
   final passwordController = TextEditingController();
 
   Future<void> signup() async {
-    if (firstNameController.text.isEmpty || lastNameController.text.isEmpty || emailController.text.isEmpty || passwordController.text.isEmpty) {
+    if (firstNameController.text.isEmpty ||
+        lastNameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        passwordController.text.isEmpty) {
       _dialogService.showCustomDialog(
         variant: DialogType.infoAlert,
         title: 'Error',

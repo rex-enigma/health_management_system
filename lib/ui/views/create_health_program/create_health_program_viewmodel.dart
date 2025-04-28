@@ -78,8 +78,12 @@ class CreateHealthProgramViewModel extends BaseViewModel {
       return;
     }
 
-    final minAge = minAgeController.text.isEmpty ? null : int.tryParse(minAgeController.text);
-    final maxAge = maxAgeController.text.isEmpty ? null : int.tryParse(maxAgeController.text);
+    final minAge = minAgeController.text.isEmpty
+        ? null
+        : int.tryParse(minAgeController.text);
+    final maxAge = maxAgeController.text.isEmpty
+        ? null
+        : int.tryParse(maxAgeController.text);
 
     setBusy(true);
     final result = await _createHealthProgramUseCase(CreateHealthProgramParams(
@@ -87,11 +91,14 @@ class CreateHealthProgramViewModel extends BaseViewModel {
       description: descriptionController.text,
       startDate: _startDate!.toIso8601String(),
       endDate: _endDate?.toIso8601String(),
-      eligibilityCriteria: (minAge != null || maxAge != null || _requiredDiagnosis != Diagnosis.none)
+      eligibilityCriteria: (minAge != null ||
+              maxAge != null ||
+              _requiredDiagnosis != Diagnosis.none)
           ? {
               'min_age': minAge,
               'max_age': maxAge,
-              'required_diagnosis': _requiredDiagnosis?.name ?? Diagnosis.none.name,
+              'required_diagnosis':
+                  _requiredDiagnosis?.name ?? Diagnosis.none.name,
             }
           : null,
     ));

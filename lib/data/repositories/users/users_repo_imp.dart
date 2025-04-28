@@ -12,7 +12,8 @@ class UsersRepositoryImpl implements UsersRepo {
   UsersRepositoryImpl({
     UsersRemoteDataSource? usersRemoteDataSource,
   }) {
-    _usersRemoteDataSource = usersRemoteDataSource ?? locator<UsersRemoteDataSourceImpl>();
+    _usersRemoteDataSource =
+        usersRemoteDataSource ?? locator<UsersRemoteDataSourceImpl>();
   }
 
   @override
@@ -35,7 +36,8 @@ class UsersRepositoryImpl implements UsersRepo {
 
     // success
     if (result.isRight()) {
-      final userModel = result.fold((failure) => null, (userModel) => userModel);
+      final userModel =
+          result.fold((failure) => null, (userModel) => userModel);
       UserEntity userEntity = userModel!.toEntity();
       return Right(userEntity);
     }
@@ -45,10 +47,12 @@ class UsersRepositoryImpl implements UsersRepo {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> login(String email, String password) async {
+  Future<Either<Failure, UserEntity>> login(
+      String email, String password) async {
     final result = await _usersRemoteDataSource.login(email, password);
     if (result.isRight()) {
-      final userModel = result.fold((failure) => null, (userModel) => userModel);
+      final userModel =
+          result.fold((failure) => null, (userModel) => userModel);
       UserEntity userEntity = userModel!.toEntity();
       return Right(userEntity);
     }

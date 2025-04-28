@@ -7,11 +7,13 @@ import 'package:health_managment_system/errors/failures.dart';
 import 'package:http/http.dart' as http;
 import 'package:dartz/dartz.dart';
 
-class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSource {
+class HealthProgramsRemoteDataSourceImpl
+    implements HealthProgramsRemoteDataSource {
   late FlutterSecureStorage flutterSecureStorage;
   late String baseUrl;
 
-  HealthProgramsRemoteDataSourceImpl({FlutterSecureStorage? flutterSecureStorage, String? baseUrl}) {
+  HealthProgramsRemoteDataSourceImpl(
+      {FlutterSecureStorage? flutterSecureStorage, String? baseUrl}) {
     this.flutterSecureStorage = flutterSecureStorage ?? FlutterSecureStorage();
     this.baseUrl = baseUrl ?? dotenv.env['BASE_URL'] as String;
   }
@@ -47,15 +49,18 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
     );
 
     if (response.statusCode == 201) {
-      return Right(HealthProgramModel.fromMap(healthProgramMap: jsonDecode(response.body)));
+      return Right(HealthProgramModel.fromMap(
+          healthProgramMap: jsonDecode(response.body)));
     } else {
-      final error = jsonDecode(response.body)['error'] ?? 'Failed to create health program';
+      final error = jsonDecode(response.body)['error'] ??
+          'Failed to create health program';
       return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<Either<Failure, HealthProgramModel>> getHealthProgram(int healthProgramId) async {
+  Future<Either<Failure, HealthProgramModel>> getHealthProgram(
+      int healthProgramId) async {
     final token = await flutterSecureStorage.read(key: 'jwt_token');
     if (token == null) {
       return Left(AuthenticationFailure('No token found'));
@@ -69,17 +74,21 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
     );
 
     if (response.statusCode == 200) {
-      return Right(HealthProgramModel.fromMap(healthProgramMap: jsonDecode(response.body)));
+      return Right(HealthProgramModel.fromMap(
+          healthProgramMap: jsonDecode(response.body)));
     } else if (response.statusCode == 404) {
-      return Left(NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
+      return Left(NotFoundFailure(jsonDecode(response.body)['error'],
+          statusCode: response.statusCode));
     } else {
-      final error = jsonDecode(response.body)['error'] ?? 'Failed to fetch health program';
+      final error = jsonDecode(response.body)['error'] ??
+          'Failed to fetch health program';
       return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
 
   @override
-  Future<Either<Failure, List<HealthProgramModel>>> getAllHealthPrograms({int page = 1, int limit = 10}) async {
+  Future<Either<Failure, List<HealthProgramModel>>> getAllHealthPrograms(
+      {int page = 1, int limit = 10}) async {
     final token = await flutterSecureStorage.read(key: 'jwt_token');
 
     if (token == null) {
@@ -95,9 +104,13 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      return Right(data.map((healthProgramData) => HealthProgramModel.fromMap(healthProgramMap: healthProgramData)).toList());
+      return Right(data
+          .map((healthProgramData) =>
+              HealthProgramModel.fromMap(healthProgramMap: healthProgramData))
+          .toList());
     } else {
-      final error = jsonDecode(response.body)['error'] ?? 'Failed to fetch health programs';
+      final error = jsonDecode(response.body)['error'] ??
+          'Failed to fetch health programs';
       return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
@@ -114,7 +127,8 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
     }
 
     final response = await http.get(
-      Uri.parse('$baseUrl/v1/health-programs/search?query=$query&page=$page&limit=$limit'),
+      Uri.parse(
+          '$baseUrl/v1/health-programs/search?query=$query&page=$page&limit=$limit'),
       headers: {
         'Authorization': 'Bearer $token',
       },
@@ -122,9 +136,13 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      return Right(data.map((healthProgramData) => HealthProgramModel.fromMap(healthProgramMap: healthProgramData)).toList());
+      return Right(data
+          .map((healthProgramData) =>
+              HealthProgramModel.fromMap(healthProgramMap: healthProgramData))
+          .toList());
     } else {
-      final error = jsonDecode(response.body)['error'] ?? 'Failed to search health programs';
+      final error = jsonDecode(response.body)['error'] ??
+          'Failed to search health programs';
       return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }
@@ -146,9 +164,11 @@ class HealthProgramsRemoteDataSourceImpl implements HealthProgramsRemoteDataSour
     if (response.statusCode == 200) {
       return Right(jsonDecode(response.body)['id']);
     } else if (response.statusCode == 404) {
-      return Left(NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
+      return Left(NotFoundFailure(jsonDecode(response.body)['error'],
+          statusCode: response.statusCode));
     } else {
-      final error = jsonDecode(response.body)['error'] ?? 'Failed to delete health program';
+      final error = jsonDecode(response.body)['error'] ??
+          'Failed to delete health program';
       return Left(ServerFailure(error, statusCode: response.statusCode));
     }
   }

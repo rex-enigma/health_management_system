@@ -37,7 +37,8 @@ class EnrollClientViewModel extends BaseViewModel {
     setBusy(true);
 
     final clientResult = await _getClientUseCase(GetClientParams(id: clientId));
-    final programsResult = await _getAllHealthProgramsUseCase(GetAllHealthProgramsParams(page: 1));
+    final programsResult =
+        await _getAllHealthProgramsUseCase(GetAllHealthProgramsParams(page: 1));
 
     clientResult.fold(
       (failure) {
@@ -62,21 +63,31 @@ class EnrollClientViewModel extends BaseViewModel {
       },
       (programs) {
         _healthPrograms = programs;
-        _healthPrograms.removeWhere((program) => _client!.enrolledPrograms.any((p) => p.id == program.id));
+        _healthPrograms.removeWhere((program) =>
+            _client!.enrolledPrograms.any((p) => p.id == program.id));
 
         _eligibilityInfo = {};
         for (var program in _healthPrograms) {
           if (program.eligibilityCriteria != null) {
-            final isEligible = program.eligibilityCriteria!.isClientEligible(_client!);
+            final isEligible =
+                program.eligibilityCriteria!.isClientEligible(_client!);
             String? reason;
             if (!isEligible) {
-              final age = _client!.dateOfBirth != null ? DateTime.now().year - _client!.dateOfBirth!.year : null;
-              if (program.eligibilityCriteria!.minAge != null && (age == null || age < program.eligibilityCriteria!.minAge!)) {
-                reason = 'Client is too young (Min age: ${program.eligibilityCriteria!.minAge})';
-              } else if (program.eligibilityCriteria!.maxAge != null && (age == null || age > program.eligibilityCriteria!.maxAge!)) {
-                reason = 'Client is too old (Max age: ${program.eligibilityCriteria!.maxAge})';
-              } else if (!_client!.currentDiagnoses.contains(program.eligibilityCriteria!.requiredDiagnosis)) {
-                reason = 'Client does not have required diagnosis: ${program.eligibilityCriteria!.requiredDiagnosis}';
+              final age = _client!.dateOfBirth != null
+                  ? DateTime.now().year - _client!.dateOfBirth!.year
+                  : null;
+              if (program.eligibilityCriteria!.minAge != null &&
+                  (age == null || age < program.eligibilityCriteria!.minAge!)) {
+                reason =
+                    'Client is too young (Min age: ${program.eligibilityCriteria!.minAge})';
+              } else if (program.eligibilityCriteria!.maxAge != null &&
+                  (age == null || age > program.eligibilityCriteria!.maxAge!)) {
+                reason =
+                    'Client is too old (Max age: ${program.eligibilityCriteria!.maxAge})';
+              } else if (!_client!.currentDiagnoses
+                  .contains(program.eligibilityCriteria!.requiredDiagnosis)) {
+                reason =
+                    'Client does not have required diagnosis: ${program.eligibilityCriteria!.requiredDiagnosis}';
               }
             }
             _eligibilityInfo[program.id] = (isEligible, reason);
@@ -120,7 +131,8 @@ class EnrollClientViewModel extends BaseViewModel {
         if (failure is IneligibleClientFailure) {
           _bottomSheetService.showCustomSheet(
             variant: BottomSheetType.notice,
-            data: 'Client is not eligible for programs with IDs: ${failure.ineligibleHealthProgramIds.join(", ")}',
+            data:
+                'Client is not eligible for programs with IDs: ${failure.ineligibleHealthProgramIds.join(", ")}',
           );
         } else {
           _dialogService.showCustomDialog(

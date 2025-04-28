@@ -12,7 +12,8 @@ class HealthProgramsRepositoryImpl implements HealthProgramsRepo {
   HealthProgramsRepositoryImpl({
     HealthProgramsRemoteDataSource? healthProgramsRemoteDataSource,
   }) {
-    _healthProgramsRemoteDataSource = healthProgramsRemoteDataSource ?? locator<HealthProgramsRemoteDataSourceImpl>();
+    _healthProgramsRemoteDataSource = healthProgramsRemoteDataSource ??
+        locator<HealthProgramsRemoteDataSourceImpl>();
   }
 
   @override
@@ -69,7 +70,9 @@ class HealthProgramsRepositoryImpl implements HealthProgramsRepo {
 
     if (result.isRight()) {
       final programsModel = result.fold((failure) => null, (models) => models);
-      final entities = programsModel!.map((programModel) => programModel.toEntity()).toList();
+      final entities = programsModel!
+          .map((programModel) => programModel.toEntity())
+          .toList();
       return Right(entities);
     }
 
@@ -101,7 +104,8 @@ class HealthProgramsRepositoryImpl implements HealthProgramsRepo {
 
   @override
   Future<Either<Failure, int>> deleteHealthProgram(int id) async {
-    final result = await _healthProgramsRemoteDataSource.deleteHealthProgram(id);
+    final result =
+        await _healthProgramsRemoteDataSource.deleteHealthProgram(id);
 
     if (result.isRight()) {
       final deletedId = result.fold((failure) => null, (id) => id);

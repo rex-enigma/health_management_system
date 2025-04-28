@@ -13,7 +13,8 @@ class ClientEntity {
   final DateTime dateOfBirth;
   final String contactInfo;
   final String? address;
-  final List<Diagnosis> currentDiagnoses; // The primary conditions or reasons for enrollment
+  final List<Diagnosis>
+      currentDiagnoses; // The primary conditions or reasons for enrollment
   final List<HealthProgramEntity> enrolledPrograms; // List of enrolled programs
   final UserEntity registeredByUser;
   final DateTime? createdAt;
