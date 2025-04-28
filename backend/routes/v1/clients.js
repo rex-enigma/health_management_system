@@ -133,7 +133,7 @@ router.get('/v1/clients', requireAuth, validatePagination, async (req, res, next
                     [client.id]
                 );
                 const [diagnoses] = await db.execute(
-                    'SELECT d.id, d.diagnosis_name FROM diagnoses d JOIN client_diagnoses cd ON d.id = cd.diagnosis_id WHERE cd.client_id = ?',
+                    'SELECT d.diagnosis_name FROM diagnoses d JOIN client_diagnoses cd ON d.id = cd.diagnosis_id WHERE cd.client_id = ?',
                     [client.id]
                 );
                 const clientData = {
@@ -143,7 +143,7 @@ router.get('/v1/clients', requireAuth, validatePagination, async (req, res, next
                     gender: client.gender,
                     profile_image_path: client.profile_image_path,
                     enrolled_programs: programs,
-                    diagnoses,
+                    diagnoses: diagnoses.map((diagnosis) => diagnosis['diagnosis_name']),
                     registered_by: {
                         id: client.user_id,
                         first_name: client.first_name,
@@ -190,7 +190,7 @@ router.get('/v1/clients/search', requireAuth, validatePagination, async (req, re
                     [client.id]
                 );
                 const [diagnoses] = await db.execute(
-                    'SELECT d.id, d.diagnosis_name FROM diagnoses d JOIN client_diagnoses cd ON d.id = cd.diagnosis_id WHERE cd.client_id = ?',
+                    'SELECT d.diagnosis_name FROM diagnoses d JOIN client_diagnoses cd ON d.id = cd.diagnosis_id WHERE cd.client_id = ?',
                     [client.id]
                 );
                 const clientData = {
@@ -200,7 +200,7 @@ router.get('/v1/clients/search', requireAuth, validatePagination, async (req, re
                     gender: client.gender,
                     profile_image_path: client.profile_image_path,
                     enrolled_programs: programs,
-                    diagnoses,
+                    diagnoses: diagnoses.map((diagnosis) => diagnosis['diagnosis_name']),
                     registered_by: {
                         id: client.user_id,
                         first_name: client.first_name,
@@ -251,7 +251,7 @@ router.get('/v1/clients/:id', requireAuth, async (req, res, next) => {
             gender: client[0].gender,
             profile_image_path: client[0].profile_image_path,
             enrolled_programs: programs,
-            diagnoses,
+            diagnoses: diagnoses.map((diagnosis) => diagnosis['diagnosis_name']),
             registered_by: {
                 id: client[0].user_id,
                 first_name: client[0].first_name,
