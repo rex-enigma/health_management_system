@@ -17,10 +17,11 @@ A new Flutter project.
 - Create a `.env` file in `backend` directory to hold the following variables:
 ```
 DB_HOST=localhost
-DB_USER=your_db_user
-DB_PASSWORD=your_db_password
-DB_NAME=your_db_name
-JWT_SECRET=your_jwt_secret
+DB_PORT=<your_db_port>
+DB_NAME=<your_db_name>
+DB_USER=<your_db_user>
+DB_PASSWORD=<your_db_name>
+JWT_SECRET=<your_jwt_secret>
 ```
 
 ### Frontend:
