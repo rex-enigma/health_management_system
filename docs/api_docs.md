@@ -397,7 +397,7 @@ This document provides detailed specifications for the RESTful APIs used in the 
       "dateOfBirth": "1980-05-15T00:00:00Z",
       "contactInfo": "john.doe@example.com",
       "address": "123 Main St, City",
-      "currentDiagnoses": ["diabetes"],
+      "diagnoses": ["diabetes"],
       "enrolledPrograms": [
         {
           "id": 3,
@@ -449,7 +449,7 @@ This document provides detailed specifications for the RESTful APIs used in the 
       "dateOfBirth": "1980-05-15T00:00:00Z",
       "contactInfo": "john.doe@example.com",
       "address": "123 Main St, City",
-      "currentDiagnoses": ["diabetes"],
+      "diagnoses": ["diabetes"],
       "enrolledPrograms": [],
       "registeredByUser": {
         "id": 1,
@@ -485,7 +485,7 @@ This document provides detailed specifications for the RESTful APIs used in the 
     "dateOfBirth": "1980-05-15T00:00:00Z",
     "contactInfo": "john.doe@example.com",
     "address": "123 Main St, City",
-    "currentDiagnoses": ["diabetes"],
+    "diagnoses": ["diabetes"],
     "enrolledPrograms": [],
     "registeredByUser": {
       "id": 1,
@@ -517,7 +517,7 @@ This document provides detailed specifications for the RESTful APIs used in the 
   "dateOfBirth": "1990-01-01T00:00:00Z",
   "contactInfo": "new.client@example.com",
   "address": "789 Elm St, City",
-  "currentDiagnoses": ["hypertension"]
+  "diagnosis_names": ["hypertension"]
 }
 ```
 
@@ -533,7 +533,7 @@ This document provides detailed specifications for the RESTful APIs used in the 
     "dateOfBirth": "1990-01-01T00:00:00Z",
     "contactInfo": "new.client@example.com",
     "address": "789 Elm St, City",
-    "currentDiagnoses": ["hypertension"],
+    "diagnosis_names": ["hypertension"],
     "enrolledPrograms": [],
     "registeredByUser": {
       "id": 1,
@@ -614,7 +614,7 @@ This document provides detailed specifications for the RESTful APIs used in the 
       "dateOfBirth": "1980-05-15T00:00:00Z",
       "contactInfo": "john.doe@example.com",
       "address": "123 Main St, City",
-      "currentDiagnoses": ["diabetes"],
+      "diagnoses": ["diabetes"],
       "enrolledPrograms": [
         {
           "id": 3,
@@ -674,7 +674,7 @@ This document provides detailed specifications for the RESTful APIs used in the 
       "dateOfBirth": "1980-05-15T00:00:00Z",
       "contactInfo": "john.doe@example.com",
       "address": "123 Main St, City",
-      "currentDiagnoses": ["diabetes"],
+      "diagnoses": ["diabetes"],
       "enrolledPrograms": [],
       "registeredByUser": {
         "id": 1,
@@ -716,7 +716,7 @@ This document provides detailed specifications for the RESTful APIs used in the 
     "lastName": "Doe",
     "gender": "male",
     "dateOfBirth": "1980-05-15T00:00:00Z",
-    "currentDiagnoses": ["diabetes"],
+    "diagnoses": ["diabetes"],
     "enrolledPrograms": [
       {
         "id": 3,
