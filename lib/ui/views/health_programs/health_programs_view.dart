@@ -33,8 +33,7 @@ class HealthProgramsView extends StackedView<HealthProgramsViewModel> {
             ? const Center(child: Text('No health programs available'))
             : ListView.builder(
                 controller: viewModel.scrollController,
-                itemCount: viewModel.healthPrograms.length +
-                    (viewModel.hasMoreData ? 1 : 0),
+                itemCount: viewModel.healthPrograms.length + (viewModel.hasMoreData ? 1 : 0),
                 itemBuilder: (context, index) {
                   if (index == viewModel.healthPrograms.length) {
                     return const Center(
@@ -63,8 +62,7 @@ class HealthProgramsView extends StackedView<HealthProgramsViewModel> {
   }
 
   @override
-  HealthProgramsViewModel viewModelBuilder(BuildContext context) =>
-      HealthProgramsViewModel();
+  HealthProgramsViewModel viewModelBuilder(BuildContext context) => HealthProgramsViewModel();
 
   @override
   void onViewModelReady(HealthProgramsViewModel viewModel) {
