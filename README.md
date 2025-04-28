@@ -1,15 +1,33 @@
+Draft
+
 # Health_managment_system
 
 A new Flutter project.
 
-## Getting Started
 
-## Dependencies versions
+## Prerequisite
 - nodejs_version: v16.20.2
 - Flutter_version: 3.27.1
 - JDK_version: 17
 - MySQL_version: 8.0.41
 - Stacked_cli_version: 1.14.0
+
+## Setup
+### Backend:
+- Create a `.env` file in `backend` directory to hold the following variables:
+```
+DB_HOST=localhost
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=your_db_name
+JWT_SECRET=your_jwt_secret
+```
+
+### Frontend:
+- Create a `.env` file in the root directory of the project for flutter to hold `BASE_URL` for remote data source.
+```
+BASE_URL=<your API's base URL>
+```
 
 ## Implemented Functionality
 1. User Authentication with JWT
@@ -20,7 +38,7 @@ A new Flutter project.
 6. **Delete Health Program:** Users can delete a health program
 7. **View Clients**: Users can view a paginated list of clients with infinite scrolling.
 8. **Search Clients**: Users can search clients by first or last name, with results paginated.
-View Client Profile: Users can view detailed client information in ClientProfileView, including enrolled programs, diagnoses, and personal details.
+View Client Profile: Users can view detailed client information, including enrolled programs, diagnoses, and personal details.
 1.  **Register Client**: Users can register a new client with details like name, gender, date of birth, contact info, address, and diagnoses.
 2.   **Delete Client**: Users can delete a client
 3.   **Enroll Client in Programs**: Users can enroll a client in eligible health programs with eligibility checks based on age and diagnoses.
