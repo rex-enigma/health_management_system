@@ -8,7 +8,11 @@ enum Diagnosis {
   none;
 
   static Diagnosis fromString(String value) {
-    switch (value.toLowerCase()) {
+    switch (value) {
+      case 'hivPositive':
+        return Diagnosis.hivPositive;
+      case 'tb':
+        return Diagnosis.tb;
       case 'malaria':
         return Diagnosis.malaria;
       case 'asthma':
