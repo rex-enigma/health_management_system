@@ -22,13 +22,13 @@ router.post('/v1/health-programs', authenticateJWT, async (req, res, next) => {
                 if (!required_diagnosis) {
                     throw new Error('Eligibility criteria diagnosis_name is required');
                 }
-                if (min_age !== undefined && (typeof min_age !== 'number' || min_age < 0)) {
+                if (min_age < 0) {
                     throw new Error('minAge must be a non-negative number');
                 }
-                if (max_age !== undefined && (typeof max_age !== 'number' || max_age < 0)) {
+                if (max_age < 0) {
                     throw new Error('maxAge must be a non-negative number');
                 }
-                if (min_age !== undefined && max_age !== undefined && min_age > max_age) {
+                if (min_age > max_age) {
                     throw new Error('minAge cannot be greater than maxAge');
                 }
 
@@ -41,10 +41,10 @@ router.post('/v1/health-programs', authenticateJWT, async (req, res, next) => {
 
                 const [criteriaResult] = await connection.execute(
                     'INSERT INTO eligibility_criteria (min_age, max_age, required_diagnosis_id) VALUES (?, ?, ?)',
-                    [min_age || null, max_age || null, diagnosisId]
+                    [min_age, max_age, diagnosisId]
                 );
                 eligibilityCriteriaId = criteriaResult.insertId;
-                eligibilityCriteriaResponse = { min_age, max_age, required_diagnosis };
+                eligibilityCriteriaResponse = { id: eligibilityCriteriaId, min_age, max_age, required_diagnosis };
             }
 
             const [programResult] = await connection.execute(
@@ -96,7 +96,7 @@ router.get('/v1/health-programs/:id', requireAuth, async (req, res, next) => {
         let eligibilityCriteria = null;
         if (program[0].eligibility_criteria_id) {
             const [criteria] = await db.execute(
-                'SELECT ec.id, ec.min_age, ec.max_age, d.diagnosis_name AS diagnosis_name ' +
+                'SELECT ec.id, ec.min_age, ec.max_age, d.diagnosis_name AS required_diagnosis ' +
                 'FROM eligibility_criteria ec JOIN diagnoses d ON ec.required_diagnosis_id = d.id WHERE ec.id = ?',
                 [program[0].eligibility_criteria_id]
             );
@@ -147,9 +147,9 @@ router.get('/v1/health-programs', requireAuth, validatePagination, async (req, r
                 let eligibilityCriteria = null;
                 if (program.eligibility_criteria_id) {
                     const [criteria] = await db.execute(
-                        'SELECT ec.id, ec.min_age AS minAge, ec.max_age AS maxAge, d.diagnosis_name AS diagnosis_name ' +
+                        'SELECT ec.id, ec.min_age, ec.max_age, d.diagnosis_name AS required_diagnosis ' +
                         'FROM eligibility_criteria ec JOIN diagnoses d ON ec.required_diagnosis_id = d.id WHERE ec.id = ?',
-                        [program[0].eligibility_criteria_id]
+                        [program.eligibility_criteria_id]
                     );
                     eligibilityCriteria = criteria.length > 0 ? criteria[0] : null;
                 }
@@ -239,22 +239,7 @@ router.get('/v1/health-programs/search', requireAuth, validatePagination, async 
     }
 });
 
-router.delete('/v1/health-programs/:id', authenticateJWT, async (req, res, next) => {
-    const { id } = req.params;
 
-    try {
-        const [program] = await db.execute('SELECT * FROM health_programs WHERE id = ? AND created_by_user_id = ?', [id, req.user.id]);
-        if (program.length === 0) {
-            return res.status(404).json({ error: 'Health program not found' });
-        }
-
-        await db.execute('DELETE FROM health_programs WHERE id = ?', [id]);
-        res.status(200).json({ id: parseInt(id) });
-    } catch (error) {
-        console.error('Health program deletion error:', error);
-        next(error);
-    }
-});
 
 // delete a specific health program
 router.delete('/v1/health-programs/:id', authenticateJWT, async (req, res, next) => {
