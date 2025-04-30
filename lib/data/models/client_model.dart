@@ -47,8 +47,9 @@ class ClientModel extends ClientEntity {
       dateOfBirth: DateTime.parse(clientMap['date_of_birth'] as String),
       contactInfo: clientMap['contact_info'] as String,
       address: clientMap['address'] as String?,
-      enrolledPrograms: [],
-      currentDiagnoses: [],
+      enrolledPrograms:
+          (clientMap['enrolled_programs'] as List<dynamic>).cast<Map<String, dynamic>>().map((program) => HealthProgramModel.fromMap(healthProgramMap: program)).toList(),
+      currentDiagnoses: (clientMap['diagnoses'] as List<dynamic>).cast<String>().map((diagnosis) => Diagnosis.fromString(diagnosis)).toList(),
       registeredByUser: UserModel.fromMap(userMap: clientMap['registered_by'] as Map<String, dynamic>),
       // modify the backend to return this data
       // createdAt: DateTime.parse(clientMap['created_at'] as String),
