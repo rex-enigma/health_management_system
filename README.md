@@ -6,7 +6,7 @@ A new Flutter project.
 
 
 ## Prerequisite
-- nodejs_version: v16.20.2
+- nodejs_version: v18
 - Flutter_version: 3.27.1
 - JDK_version: 17
 - MySQL_version: 8.0.41
