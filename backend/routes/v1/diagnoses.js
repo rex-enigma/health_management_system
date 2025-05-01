@@ -23,7 +23,7 @@ router.get('/v1/diagnoses', authenticateJWT, validatePagination, async (req, res
 });
 
 
-// Token caching variables
+// Token caching variable
 let accessToken = null;
 let tokenExpirationTime = null;
 
@@ -60,17 +60,21 @@ const getAccessToken = async () => {
 router.get('v1/diagnoses/search', authenticateJWT, validatePagination, async (req, res, next) => {
     const { limit, offset } = req.pagination;
     const { q } = req.query;
-    if (!q) return res.status(400).json({ error: 'Query parameter is required' });
+    if (!q) return res.status(400).json({ status: 'error', error: 'Query parameter is required' });
 
     let results = [];
 
+
+    let diagnosesSelectQuery = `SELECT id, diagnosis_name, icd_11_code FROM diagnoses WHERE diagnosis_name LIKE ? ORDER BY diagnosis_name LIMIT ${limit} OFFSET ${offset}`;
+
     try {
-        // Search in local diagnoses table
-        const connection = await db.getConnection();
+
+        let connection = await db.getConnection();
         await connection.beginTransaction();
 
-        const [diagnosesRows] = await connection.execute(
-            `SELECT id, diagnosis_name, icd_11_code FROM diagnoses ORDER BY diagnosis_name WHERE name LIKE ? LIMIT ${limit} OFFSET ${offset}`,
+        // Search in local diagnoses table
+        // sanitize the arguments later
+        const [diagnosesRows] = await connection.execute(diagnosesSelectQuery,
             [`%${q}%`]
         );
 
@@ -88,7 +92,8 @@ router.get('v1/diagnoses/search', authenticateJWT, validatePagination, async (re
             const icdResponse = await axios.get(`${process.env.WHO_ICD_API_URL}/icd/release/11/2025-01/mms/search`, {
                 params: {
                     q: q,
-
+                    highlightingEnabled: 'false', // turn off special tags eg <em></em>
+                    flatResults: 'false',
                 },
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -98,19 +103,42 @@ router.get('v1/diagnoses/search', authenticateJWT, validatePagination, async (re
                 }
             });
 
-            // Map WHO ICD-API response to expected format
-            results = icdResponse.data.destinationEntities.map(item => ({
-                code: item.theCode, // ICD-11 code
-                diagnosis_name: item.title.replace(/<[^>]+>/g, ''), // strip HTML tags
-            }));
+
+            if (!icdResponse.data.destinationEntities || icdResponse.data.destinationEntities.length === 0) {
+                console.log(`No matches found in WHO ICD-API for query: ${q}`);
+                results = []; // Return empty array if no matches found
+            }
+            else {
+                // Map WHO ICD-API response 
+                let diagnosesData = icdResponse.data.destinationEntities.map(item => ([item.title, item.theCode]));
+                await connection.query('INSERT INTO diagnoses (diagnosis_name, icd_11_code) VALUES ? ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)', [diagnosesData]);
+
+                // Search in local diagnoses table
+                // sanitize the arguments later
+                const [diagnosesRows] = await connection.execute(diagnosesSelectQuery,
+                    [`%${q}%`]
+                );
+
+                results = diagnosesRows.map(row => ({
+                    id: row.id,
+                    diagnosis_name: row.diagnosis_name,
+                    icd_11_code: row.icd_11_code
+                }));
+            }
+
         }
 
-        connection.release();
+        await connection.commit();
+
         res.status(200).json(results);
 
     } catch (error) {
+        await connection.rollback();
         console.error('Error searching diagnoses:', error.message);
         next(error);
+    }
+    finally {
+        connection.release();
     };
 }
 );
