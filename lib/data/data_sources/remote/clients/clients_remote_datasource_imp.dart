@@ -101,7 +101,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      return Right(data.map((map) => ClientModel.fromMap(clientMap: map)).toList());
+      return Right(data.map((clientData) => ClientModel.fromMap(clientMap: clientData)).toList());
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to search clients';
       return Left(ServerFailure(error, statusCode: response.statusCode));
@@ -125,8 +125,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     if (response.statusCode == 200) {
       return Right(ClientModel.fromMap(clientMap: jsonDecode(response.body)));
     } else if (response.statusCode == 404) {
-      return Left(
-          NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
+      return Left(NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to fetch client';
       return Left(ServerFailure(error, statusCode: response.statusCode));
@@ -154,8 +153,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     if (response.statusCode == 200) {
       return Right(unit);
     } else if (response.statusCode == 404) {
-      return Left(
-          NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
+      return Left(NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to enroll client';
       return Left(ServerFailure(error, statusCode: response.statusCode));
@@ -179,8 +177,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['id'];
     } else if (response.statusCode == 404) {
-      return Left(
-          NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
+      return Left(NotFoundFailure(jsonDecode(response.body)['error'], statusCode: response.statusCode));
     } else {
       final error = jsonDecode(response.body)['error'] ?? 'Failed to delete client';
       return Left(ServerFailure(error, statusCode: response.statusCode));

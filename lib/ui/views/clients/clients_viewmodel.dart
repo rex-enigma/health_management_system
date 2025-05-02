@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/app/app.router.dart';
-import 'package:health_managment_system/domain/entities/client.dart';
+import 'package:health_managment_system/domain/entities/client_entity.dart';
 import 'package:health_managment_system/domain/usecases/get_all_clients_usecase.dart';
 import 'package:health_managment_system/domain/usecases/search_clients_usecase.dart';
 import 'package:health_managment_system/ui/dialogs/info_alert/info_alert_dialog.dart';
@@ -39,16 +39,13 @@ class ClientsViewModel extends BaseViewModel {
 
   ClientsViewModel() {
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent &&
-          _hasMoreData) {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent && _hasMoreData) {
         loadClients();
       }
     });
 
     _searchScrollController.addListener(() {
-      if (_searchScrollController.position.pixels ==
-              _searchScrollController.position.maxScrollExtent &&
-          _hasMoreSearchData) {
+      if (_searchScrollController.position.pixels == _searchScrollController.position.maxScrollExtent && _hasMoreSearchData) {
         loadMoreSearchClients(_lastQuery);
       }
     });
@@ -89,8 +86,7 @@ class ClientsViewModel extends BaseViewModel {
       return;
     }
 
-    final result =
-        await _searchClientsUseCase(SearchClientsParams(query: query, page: _searchPage));
+    final result = await _searchClientsUseCase(SearchClientsParams(query: query, page: _searchPage));
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(
