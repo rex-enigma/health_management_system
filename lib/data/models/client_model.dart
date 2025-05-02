@@ -1,7 +1,7 @@
+import 'package:health_managment_system/data/models/diagnosis_model.dart';
 import 'package:health_managment_system/data/models/health_program_model.dart';
 import 'package:health_managment_system/data/models/user_model.dart';
-import 'package:health_managment_system/domain/entities/client.dart';
-import 'package:health_managment_system/enums/diagnosis.dart';
+import 'package:health_managment_system/domain/entities/client_entity.dart';
 import 'package:health_managment_system/enums/gender.dart';
 
 class ClientModel extends ClientEntity {
@@ -47,10 +47,16 @@ class ClientModel extends ClientEntity {
       dateOfBirth: DateTime.parse(clientMap['date_of_birth'] as String),
       contactInfo: clientMap['contact_info'] as String,
       address: clientMap['address'] as String?,
-      enrolledPrograms:
-          (clientMap['enrolled_programs'] as List<dynamic>).cast<Map<String, dynamic>>().map((program) => HealthProgramModel.fromMap(healthProgramMap: program)).toList(),
-      currentDiagnoses: (clientMap['diagnoses'] as List<dynamic>).cast<String>().map((diagnosis) => Diagnosis.fromString(diagnosis)).toList(),
-      registeredByUser: UserModel.fromMap(userMap: clientMap['registered_by'] as Map<String, dynamic>),
+      enrolledPrograms: (clientMap['enrolled_programs'] as List<dynamic>)
+          .cast<Map<String, dynamic>>()
+          .map((program) => HealthProgramModel.fromMap(healthProgramMap: program))
+          .toList(),
+      currentDiagnoses: (clientMap['diagnoses'] as List<dynamic>)
+          .cast<Map<String, dynamic>>()
+          .map((diagnosis) => DiagnosisModel.fromMap(diagnosisMap: diagnosis))
+          .toList(),
+      registeredByUser:
+          UserModel.fromMap(userMap: clientMap['registered_by'] as Map<String, dynamic>),
       // modify the backend to return this data
       // createdAt: DateTime.parse(clientMap['created_at'] as String),
     );

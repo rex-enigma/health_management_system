@@ -5,11 +5,9 @@ import 'package:health_managment_system/ui/reusable_widgets/app_button.dart';
 import 'package:health_managment_system/ui/reusable_widgets/app_text_field.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
-import '../../../enums/diagnosis.dart';
 import 'create_health_program_viewmodel.dart';
 
-class CreateHealthProgramView
-    extends StackedView<CreateHealthProgramViewModel> {
+class CreateHealthProgramView extends StackedView<CreateHealthProgramViewModel> {
   const CreateHealthProgramView({Key? key}) : super(key: key);
 
   @override
@@ -43,9 +41,7 @@ class CreateHealthProgramView
                 child: AppTextField(
                   label: 'Start Date',
                   controller: TextEditingController(
-                    text: viewModel.startDate != null
-                        ? DateFormat('dd/MM/yyyy').format(viewModel.startDate!)
-                        : '',
+                    text: viewModel.startDate != null ? DateFormat('dd/MM/yyyy').format(viewModel.startDate!) : '',
                   ),
                 ),
               ),
@@ -57,9 +53,7 @@ class CreateHealthProgramView
                 child: AppTextField(
                   label: 'End Date (Optional)',
                   controller: TextEditingController(
-                    text: viewModel.endDate != null
-                        ? DateFormat('dd/MM/yyyy').format(viewModel.endDate!)
-                        : '',
+                    text: viewModel.endDate != null ? DateFormat('dd/MM/yyyy').format(viewModel.endDate!) : '',
                   ),
                 ),
               ),
@@ -111,6 +105,5 @@ class CreateHealthProgramView
   }
 
   @override
-  CreateHealthProgramViewModel viewModelBuilder(BuildContext context) =>
-      CreateHealthProgramViewModel();
+  CreateHealthProgramViewModel viewModelBuilder(BuildContext context) => CreateHealthProgramViewModel();
 }

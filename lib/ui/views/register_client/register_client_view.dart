@@ -5,7 +5,6 @@ import 'package:health_managment_system/ui/reusable_widgets/app_text_field.dart'
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import '../../../enums/gender.dart';
-import '../../../enums/diagnosis.dart';
 import 'register_client_viewmodel.dart';
 
 class RegisterClientView extends StackedView<RegisterClientViewModel> {
@@ -59,10 +58,7 @@ class RegisterClientView extends StackedView<RegisterClientViewModel> {
                 child: AppTextField(
                   label: 'Date of Birth',
                   controller: TextEditingController(
-                    text: viewModel.dateOfBirth != null
-                        ? DateFormat('dd/MM/yyyy')
-                            .format(viewModel.dateOfBirth!)
-                        : '',
+                    text: viewModel.dateOfBirth != null ? DateFormat('dd/MM/yyyy').format(viewModel.dateOfBirth!) : '',
                   ),
                 ),
               ),
@@ -108,6 +104,5 @@ class RegisterClientView extends StackedView<RegisterClientViewModel> {
   }
 
   @override
-  RegisterClientViewModel viewModelBuilder(BuildContext context) =>
-      RegisterClientViewModel();
+  RegisterClientViewModel viewModelBuilder(BuildContext context) => RegisterClientViewModel();
 }

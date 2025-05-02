@@ -40,14 +40,11 @@ double screenWidthFraction(BuildContext context,
         {int dividedBy = 1, double offsetBy = 0, double max = 3000}) =>
     min((screenWidth(context) - offsetBy) / dividedBy, max);
 
-double halfScreenWidth(BuildContext context) =>
-    screenWidthFraction(context, dividedBy: 2);
+double halfScreenWidth(BuildContext context) => screenWidthFraction(context, dividedBy: 2);
 
-double thirdScreenWidth(BuildContext context) =>
-    screenWidthFraction(context, dividedBy: 3);
+double thirdScreenWidth(BuildContext context) => screenWidthFraction(context, dividedBy: 3);
 
-double quarterScreenWidth(BuildContext context) =>
-    screenWidthFraction(context, dividedBy: 4);
+double quarterScreenWidth(BuildContext context) => screenWidthFraction(context, dividedBy: 4);
 
 double getResponsiveHorizontalSpaceMedium(BuildContext context) =>
     screenWidthFraction(context, dividedBy: 10);
@@ -66,13 +63,11 @@ double getResponsiveExtraLargeFontSize(BuildContext context) =>
 double getResponsiveMassiveFontSize(BuildContext context) =>
     getResponsiveFontSize(context, fontSize: 30);
 
-double getResponsiveFontSize(BuildContext context,
-    {double? fontSize, double? max}) {
+double getResponsiveFontSize(BuildContext context, {double? fontSize, double? max}) {
   max ??= 100;
 
-  var responsiveSize = min(
-      screenWidthFraction(context, dividedBy: 10) * ((fontSize ?? 100) / 100),
-      max);
+  var responsiveSize =
+      min(screenWidthFraction(context, dividedBy: 10) * ((fontSize ?? 100) / 100), max);
 
   return responsiveSize;
 }

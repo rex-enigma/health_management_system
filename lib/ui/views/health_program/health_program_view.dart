@@ -6,8 +6,7 @@ import 'package:stacked/stacked.dart';
 class HealthProgramView extends StackedView<HealthProgramViewModel> {
   final int programId;
 
-  const HealthProgramView({Key? key, required this.programId})
-      : super(key: key);
+  const HealthProgramView({Key? key, required this.programId}) : super(key: key);
 
   @override
   Widget builder(

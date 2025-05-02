@@ -31,6 +31,5 @@ class SettingsView extends StackedView<SettingsViewModel> {
   }
 
   @override
-  SettingsViewModel viewModelBuilder(BuildContext context) =>
-      SettingsViewModel();
+  SettingsViewModel viewModelBuilder(BuildContext context) => SettingsViewModel();
 }

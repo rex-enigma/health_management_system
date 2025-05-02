@@ -1,3 +1,4 @@
+import 'package:health_managment_system/data/models/eligibility_criteria_model.dart';
 import 'package:health_managment_system/data/models/user_model.dart';
 import 'package:health_managment_system/domain/entities/health_program_entity.dart';
 
@@ -35,11 +36,16 @@ class HealthProgramModel extends HealthProgramEntity {
       name: healthProgramMap['name'] as String,
       description: healthProgramMap['description'] as String,
       startDate: DateTime.parse(healthProgramMap['start_date'] as String),
-      endDate: healthProgramMap['end_date'] != null ? DateTime.parse(healthProgramMap['end_date'] as String) : null,
-      eligibilityCriteria: healthProgramMap['eligibility_criteria'] != null
-          ? EligibilityCriteria.fromMap(eligibilityCriteriaMap: healthProgramMap['eligibility_criteria'] as Map<String, dynamic>)
+      endDate: healthProgramMap['end_date'] != null
+          ? DateTime.parse(healthProgramMap['end_date'] as String)
           : null,
-      createdByUser: UserModel.fromMap(userMap: healthProgramMap['created_by'] as Map<String, dynamic>),
+      eligibilityCriteria: healthProgramMap['eligibility_criteria'] != null
+          ? EligibilityCriteriaModel.fromMap(
+              eligibilityCriteriaMap:
+                  healthProgramMap['eligibility_criteria'] as Map<String, dynamic>)
+          : null,
+      createdByUser:
+          UserModel.fromMap(userMap: healthProgramMap['created_by'] as Map<String, dynamic>),
       // modify the backend to return this data
       // createdAt: DateTime.parse(healthProgramMap['created_at'] as String),
     );

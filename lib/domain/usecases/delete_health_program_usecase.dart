@@ -10,8 +10,7 @@ class DeleteHealthProgramUseCase
   final HealthProgramsRepo _healthProgramsRepo;
 
   DeleteHealthProgramUseCase({HealthProgramsRepo? healthProgramsRepo})
-      : _healthProgramsRepo =
-            healthProgramsRepo ?? locator<HealthProgramsRepositoryImpl>();
+      : _healthProgramsRepo = healthProgramsRepo ?? locator<HealthProgramsRepositoryImpl>();
 
   @override
   Future<Either<Failure, void>> call(DeleteHealthProgramParams params) {

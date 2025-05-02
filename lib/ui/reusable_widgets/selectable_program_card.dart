@@ -58,11 +58,7 @@ class SelectableProgramCard extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 8.0),
                 child: Text(
                   'Ineligible: $ineligibilityReason',
-                  style: Theme.of(context)
-                      .typography
-                      .black
-                      .bodySmall
-                      ?.copyWith(color: Colors.red),
+                  style: Theme.of(context).typography.black.bodySmall?.copyWith(color: Colors.red),
                 ),
               ),
           ],

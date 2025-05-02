@@ -7,3 +7,15 @@ abstract class UseCase<RT, PT> {
 class NoParams {
   const NoParams();
 }
+
+class SearchParams {
+  final String query;
+  final int page;
+  final int limit;
+
+  SearchParams({
+    required this.query,
+    this.page = 1,
+    this.limit = 10,
+  });
+}

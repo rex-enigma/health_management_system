@@ -36,6 +36,5 @@ class InfoAlertDialog extends StackedView<InfoAlertDialogModel> {
   }
 
   @override
-  InfoAlertDialogModel viewModelBuilder(BuildContext context) =>
-      InfoAlertDialogModel(completer);
+  InfoAlertDialogModel viewModelBuilder(BuildContext context) => InfoAlertDialogModel(completer);
 }

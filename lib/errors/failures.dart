@@ -25,6 +25,10 @@ class IneligibleClientFailure extends Failure {
 
   IneligibleClientFailure({
     required this.ineligibleHealthProgramIds,
-  }) : super(
-            'Client is not eligible for health programs: $ineligibleHealthProgramIds');
+  }) : super('Client is not eligible for health programs: $ineligibleHealthProgramIds');
+}
+
+class ClientAlreadyExistFailure extends Failure {
+  final int? status;
+  ClientAlreadyExistFailure(super.message, {this.status});
 }

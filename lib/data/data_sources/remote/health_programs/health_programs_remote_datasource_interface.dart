@@ -12,8 +12,7 @@ abstract class HealthProgramsRemoteDataSource {
     Map<String, dynamic>? eligibilityCriteria,
   });
 
-  Future<Either<Failure, HealthProgramModel>> getHealthProgram(
-      int healthProgramId);
+  Future<Either<Failure, HealthProgramModel>> getHealthProgram(int healthProgramId);
 
   Future<Either<Failure, List<HealthProgramModel>>> getAllHealthPrograms(
       {int page = 1, int limit = 10});

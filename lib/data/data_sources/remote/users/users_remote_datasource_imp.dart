@@ -11,8 +11,7 @@ class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
   late FlutterSecureStorage flutterSecureStorage;
   late String baseUrl;
 
-  UsersRemoteDataSourceImpl(
-      {FlutterSecureStorage? flutterSecureStorage, String? baseUrl}) {
+  UsersRemoteDataSourceImpl({FlutterSecureStorage? flutterSecureStorage, String? baseUrl}) {
     this.flutterSecureStorage = flutterSecureStorage ?? FlutterSecureStorage();
     this.baseUrl = baseUrl ?? dotenv.env['BASE_URL'] as String;
   }
@@ -52,8 +51,7 @@ class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
   }
 
   @override
-  Future<Either<Failure, UserModel>> login(
-      String email, String password) async {
+  Future<Either<Failure, UserModel>> login(String email, String password) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl/v1/auth/login'),
@@ -63,8 +61,7 @@ class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        await flutterSecureStorage.write(
-            key: 'jwt_token', value: data['token']);
+        await flutterSecureStorage.write(key: 'jwt_token', value: data['token']);
         return Right(UserModel.fromMap(userMap: data['user']));
       } else {
         final error = jsonDecode(response.body)['error'] ?? 'Login failed';

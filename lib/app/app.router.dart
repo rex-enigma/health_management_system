@@ -7,29 +7,19 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:flutter/material.dart' as _i14;
 import 'package:flutter/material.dart';
-import 'package:health_managment_system/ui/views/client/client_view.dart'
-    as _i11;
-import 'package:health_managment_system/ui/views/clients/clients_view.dart'
-    as _i8;
+import 'package:health_managment_system/ui/views/client/client_view.dart' as _i11;
+import 'package:health_managment_system/ui/views/clients/clients_view.dart' as _i8;
 import 'package:health_managment_system/ui/views/create_health_program/create_health_program_view.dart'
     as _i12;
-import 'package:health_managment_system/ui/views/enroll_client/enroll_client_view.dart'
-    as _i13;
-import 'package:health_managment_system/ui/views/health_program/health_program_view.dart'
-    as _i4;
-import 'package:health_managment_system/ui/views/health_programs/health_programs_view.dart'
-    as _i5;
-import 'package:health_managment_system/ui/views/home_view/home_view.dart'
-    as _i2;
+import 'package:health_managment_system/ui/views/enroll_client/enroll_client_view.dart' as _i13;
+import 'package:health_managment_system/ui/views/health_program/health_program_view.dart' as _i4;
+import 'package:health_managment_system/ui/views/health_programs/health_programs_view.dart' as _i5;
+import 'package:health_managment_system/ui/views/home_view/home_view.dart' as _i2;
 import 'package:health_managment_system/ui/views/login/login_view.dart' as _i9;
-import 'package:health_managment_system/ui/views/register_client/register_client_view.dart'
-    as _i6;
-import 'package:health_managment_system/ui/views/settings/settings_view.dart'
-    as _i7;
-import 'package:health_managment_system/ui/views/signup/signup_view.dart'
-    as _i10;
-import 'package:health_managment_system/ui/views/startup_view/startup_view.dart'
-    as _i3;
+import 'package:health_managment_system/ui/views/register_client/register_client_view.dart' as _i6;
+import 'package:health_managment_system/ui/views/settings/settings_view.dart' as _i7;
+import 'package:health_managment_system/ui/views/signup/signup_view.dart' as _i10;
+import 'package:health_managment_system/ui/views/startup_view/startup_view.dart' as _i3;
 import 'package:stacked/stacked.dart' as _i1;
 import 'package:stacked_services/stacked_services.dart' as _i15;
 
@@ -142,8 +132,7 @@ class StackedRouter extends _i1.RouterBase {
     _i4.HealthProgramView: (data) {
       final args = data.getArgs<HealthProgramViewArguments>(nullOk: false);
       return _i14.MaterialPageRoute<dynamic>(
-        builder: (context) =>
-            _i4.HealthProgramView(key: args.key, programId: args.programId),
+        builder: (context) => _i4.HealthProgramView(key: args.key, programId: args.programId),
         settings: data,
       );
     },
@@ -186,8 +175,7 @@ class StackedRouter extends _i1.RouterBase {
     _i11.ClientView: (data) {
       final args = data.getArgs<ClientViewArguments>(nullOk: false);
       return _i14.MaterialPageRoute<dynamic>(
-        builder: (context) =>
-            _i11.ClientView(key: args.key, clientId: args.clientId),
+        builder: (context) => _i11.ClientView(key: args.key, clientId: args.clientId),
         settings: data,
       );
     },
@@ -200,8 +188,7 @@ class StackedRouter extends _i1.RouterBase {
     _i13.EnrollClientView: (data) {
       final args = data.getArgs<EnrollClientViewArguments>(nullOk: false);
       return _i14.MaterialPageRoute<dynamic>(
-        builder: (context) =>
-            _i13.EnrollClientView(key: args.key, clientId: args.clientId),
+        builder: (context) => _i13.EnrollClientView(key: args.key, clientId: args.clientId),
         settings: data,
       );
     },
@@ -300,8 +287,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return navigateTo<dynamic>(Routes.homeView,
         id: routerId,
@@ -314,8 +300,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return navigateTo<dynamic>(Routes.startupView,
         id: routerId,
@@ -330,8 +315,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   }) async {
     return navigateTo<dynamic>(Routes.healthProgramView,
         arguments: HealthProgramViewArguments(key: key, programId: programId),
@@ -345,8 +329,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return navigateTo<dynamic>(Routes.healthProgramsView,
         id: routerId,
@@ -359,8 +342,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return navigateTo<dynamic>(Routes.registerClientView,
         id: routerId,
@@ -373,8 +355,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return navigateTo<dynamic>(Routes.settingsView,
         id: routerId,
@@ -387,8 +368,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return navigateTo<dynamic>(Routes.clientsView,
         id: routerId,
@@ -401,8 +381,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return navigateTo<dynamic>(Routes.loginView,
         id: routerId,
@@ -415,8 +394,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return navigateTo<dynamic>(Routes.signupView,
         id: routerId,
@@ -431,8 +409,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   }) async {
     return navigateTo<dynamic>(Routes.clientView,
         arguments: ClientViewArguments(key: key, clientId: clientId),
@@ -446,8 +423,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return navigateTo<dynamic>(Routes.createHealthProgramView,
         id: routerId,
@@ -462,8 +438,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   }) async {
     return navigateTo<dynamic>(Routes.enrollClientView,
         arguments: EnrollClientViewArguments(key: key, clientId: clientId),
@@ -477,8 +452,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return replaceWith<dynamic>(Routes.homeView,
         id: routerId,
@@ -491,8 +465,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return replaceWith<dynamic>(Routes.startupView,
         id: routerId,
@@ -507,8 +480,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   }) async {
     return replaceWith<dynamic>(Routes.healthProgramView,
         arguments: HealthProgramViewArguments(key: key, programId: programId),
@@ -522,8 +494,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return replaceWith<dynamic>(Routes.healthProgramsView,
         id: routerId,
@@ -536,8 +507,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return replaceWith<dynamic>(Routes.registerClientView,
         id: routerId,
@@ -550,8 +520,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return replaceWith<dynamic>(Routes.settingsView,
         id: routerId,
@@ -564,8 +533,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return replaceWith<dynamic>(Routes.clientsView,
         id: routerId,
@@ -578,8 +546,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return replaceWith<dynamic>(Routes.loginView,
         id: routerId,
@@ -592,8 +559,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return replaceWith<dynamic>(Routes.signupView,
         id: routerId,
@@ -608,8 +574,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   }) async {
     return replaceWith<dynamic>(Routes.clientView,
         arguments: ClientViewArguments(key: key, clientId: clientId),
@@ -623,8 +588,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   ]) async {
     return replaceWith<dynamic>(Routes.createHealthProgramView,
         id: routerId,
@@ -639,8 +603,7 @@ extension NavigatorStateExtension on _i15.NavigationService {
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
-    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
-        transition,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)? transition,
   }) async {
     return replaceWith<dynamic>(Routes.enrollClientView,
         arguments: EnrollClientViewArguments(key: key, clientId: clientId),

@@ -38,8 +38,7 @@ class HealthProgramsViewModel extends BaseViewModel {
 
   HealthProgramsViewModel() {
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-              _scrollController.position.maxScrollExtent &&
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent &&
           _hasMoreData) {
         loadHealthPrograms();
       }
@@ -56,8 +55,8 @@ class HealthProgramsViewModel extends BaseViewModel {
 
   Future<void> loadHealthPrograms() async {
     setBusy(true);
-    final result = await _getAllHealthProgramsUseCase(
-        GetAllHealthProgramsParams(page: _currentPage));
+    final result =
+        await _getAllHealthProgramsUseCase(GetAllHealthProgramsParams(page: _currentPage));
     setBusy(false);
 
     result.fold(

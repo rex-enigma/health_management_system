@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:health_managment_system/domain/entities/diagnosis_entity.dart';
 import 'package:health_managment_system/domain/entities/health_program_entity.dart';
 import 'package:health_managment_system/domain/entities/user_entity.dart';
-import 'package:health_managment_system/enums/diagnosis.dart';
 import 'package:health_managment_system/enums/gender.dart';
 
 class ClientEntity {
@@ -10,11 +10,10 @@ class ClientEntity {
   final String firstName;
   final String lastName;
   final Gender gender;
-  final DateTime dateOfBirth;
+  final DateTime dateOfBirth; // one of the reasons for enrollment
   final String contactInfo;
   final String? address;
-  final List<Diagnosis>
-      currentDiagnoses; // The primary conditions or reasons for enrollment
+  final List<DiagnosisEntity> currentDiagnoses; // one of the reasons for enrollment
   final List<HealthProgramEntity> enrolledPrograms; // List of enrolled programs
   final UserEntity registeredByUser;
   final DateTime? createdAt;
@@ -59,7 +58,7 @@ class ClientEntity {
     DateTime? dateOfBirth,
     String? contactInfo,
     String? address,
-    List<Diagnosis>? currentDiagnoses,
+    List<DiagnosisEntity>? currentDiagnoses,
     List<HealthProgramEntity>? enrolledPrograms,
   }) {
     return ClientEntity(

@@ -1,5 +1,4 @@
-import 'package:health_managment_system/domain/entities/client.dart';
-import 'package:health_managment_system/enums/diagnosis.dart';
+import 'package:health_managment_system/domain/entities/eligibility_criteria_entity.dart';
 import 'package:health_managment_system/domain/entities/user_entity.dart';
 
 class HealthProgramEntity {
@@ -9,7 +8,7 @@ class HealthProgramEntity {
   final String description;
   final DateTime startDate;
   final DateTime? endDate;
-  final EligibilityCriteria? eligibilityCriteria;
+  final EligibilityCriteriaEntity? eligibilityCriteria;
   final UserEntity createdByUser;
   final DateTime? createdAt;
 
@@ -45,7 +44,7 @@ class HealthProgramEntity {
     String? description,
     DateTime? startDate,
     DateTime? endDate,
-    EligibilityCriteria? eligibilityCriteria,
+    EligibilityCriteriaEntity? eligibilityCriteria,
     UserEntity? createdByUser,
   }) {
     return HealthProgramEntity(
@@ -101,73 +100,5 @@ class HealthProgramEntity {
       createdByUser: $createdByUser,
       createdAt: $createdAt
     }""";
-  }
-}
-
-class EligibilityCriteria {
-  final int id;
-  final int? minAge; // Minimum age in years
-  final int? maxAge; // Maximum age in years
-  final Diagnosis requiredDiagnosis;
-
-  EligibilityCriteria({
-    required this.id,
-    this.minAge,
-    this.maxAge,
-    required this.requiredDiagnosis,
-  });
-
-  bool get isEmpty => minAge == null && maxAge == null;
-
-  bool isClientEligible(ClientEntity client) {
-    // Check age eligibility
-    final clientAge = _getClientAge(client.dateOfBirth);
-    if (minAge != null && clientAge < minAge!) {
-      return false;
-    }
-    if (maxAge != null && clientAge > maxAge!) {
-      return false;
-    }
-
-    // Check diagnosis eligibility
-    return client.currentDiagnoses
-        .any((diagnosis) => diagnosis.name == requiredDiagnosis.name);
-  }
-
-  int _getClientAge(DateTime dateOfBirth) {
-    final now = DateTime.now();
-    int age = now.year - dateOfBirth.year;
-    if (now.month < dateOfBirth.month ||
-        (now.month == dateOfBirth.month && now.day < dateOfBirth.day)) {
-      age--;
-    }
-    return age;
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is EligibilityCriteria &&
-        id == other.id &&
-        minAge == other.minAge &&
-        maxAge == other.maxAge &&
-        requiredDiagnosis == other.requiredDiagnosis;
-  }
-
-  factory EligibilityCriteria.fromMap(
-      {required Map<String, dynamic> eligibilityCriteriaMap}) {
-    return EligibilityCriteria(
-      id: eligibilityCriteriaMap['id'] as int,
-      minAge: eligibilityCriteriaMap['min_age'] as int?,
-      maxAge: eligibilityCriteriaMap['max_age'] as int?,
-      requiredDiagnosis:
-          Diagnosis.fromString(eligibilityCriteriaMap['required_diagnosis']),
-    );
-  }
-  @override
-  int get hashCode {
-    return id.hashCode ^
-        minAge.hashCode ^
-        maxAge.hashCode ^
-        requiredDiagnosis.hashCode;
   }
 }

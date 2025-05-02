@@ -25,7 +25,6 @@ import '../domain/usecases/delete_client_usecase.dart';
 import '../domain/usecases/delete_health_program_usecase.dart';
 import '../domain/usecases/enroll_client_usecase.dart';
 import '../domain/usecases/get_all_clients_usecase.dart';
-import '../domain/usecases/get_all_diagnoses_usecase.dart';
 import '../domain/usecases/get_all_health_programs_usecase.dart';
 import '../domain/usecases/get_client_usecase.dart';
 import '../domain/usecases/get_health_programs_usecase.dart';
@@ -41,8 +40,7 @@ Future<void> setupLocator({
   EnvironmentFilter? environmentFilter,
 }) async {
 // Register environments
-  locator.registerEnvironment(
-      environment: environment, environmentFilter: environmentFilter);
+  locator.registerEnvironment(environment: environment, environmentFilter: environmentFilter);
 
 // Register dependencies
   locator.registerLazySingleton(() => BottomSheetService());
@@ -62,7 +60,6 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => DeleteHealthProgramUseCase());
   locator.registerLazySingleton(() => EnrollClientUseCase());
   locator.registerLazySingleton(() => GetAllClientsUseCase());
-  locator.registerLazySingleton(() => GetAllDiagnosesUseCase());
   locator.registerLazySingleton(() => GetAllHealthProgramsUseCase());
   locator.registerLazySingleton(() => GetClientUseCase());
   locator.registerLazySingleton(() => GetHealthProgramUseCase());

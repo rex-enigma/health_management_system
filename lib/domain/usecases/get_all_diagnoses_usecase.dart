@@ -7,8 +7,7 @@ import 'package:health_managment_system/enums/diagnosis.dart';
 import 'package:health_managment_system/errors/failures.dart';
 
 class GetAllDiagnosesUseCase
-    implements
-        UseCase<Either<Failure, List<Diagnosis>>, GetAllDiagnosesParams> {
+    implements UseCase<Either<Failure, List<Diagnosis>>, GetAllDiagnosesParams> {
   final DiagnosesRepo _diagnosesRepo;
 
   GetAllDiagnosesUseCase({DiagnosesRepo? diagnosesRepo})
