@@ -1,5 +1,7 @@
+import 'package:health_managment_system/domain/entities/client_entity.dart';
 import 'package:health_managment_system/domain/entities/eligibility_criteria_entity.dart';
 import 'package:health_managment_system/domain/entities/user_entity.dart';
+import 'package:health_managment_system/utils/calculate_age.dart';
 
 class HealthProgramEntity {
   final int id;
@@ -36,6 +38,22 @@ class HealthProgramEntity {
   //   required this.createdByUser,
   //   required this.createdAt,
   // });
+
+  /// Business logic for checking if the criteria are met for a given client to be eligible to this health program
+  bool isClientEligible(ClientEntity client) {
+    final clientAge = calculateAge(client.dateOfBirth);
+    if (eligibilityCriteria?.minAge != null && clientAge < eligibilityCriteria!.minAge!) {
+      return false;
+    }
+    if (eligibilityCriteria?.maxAge != null && clientAge > eligibilityCriteria!.maxAge!) {
+      return false;
+    }
+    if (eligibilityCriteria?.diagnosis != null) {
+      return client.currentDiagnoses
+          .any((clientDiagnosis) => clientDiagnosis.diagnosisName == eligibilityCriteria!.diagnosis!.diagnosisName);
+    }
+    return true;
+  }
 
   /// Allows creating a modified copy of the current instance.
   HealthProgramEntity copyWith({

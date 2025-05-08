@@ -1,4 +1,3 @@
-import 'package:health_managment_system/domain/entities/client_entity.dart';
 import 'package:health_managment_system/domain/entities/diagnosis_entity.dart';
 
 class EligibilityCriteriaEntity {
@@ -13,30 +12,6 @@ class EligibilityCriteriaEntity {
     this.maxAge,
     this.diagnosis,
   });
-
-  /// Business logic for checking if the criteria are met for a given client
-  bool isClientEligible(ClientEntity client) {
-    final clientAge = _calculateClientAge(client.dateOfBirth);
-    if (minAge != null && clientAge < minAge!) {
-      return false;
-    }
-    if (maxAge != null && clientAge > maxAge!) {
-      return false;
-    }
-    return client.currentDiagnoses
-        .any((diagnosis) => diagnosis.diagnosisName == diagnosis.diagnosisName);
-  }
-
-  /// Calculates the age of the client based on their date of birth
-  int _calculateClientAge(DateTime dateOfBirth) {
-    final now = DateTime.now();
-    int age = now.year - dateOfBirth.year;
-    if (now.month < dateOfBirth.month ||
-        (now.month == dateOfBirth.month && now.day < dateOfBirth.day)) {
-      age--;
-    }
-    return age;
-  }
 
   @override
   bool operator ==(Object other) {
