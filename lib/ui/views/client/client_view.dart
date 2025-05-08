@@ -11,11 +11,7 @@ class ClientView extends StackedView<ClientViewModel> {
   const ClientView({Key? key, required this.clientId}) : super(key: key);
 
   @override
-  Widget builder(
-    BuildContext context,
-    ClientViewModel viewModel,
-    Widget? child,
-  ) {
+  Widget builder(BuildContext context, ClientViewModel viewModel, Widget? child) {
     if (viewModel.isBusy) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -24,7 +20,7 @@ class ClientView extends StackedView<ClientViewModel> {
 
     if (viewModel.client == null) {
       return const Scaffold(
-        body: Center(child: Text('Client not found')),
+        body: Center(child: Text('Failed to load client')),
       );
     }
 
@@ -33,10 +29,10 @@ class ClientView extends StackedView<ClientViewModel> {
       appBar: AppBar(
         title: Text('${client.firstName} ${client.lastName}'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => viewModel.showDeleteClientDialog(),
-          ),
+          // IconButton(
+          //   icon: const Icon(Icons.delete),
+          //   onPressed: () => viewModel.showDeleteClientDialog(),
+          // ),
         ],
       ),
       body: SingleChildScrollView(
@@ -44,70 +40,132 @@ class ClientView extends StackedView<ClientViewModel> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 50,
-                  ),
+            // Upper Section: Profile Card
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                        size: 50,
+                      ),
+                    ),
+                    horizontalSpaceMedium,
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${client.firstName} ${client.lastName}',
+                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          verticalSpaceSmall,
+                          Text(
+                            'Gender: ${client.gender}',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          Text(
+                            'Age: ${calculateAge(client.dateOfBirth)} years',
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                horizontalSpaceMedium,
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${client.firstName} ${client.lastName}',
-                        style: Theme.of(context).typography.black.headlineLarge,
-                      ),
-                      verticalSpaceSmall,
-                      Text(
-                        'Gender: ${client.gender}',
-                        style: Theme.of(context).typography.black.bodyMedium,
-                      ),
-                      Text(
-                        'Age: ${calculateAge(client.dateOfBirth)} years',
-                        style: Theme.of(context).typography.black.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+              ),
             ),
             verticalSpaceLarge,
-            Text(
-              'Contact Info: ${client.contactInfo}',
-              style: Theme.of(context).typography.black.bodyMedium,
-            ),
-            verticalSpaceMedium,
-            Text(
-              'Address: ${client.address ?? "Not provided"}',
-              style: Theme.of(context).typography.black.bodyMedium,
-            ),
-            verticalSpaceMedium,
-            Text(
-              'Diagnoses: ${client.currentDiagnoses.isEmpty ? "None" : client.currentDiagnoses.join(", ")}',
-              style: Theme.of(context).typography.black.bodyMedium,
+
+            // Contact and Address Section
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.phone, color: Theme.of(context).colorScheme.primary),
+                      title: Text('Contact Info'),
+                      subtitle: Text(client.contactInfo),
+                    ),
+                    Divider(),
+                    ListTile(
+                      leading: Icon(Icons.location_on, color: Theme.of(context).colorScheme.primary),
+                      title: Text('Address'),
+                      subtitle: Text(client.address ?? 'Not provided'),
+                    ),
+                  ],
+                ),
+              ),
             ),
             verticalSpaceLarge,
+
+            // Diagnoses Section
+            Text(
+              'Diagnoses',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            verticalSpaceSmall,
+            client.currentDiagnoses.isEmpty
+                ? const Text(
+                    "None",
+                    style: TextStyle(color: Colors.grey),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: client.currentDiagnoses.length,
+                    itemBuilder: (context, index) {
+                      final diagnosis = client.currentDiagnoses[index];
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.medical_information_outlined,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          title: Text(diagnosis.diagnosisName),
+                          subtitle: Text('Code: ${diagnosis.icd11Code}'),
+                        ),
+                      );
+                    },
+                  ),
+            verticalSpaceLarge,
+            // Enrolled Programs Section
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Enrolled Programs',
-                  style: Theme.of(context).typography.black.headlineSmall,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.add),
+                FloatingActionButton(
+                  elevation: 0,
                   onPressed: () => viewModel.navigateToEnrollClient(),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  mini: true, // Makes it smaller for subtle alignment
+                  child: const Icon(Icons.add, color: Colors.white),
                 ),
               ],
             ),
-            verticalSpaceMedium,
+            verticalSpaceSmall,
             client.enrolledPrograms.isEmpty
                 ? const Text('No enrolled programs')
                 : ListView.builder(
