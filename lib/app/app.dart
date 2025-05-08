@@ -18,6 +18,7 @@ import 'package:health_managment_system/domain/usecases/get_client_usecase.dart'
 import 'package:health_managment_system/domain/usecases/get_health_programs_usecase.dart';
 import 'package:health_managment_system/domain/usecases/login_use_usecase.dart';
 import 'package:health_managment_system/domain/usecases/search_clients_usecase.dart';
+import 'package:health_managment_system/domain/usecases/search_diagnoses_usecase.dart';
 import 'package:health_managment_system/domain/usecases/search_health_programs_usecase.dart';
 import 'package:health_managment_system/domain/usecases/sign_up_usecase.dart';
 import 'package:health_managment_system/ui/bottom_sheets/notice/notice_sheet.dart';
@@ -36,6 +37,7 @@ import 'package:health_managment_system/ui/views/signup/signup_view.dart';
 import 'package:health_managment_system/ui/views/client/client_view.dart';
 import 'package:health_managment_system/ui/views/create_health_program/create_health_program_view.dart';
 import 'package:health_managment_system/ui/views/enroll_client/enroll_client_view.dart';
+import 'package:health_managment_system/ui/bottom_sheets/diagnosis_selection/diagnosis_selection_sheet.dart';
 // @stacked-import
 
 @StackedApp(
@@ -76,18 +78,20 @@ import 'package:health_managment_system/ui/views/enroll_client/enroll_client_vie
     LazySingleton(classType: DeleteHealthProgramUseCase),
     LazySingleton(classType: EnrollClientUseCase),
     LazySingleton(classType: GetAllClientsUseCase),
-    LazySingleton(classType: GetAllDiagnosesUseCase),
+    // LazySingleton(classType: GetAllDiagnosesUseCase),
     LazySingleton(classType: GetAllHealthProgramsUseCase),
     LazySingleton(classType: GetClientUseCase),
     LazySingleton(classType: GetHealthProgramUseCase),
     LazySingleton(classType: LoginUseCase),
     LazySingleton(classType: SearchClientsUseCase),
+    LazySingleton(classType: SearchDiagnosesUseCase),
     LazySingleton(classType: SearchHealthProgramsUseCase),
     LazySingleton(classType: SignupUseCase),
   ],
   bottomsheets: [
     StackedBottomsheet(classType: NoticeSheet),
-    // @stacked-bottom-sheet
+    StackedBottomsheet(classType: DiagnosisSelectionSheet),
+// @stacked-bottom-sheet
   ],
   dialogs: [
     StackedDialog(classType: InfoAlertDialog),
