@@ -25,7 +25,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
     required String contactInfo,
     String? address,
     String? profileImagePath,
-    required List<String> diagnosisNames,
+    required List<int> diagnosisIds,
   }) async {
     final token = await flutterSecureStorage.read(key: 'jwt_token');
     if (token == null) {
@@ -46,7 +46,7 @@ class ClientsRemoteDataSourceImpl implements ClientsRemoteDataSource {
         'contact_info': contactInfo,
         'address': address,
         'profile_image_path': profileImagePath,
-        'diagnosis_names': diagnosisNames,
+        'diagnosis_ids': diagnosisIds,
       }),
     );
 

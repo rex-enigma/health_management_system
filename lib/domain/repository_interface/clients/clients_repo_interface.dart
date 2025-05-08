@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:health_managment_system/domain/entities/client.dart';
+import 'package:health_managment_system/domain/entities/client_entity.dart';
 import 'package:health_managment_system/errors/failures.dart';
 
 abstract class ClientsRepo {
@@ -11,7 +11,7 @@ abstract class ClientsRepo {
     required String contactInfo,
     String? address,
     String? profileImagePath,
-    required List<String> diagnosisNames,
+    required List<int> diagnosisIds,
   });
 
   Future<Either<Failure, List<ClientEntity>>> getAllClients({

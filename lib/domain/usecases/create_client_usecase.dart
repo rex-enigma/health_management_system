@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/data/repositories/clients/clients_repo_imp.dart';
-import 'package:health_managment_system/domain/entities/client.dart';
+import 'package:health_managment_system/domain/entities/client_entity.dart';
 import 'package:health_managment_system/domain/repository_interface/clients/clients_repo_interface.dart';
 import 'package:health_managment_system/domain/usecases/usecase.dart';
 import 'package:health_managment_system/errors/failures.dart';
@@ -9,8 +9,7 @@ import 'package:health_managment_system/errors/failures.dart';
 class CreateClientUseCase implements UseCase<Either<Failure, ClientEntity>, CreateClientParams> {
   final ClientsRepo _clientsRepo;
 
-  CreateClientUseCase({ClientsRepo? clientsRepo})
-      : _clientsRepo = clientsRepo ?? locator<ClientsRepositoryImpl>();
+  CreateClientUseCase({ClientsRepo? clientsRepo}) : _clientsRepo = clientsRepo ?? locator<ClientsRepositoryImpl>();
 
   @override
   Future<Either<Failure, ClientEntity>> call(CreateClientParams params) {
@@ -22,7 +21,7 @@ class CreateClientUseCase implements UseCase<Either<Failure, ClientEntity>, Crea
       contactInfo: params.contactInfo,
       address: params.address,
       profileImagePath: params.profileImagePath,
-      diagnosisNames: params.diagnosisNames,
+      diagnosisIds: params.diagnosisIds,
     );
   }
 }
@@ -35,7 +34,7 @@ class CreateClientParams {
   final String contactInfo;
   final String? address;
   final String? profileImagePath;
-  final List<String> diagnosisNames;
+  final List<int> diagnosisIds;
 
   CreateClientParams({
     required this.firstName,
@@ -45,6 +44,6 @@ class CreateClientParams {
     required this.contactInfo,
     this.address,
     this.profileImagePath,
-    required this.diagnosisNames,
+    required this.diagnosisIds,
   });
 }
