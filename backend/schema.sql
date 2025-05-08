@@ -28,7 +28,8 @@ CREATE TABLE
 CREATE TABLE
     IF NOT EXISTS diagnoses (
         id INT PRIMARY KEY AUTO_INCREMENT,
-        diagnosis_name VARCHAR(255) NOT NULL UNIQUE
+        diagnosis_name VARCHAR(255) NOT NULL UNIQUE,
+        icd_11_code VARCHAR(255) NOT NULL UNIQUE
     );
 
 CREATE TABLE
@@ -36,8 +37,8 @@ CREATE TABLE
         id INT PRIMARY KEY AUTO_INCREMENT,
         min_age INT,
         max_age INT,
-        required_diagnosis_id INT NOT NULL,
-        FOREIGN KEY (required_diagnosis_id) REFERENCES diagnoses (id)
+        diagnosis_id INT,
+        FOREIGN KEY (diagnosis_id) REFERENCES diagnoses (id)
     );
 
 CREATE TABLE
@@ -83,29 +84,3 @@ CREATE TABLE
         status ENUM ('active', 'revoked', 'inactive') DEFAULT 'active',
         revocation_reason TEXT
     );
-
-INSERT IGNORE INTO diagnoses (diagnosis_name)
-VALUES
-    ('hivPositive'),
-    ('tb'),
-    ('malariaPositive'),
-    ('diabetesType1'),
-    ('diabetesType2'),
-    ('gestationalDiabetes'),
-    ('hypertension'),
-    ('asthma'),
-    ('chronicObstructivePulmonaryDisease'),
-    ('anemia'),
-    ('dengueFever'),
-    ('cholera'),
-    ('hepatitisB'),
-    ('hepatitisC'),
-    ('typhoidFever'),
-    ('covid19'),
-    ('pneumonia'),
-    ('cirrhosisOfTheLiver'),
-    ('humanPapillomavirus'),
-    ('rheumatoidArthritis'),
-    ('chronicKidneyDisease'),
-    ('sickleCellDisease'),
-    ('stroke');
