@@ -6,10 +6,10 @@ import 'package:health_managment_system/domain/repository_interface/diagnoses/di
 import 'package:health_managment_system/domain/usecases/usecase.dart';
 import 'package:health_managment_system/errors/failures.dart';
 
-class FetchDiagnosesUseCase extends UseCase<Either<Failure, List<DiagnosisEntity>>, SearchParams> {
+class SearchDiagnosesUseCase extends UseCase<Either<Failure, List<DiagnosisEntity>>, SearchParams> {
   final DiagnosesRepo _diagnosisRepos;
 
-  FetchDiagnosesUseCase({DiagnosesRepo? diagnosisRepos})
+  SearchDiagnosesUseCase({DiagnosesRepo? diagnosisRepos})
       : _diagnosisRepos = diagnosisRepos ?? locator<DiagnosesRepositoryImpl>();
 
   @override

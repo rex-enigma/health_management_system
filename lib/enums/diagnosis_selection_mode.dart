@@ -1,0 +1,4 @@
+enum DiagnosisSelectionMode {
+  single,
+  multiple;
+}

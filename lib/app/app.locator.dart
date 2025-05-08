@@ -30,6 +30,7 @@ import '../domain/usecases/get_client_usecase.dart';
 import '../domain/usecases/get_health_programs_usecase.dart';
 import '../domain/usecases/login_use_usecase.dart';
 import '../domain/usecases/search_clients_usecase.dart';
+import '../domain/usecases/search_diagnoses_usecase.dart';
 import '../domain/usecases/search_health_programs_usecase.dart';
 import '../domain/usecases/sign_up_usecase.dart';
 
@@ -65,6 +66,7 @@ Future<void> setupLocator({
   locator.registerLazySingleton(() => GetHealthProgramUseCase());
   locator.registerLazySingleton(() => LoginUseCase());
   locator.registerLazySingleton(() => SearchClientsUseCase());
+  locator.registerLazySingleton(() => SearchDiagnosesUseCase());
   locator.registerLazySingleton(() => SearchHealthProgramsUseCase());
   locator.registerLazySingleton(() => SignupUseCase());
 }
