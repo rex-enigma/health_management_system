@@ -24,7 +24,7 @@ class ClientsRepositoryImpl implements ClientsRepo {
     required String contactInfo,
     String? address,
     String? profileImagePath,
-    required List<String> diagnosisNames,
+    required List<int> diagnosisIds,
   }) async {
     final result = await _clientsRemoteDataSource.createClient(
       firstName: firstName,
@@ -34,7 +34,7 @@ class ClientsRepositoryImpl implements ClientsRepo {
       contactInfo: contactInfo,
       address: address,
       profileImagePath: profileImagePath,
-      diagnosisNames: diagnosisNames,
+      diagnosisIds: diagnosisIds,
     );
 
     if (result.isRight()) {
@@ -70,8 +70,7 @@ class ClientsRepositoryImpl implements ClientsRepo {
     int page = 1,
     int limit = 10,
   }) async {
-    final result =
-        await _clientsRemoteDataSource.searchClients(query: query, page: page, limit: limit);
+    final result = await _clientsRemoteDataSource.searchClients(query: query, page: page, limit: limit);
 
     if (result.isRight()) {
       final clients = result.fold((failure) => null, (clients) => clients);
