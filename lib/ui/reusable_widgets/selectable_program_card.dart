@@ -22,9 +22,10 @@ class SelectableProgramCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8),
+      elevation: 0,
       child: ListTile(
         onTap: isEligible ? onTap : null,
-        tileColor: isEligible ? null : Colors.grey[200],
+        tileColor: isEligible ? Color.fromARGB(255, 197, 233, 199) : const Color.fromARGB(255, 233, 197, 197),
         leading: Checkbox(
           value: isSelected,
           onChanged: isEligible ? (value) => onTap() : null,
@@ -32,6 +33,12 @@ class SelectableProgramCard extends StatelessWidget {
         title: Text(
           program.name,
           style: Theme.of(context).typography.black.headlineSmall,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(
+            color: isEligible ? Colors.green : Colors.red,
+          ),
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
