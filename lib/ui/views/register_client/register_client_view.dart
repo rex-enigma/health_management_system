@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:health_managment_system/enums/diagnosis_selection_mode.dart';
 import 'package:health_managment_system/ui/common/ui_helpers.dart';
 import 'package:health_managment_system/ui/reusable_widgets/app_button.dart';
 import 'package:health_managment_system/ui/reusable_widgets/app_text_field.dart';
+import 'package:health_managment_system/ui/reusable_widgets/select_diagnoses_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import '../../../enums/gender.dart';
@@ -26,19 +28,18 @@ class RegisterClientView extends StackedView<RegisterClientViewModel> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             AppTextField(
-              label: 'First Name',
+              label: 'First Name*',
               controller: viewModel.firstNameController,
             ),
             verticalSpaceMedium,
             AppTextField(
-              label: 'Last Name',
+              label: 'Last Name*',
               controller: viewModel.lastNameController,
             ),
             verticalSpaceMedium,
             DropdownButtonFormField<Gender>(
-              value: viewModel.selectedGender,
               decoration: InputDecoration(
-                labelText: 'Gender',
+                labelText: 'Gender*',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -56,7 +57,7 @@ class RegisterClientView extends StackedView<RegisterClientViewModel> {
               onTap: () => viewModel.selectDateOfBirth(context),
               child: AbsorbPointer(
                 child: AppTextField(
-                  label: 'Date of Birth',
+                  label: 'Date of Birth*',
                   controller: TextEditingController(
                     text: viewModel.dateOfBirth != null ? DateFormat('dd/MM/yyyy').format(viewModel.dateOfBirth!) : '',
                   ),
@@ -65,12 +66,12 @@ class RegisterClientView extends StackedView<RegisterClientViewModel> {
             ),
             verticalSpaceMedium,
             AppTextField(
-              label: 'Contact Info',
+              label: 'Contact Info*',
               controller: viewModel.contactInfoController,
             ),
             verticalSpaceMedium,
             AppTextField(
-              label: 'Address (Optional)',
+              label: 'Address',
               controller: viewModel.addressController,
             ),
             verticalSpaceMedium,
@@ -79,23 +80,15 @@ class RegisterClientView extends StackedView<RegisterClientViewModel> {
               style: Theme.of(context).typography.black.headlineSmall,
             ),
             verticalSpaceSmall,
-            Wrap(
-              spacing: 8.0,
-              children: Diagnosis.values.map((diagnosis) {
-                if (diagnosis == Diagnosis.none) return const SizedBox.shrink();
-                return ChoiceChip(
-                  label: Text(diagnosis.name),
-                  selected: viewModel.selectedDiagnoses.contains(diagnosis),
-                  onSelected: (selected) {
-                    viewModel.toggleDiagnosis(diagnosis);
-                  },
-                );
-              }).toList(),
+            SelectDiagnosesWidget(
+              diagnosisSelectionMode: DiagnosisSelectionMode.multiple,
+              baseViewModel: viewModel,
             ),
             verticalSpaceLarge,
             AppButton(
               label: 'Register Client',
               onPressed: () => viewModel.registerClient(),
+              isLoading: viewModel.isBusy,
             ),
           ],
         ),
