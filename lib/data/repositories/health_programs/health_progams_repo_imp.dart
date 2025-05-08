@@ -12,8 +12,7 @@ class HealthProgramsRepositoryImpl implements HealthProgramsRepo {
   HealthProgramsRepositoryImpl({
     HealthProgramsRemoteDataSource? healthProgramsRemoteDataSource,
   }) {
-    _healthProgramsRemoteDataSource =
-        healthProgramsRemoteDataSource ?? locator<HealthProgramsRemoteDataSourceImpl>();
+    _healthProgramsRemoteDataSource = healthProgramsRemoteDataSource ?? locator<HealthProgramsRemoteDataSourceImpl>();
   }
 
   @override
@@ -70,8 +69,7 @@ class HealthProgramsRepositoryImpl implements HealthProgramsRepo {
 
     if (result.isRight()) {
       final programsModel = result.fold((failure) => null, (models) => models);
-      final healthProgramEntities =
-          programsModel!.map((programModel) => programModel.toEntity()).toList();
+      final healthProgramEntities = programsModel!.map((programModel) => programModel.toEntity()).toList();
       return Right(healthProgramEntities);
     }
 

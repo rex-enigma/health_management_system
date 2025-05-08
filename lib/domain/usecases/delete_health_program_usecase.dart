@@ -5,8 +5,7 @@ import 'package:health_managment_system/domain/repository_interface/health_progr
 import 'package:health_managment_system/domain/usecases/usecase.dart';
 import 'package:health_managment_system/errors/failures.dart';
 
-class DeleteHealthProgramUseCase
-    implements UseCase<Either<Failure, void>, DeleteHealthProgramParams> {
+class DeleteHealthProgramUseCase implements UseCase<Either<Failure, void>, DeleteHealthProgramParams> {
   final HealthProgramsRepo _healthProgramsRepo;
 
   DeleteHealthProgramUseCase({HealthProgramsRepo? healthProgramsRepo})

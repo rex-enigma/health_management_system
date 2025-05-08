@@ -68,9 +68,7 @@ class DiagnosesRemoteDataSourceImpl implements DiagnosesRemoteDataSource {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
-        return Right(data
-            .map((diagnosisData) => DiagnosisModel.fromMap(diagnosisMap: diagnosisData))
-            .toList());
+        return Right(data.map((diagnosisData) => DiagnosisModel.fromMap(diagnosisMap: diagnosisData)).toList());
       } else {
         final error = jsonDecode(response.body)['message'] ?? 'Failed to search diagnoses';
         return Left(ServerFailure(error, statusCode: response.statusCode));

@@ -9,8 +9,7 @@ import 'package:health_managment_system/errors/failures.dart';
 class SearchClientsUseCase implements UseCase<Either<Failure, List<ClientEntity>>, SearchParams> {
   final ClientsRepo _clientsRepos;
 
-  SearchClientsUseCase({ClientsRepo? clientsRepos})
-      : _clientsRepos = clientsRepos ?? locator<ClientsRepositoryImpl>();
+  SearchClientsUseCase({ClientsRepo? clientsRepos}) : _clientsRepos = clientsRepos ?? locator<ClientsRepositoryImpl>();
 
   @override
   Future<Either<Failure, List<ClientEntity>>> call(SearchParams params) {

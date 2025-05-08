@@ -13,8 +13,7 @@ class DiagnosesRepositoryImpl implements DiagnosesRepo {
   DiagnosesRepositoryImpl({
     DiagnosesRemoteDataSource? diagnosesRemoteDataSource,
   }) {
-    _diagnosesRemoteDataSource =
-        diagnosesRemoteDataSource ?? locator<DiagnosesRemoteDataSourceImpl>();
+    _diagnosesRemoteDataSource = diagnosesRemoteDataSource ?? locator<DiagnosesRemoteDataSourceImpl>();
   }
 
   // @override
@@ -46,8 +45,7 @@ class DiagnosesRepositoryImpl implements DiagnosesRepo {
 
     if (result.isRight()) {
       final diagnosesModel = result.fold((failure) => null, (diagnoses) => diagnoses);
-      final diagnosisEntities =
-          diagnosesModel!.map((diagnosisModel) => diagnosisModel.toEntity()).toList();
+      final diagnosisEntities = diagnosesModel!.map((diagnosisModel) => diagnosisModel.toEntity()).toList();
       return Right(diagnosisEntities);
     }
 

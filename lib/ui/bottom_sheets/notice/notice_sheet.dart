@@ -43,6 +43,5 @@ class NoticeSheet extends StackedView<NoticeSheetModel> {
   }
 
   @override
-  NoticeSheetModel viewModelBuilder(BuildContext context) =>
-      NoticeSheetModel(completer, request.data as String);
+  NoticeSheetModel viewModelBuilder(BuildContext context) => NoticeSheetModel(completer, request.data as String);
 }
