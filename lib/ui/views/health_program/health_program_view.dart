@@ -9,11 +9,7 @@ class HealthProgramView extends StackedView<HealthProgramViewModel> {
   const HealthProgramView({Key? key, required this.programId}) : super(key: key);
 
   @override
-  Widget builder(
-    BuildContext context,
-    HealthProgramViewModel viewModel,
-    Widget? child,
-  ) {
+  Widget builder(BuildContext context, HealthProgramViewModel viewModel, Widget? child) {
     if (viewModel.isBusy) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -22,7 +18,7 @@ class HealthProgramView extends StackedView<HealthProgramViewModel> {
 
     if (viewModel.healthProgram == null) {
       return const Scaffold(
-        body: Center(child: Text('Health program not found')),
+        body: Center(child: Text('Failed to load Health Program')),
       );
     }
 
@@ -31,10 +27,10 @@ class HealthProgramView extends StackedView<HealthProgramViewModel> {
       appBar: AppBar(
         title: Text(program.name),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.delete),
-            onPressed: () => viewModel.showDeleteProgramDialog(),
-          ),
+          // IconButton(
+          //   icon: const Icon(Icons.delete),
+          //   onPressed: () => viewModel.showDeleteProgramDialog(),
+          // ),
         ],
       ),
       body: Padding(
@@ -73,10 +69,11 @@ class HealthProgramView extends StackedView<HealthProgramViewModel> {
                   'Maximum Age: ${program.eligibilityCriteria!.maxAge}',
                   style: Theme.of(context).typography.black.bodyMedium,
                 ),
-              Text(
-                'Required Diagnosis: ${program.eligibilityCriteria!.requiredDiagnosis}',
-                style: Theme.of(context).typography.black.bodyMedium,
-              ),
+              if (program.eligibilityCriteria!.diagnosis != null)
+                Text(
+                  ' Diagnosis: ${program.eligibilityCriteria!.diagnosis?.diagnosisName}',
+                  style: Theme.of(context).typography.black.bodyMedium,
+                ),
             ],
             verticalSpaceMedium,
             Text(
@@ -90,8 +87,7 @@ class HealthProgramView extends StackedView<HealthProgramViewModel> {
   }
 
   @override
-  HealthProgramViewModel viewModelBuilder(BuildContext context) =>
-      HealthProgramViewModel(programId);
+  HealthProgramViewModel viewModelBuilder(BuildContext context) => HealthProgramViewModel(programId);
 
   @override
   void onViewModelReady(HealthProgramViewModel viewModel) {
