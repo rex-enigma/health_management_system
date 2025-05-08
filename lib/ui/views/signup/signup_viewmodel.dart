@@ -39,7 +39,6 @@ class SignupViewModel extends BaseViewModel {
       phoneNumber: phoneNumberController.text,
       password: passwordController.text,
     ));
-    setBusy(false);
 
     result.fold(
       (failure) {
@@ -53,6 +52,7 @@ class SignupViewModel extends BaseViewModel {
         _navigationService.clearStackAndShow(Routes.loginView);
       },
     );
+    setBusy(false);
   }
 
   void navigateToLogin() {

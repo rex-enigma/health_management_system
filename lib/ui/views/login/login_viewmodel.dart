@@ -30,7 +30,6 @@ class LoginViewModel extends BaseViewModel {
       email: emailController.text.trim(),
       password: passwordController.text,
     ));
-    setBusy(false);
 
     result.fold(
       (failure) {
@@ -44,6 +43,7 @@ class LoginViewModel extends BaseViewModel {
         _navigationService.clearStackAndShow(Routes.homeView);
       },
     );
+    setBusy(false);
   }
 
   void navigateToSignup() {
