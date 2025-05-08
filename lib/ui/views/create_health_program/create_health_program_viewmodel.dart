@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:health_managment_system/app/app.bottomsheets.dart';
 import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
+import 'package:health_managment_system/domain/entities/diagnosis_entity.dart';
 import 'package:health_managment_system/domain/usecases/create_health_program_usecase.dart';
-import 'package:health_managment_system/ui/dialogs/info_alert/info_alert_dialog.dart';
+import 'package:health_managment_system/enums/diagnosis_selection_mode.dart';
+import 'package:health_managment_system/ui/reusable_widgets/select_diagnoses_widget.dart';
 import 'package:stacked/stacked.dart';
 import 'package:stacked_services/stacked_services.dart';
-import '../../../domain/entities/health_program_entity.dart';
-import '../../../domain/entities/user_entity.dart';
-import '../../../enums/diagnosis.dart';
 
-class CreateHealthProgramViewModel extends BaseViewModel {
+class CreateHealthProgramViewModel extends BaseViewModel with DiagnosisSelectionViewModel {
   final _navigationService = locator<NavigationService>();
   final _dialogService = locator<DialogService>();
+  final _bottomSheetService = locator<BottomSheetService>();
   final _createHealthProgramUseCase = locator<CreateHealthProgramUseCase>();
 
   final nameController = TextEditingController();
@@ -25,8 +26,14 @@ class CreateHealthProgramViewModel extends BaseViewModel {
   DateTime? _endDate;
   DateTime? get endDate => _endDate;
 
-  Diagnosis? _requiredDiagnosis = Diagnosis.none;
-  Diagnosis? get requiredDiagnosis => _requiredDiagnosis;
+  DiagnosisEntity? _selectedDiagnoses;
+  // Returns a set containing one selected diagnosis or an empty set if none is selected.
+  // This is necessary because `CreateHealthProgramView` and `RegisterClientView` reuses the `select_diagnosis_widget`,
+  // which expects an iterable (like a set) of selected diagnoses.
+  // In this case, `_selectedDiagnosis` represents a single diagnosis,
+  // so we wrap it in a set to maintain compatibility.
+  @override
+  Set<DiagnosisEntity> get selectedDiagnoses => _selectedDiagnoses != null ? {_selectedDiagnoses!} : {};
 
   Future<void> selectStartDate(BuildContext context) async {
     final picked = await showDatePicker(
@@ -54,8 +61,17 @@ class CreateHealthProgramViewModel extends BaseViewModel {
     }
   }
 
-  void setSelectedDiagnosis(Diagnosis? diagnosis) {
-    _requiredDiagnosis = diagnosis;
+  @override
+  void openDiagnosisSelection() async {
+    final result = await _bottomSheetService.showCustomSheet(
+      variant: BottomSheetType.diagnosisSelection,
+      ignoreSafeArea: false,
+      isScrollControlled: true,
+      // should always be in that order
+      data: (_selectedDiagnoses, DiagnosisSelectionMode.single),
+    );
+
+    _selectedDiagnoses = result?.data;
     notifyListeners();
   }
 
@@ -78,8 +94,26 @@ class CreateHealthProgramViewModel extends BaseViewModel {
       return;
     }
 
+    if ((_endDate != null) && _endDate!.isBefore(_startDate!)) {
+      _dialogService.showCustomDialog(
+        variant: DialogType.infoAlert,
+        title: 'Error',
+        description: 'End date cannot be earlier than the start date.',
+      );
+      return;
+    }
+
     final minAge = minAgeController.text.isEmpty ? null : int.tryParse(minAgeController.text);
     final maxAge = maxAgeController.text.isEmpty ? null : int.tryParse(maxAgeController.text);
+
+    if ((maxAge != null && minAge != null) && minAge > maxAge) {
+      _dialogService.showCustomDialog(
+        variant: DialogType.infoAlert,
+        title: 'Error',
+        description: "Minimum age can't be greater that maximum age",
+      );
+      return;
+    }
 
     setBusy(true);
     final result = await _createHealthProgramUseCase(CreateHealthProgramParams(
@@ -87,15 +121,19 @@ class CreateHealthProgramViewModel extends BaseViewModel {
       description: descriptionController.text,
       startDate: _startDate!.toIso8601String(),
       endDate: _endDate?.toIso8601String(),
-      eligibilityCriteria: (minAge != null || maxAge != null || _requiredDiagnosis != Diagnosis.none)
-          ? {
-              'min_age': minAge,
-              'max_age': maxAge,
-              'required_diagnosis': _requiredDiagnosis?.name ?? Diagnosis.none.name,
-            }
+      eligibilityCriteria: (minAge != null || maxAge != null || _selectedDiagnoses != null)
+          ? EligibilityCriteriaParams(
+              minAge: minAge,
+              maxAge: maxAge,
+              diagnosisParams: _selectedDiagnoses != null
+                  ? DiagnosisParams(
+                      id: _selectedDiagnoses!.id,
+                      diagnosisName: _selectedDiagnoses!.diagnosisName,
+                      icd11Code: _selectedDiagnoses!.icd11Code,
+                    )
+                  : null)
           : null,
     ));
-    setBusy(false);
     result.fold(
       (failure) {
         _dialogService.showCustomDialog(
@@ -104,10 +142,17 @@ class CreateHealthProgramViewModel extends BaseViewModel {
           description: 'Failed to create health program: ${failure.message}',
         );
       },
-      (_) {
-        _navigationService.back();
+      (healthProgram) {
+        _navigationService.back(result: healthProgram.id);
       },
     );
+    setBusy(false);
+  }
+
+  @override
+  void removeDiagnosis(DiagnosisEntity diagnosis) {
+    _selectedDiagnoses = null;
+    notifyListeners();
   }
 
   @override
