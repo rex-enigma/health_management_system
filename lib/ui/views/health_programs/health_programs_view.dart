@@ -15,6 +15,7 @@ class HealthProgramsView extends StackedView<HealthProgramsViewModel> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Health Programs'),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -43,7 +44,7 @@ class HealthProgramsView extends StackedView<HealthProgramsViewModel> {
                       ),
                     );
                   }
-                  final program = viewModel.healthPrograms[index];
+                  final program = viewModel.healthPrograms.elementAt(index);
                   return HealthProgramCard(
                     name: program.name,
                     description: program.description,
@@ -99,26 +100,41 @@ class HealthProgramSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    final results = viewModel.searchHealthPrograms(query);
-    return ListView.builder(
-      controller: viewModel.searchScrollController,
-      itemCount: results.length + (viewModel.hasMoreSearchData ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (index == results.length) {
+    viewModel.searchHealthPrograms(query);
+
+    return ListenableBuilder(
+      listenable: viewModel,
+      builder: (context, child) {
+        if (viewModel.busy('loadSearchPrograms')) {
           return const Center(
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(),
-            ),
+            child: CircularProgressIndicator(),
           );
         }
-        final program = results[index];
-        return HealthProgramCard(
-          name: program.name,
-          description: program.description,
-          startDate: program.startDate,
-          endDate: program.endDate,
-          onTap: () => viewModel.navigateToHealthProgram(program.id),
+
+        final results = viewModel.filteredPrograms;
+
+        return ListView.builder(
+          controller: viewModel.searchScrollController,
+          itemCount: results.length + (viewModel.hasMoreSearchData ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index == results.length) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            final program = results.elementAt(index);
+
+            return HealthProgramCard(
+              name: program.name,
+              description: program.description,
+              startDate: program.startDate,
+              endDate: program.endDate,
+              onTap: () => viewModel.navigateToHealthProgram(program.id),
+            );
+          },
         );
       },
     );
@@ -126,7 +142,10 @@ class HealthProgramSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestions = viewModel.searchHealthPrograms(query);
+    final suggestions = viewModel.filteredPrograms
+        .where((program) => program.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
     return ListView.builder(
       controller: viewModel.searchScrollController,
       itemCount: suggestions.length + (viewModel.hasMoreSearchData ? 1 : 0),
