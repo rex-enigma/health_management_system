@@ -1,12 +1,12 @@
 class DiagnosisEntity {
   final int id;
   final String diagnosisName;
-  final String icd10Code;
+  final String icd11Code;
 
   DiagnosisEntity({
     required this.id,
     required this.diagnosisName,
-    required this.icd10Code,
+    required this.icd11Code,
   });
 
   DiagnosisEntity copyWith({
@@ -17,7 +17,7 @@ class DiagnosisEntity {
     return DiagnosisEntity(
       id: id ?? this.id,
       diagnosisName: diagnosisName ?? this.diagnosisName,
-      icd10Code: code ?? this.icd10Code,
+      icd11Code: code ?? this.icd11Code,
     );
   }
 
@@ -26,12 +26,12 @@ class DiagnosisEntity {
     return (other is DiagnosisEntity &&
         id == other.id &&
         diagnosisName == other.diagnosisName &&
-        icd10Code == other.icd10Code);
+        icd11Code == other.icd11Code);
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ diagnosisName.hashCode ^ icd10Code.hashCode;
+    return id.hashCode ^ diagnosisName.hashCode ^ icd11Code.hashCode;
   }
 
   @override
@@ -39,7 +39,7 @@ class DiagnosisEntity {
     return """DiagnosisEntity: {
       id: $id,
       diagnosisName: $diagnosisName,
-      code: $icd10Code
+      code: $icd11Code
     }""";
   }
 }

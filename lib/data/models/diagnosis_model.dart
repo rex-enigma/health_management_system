@@ -4,14 +4,14 @@ class DiagnosisModel extends DiagnosisEntity {
   DiagnosisModel({
     required super.id,
     required super.diagnosisName,
-    required super.icd10Code,
+    required super.icd11Code,
   });
 
   factory DiagnosisModel.fromEntity(DiagnosisEntity entity) {
     return DiagnosisModel(
       id: entity.id,
       diagnosisName: entity.diagnosisName,
-      icd10Code: entity.icd10Code,
+      icd11Code: entity.icd11Code,
     );
   }
 
@@ -19,7 +19,7 @@ class DiagnosisModel extends DiagnosisEntity {
     return DiagnosisModel(
       id: diagnosisMap['id'] as int,
       diagnosisName: diagnosisMap['diagnosis_name'] as String,
-      icd10Code: diagnosisMap['icd_11_code'] as String,
+      icd11Code: diagnosisMap['icd_11_code'] as String,
     );
   }
 
@@ -27,7 +27,7 @@ class DiagnosisModel extends DiagnosisEntity {
     return DiagnosisEntity(
       id: id,
       diagnosisName: diagnosisName,
-      icd10Code: icd10Code,
+      icd11Code: icd11Code,
     );
   }
 }

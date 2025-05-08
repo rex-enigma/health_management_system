@@ -27,7 +27,7 @@ class EligibilityCriteriaModel extends EligibilityCriteriaEntity {
           ? DiagnosisEntity(
               id: eligibilityCriteriaMap['diagnosis']['id'] as int,
               diagnosisName: eligibilityCriteriaMap['diagnosis']['diagnosis_name'] as String,
-              icd10Code: eligibilityCriteriaMap['diagnosis']['icd_11_code'] as String,
+              icd11Code: eligibilityCriteriaMap['diagnosis']['icd_11_code'] as String,
             )
           : null,
     );
