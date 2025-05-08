@@ -21,8 +21,7 @@ class HealthProgramViewModel extends BaseViewModel {
 
   Future<void> loadHealthProgram() async {
     setBusy(true);
-    final result = await _getHealthProgramUseCase(GetHealthProgramParams(id: programId));
-    setBusy(false);
+    final result = await _getHealthProgramUseCase(GetHealthProgramParam(id: programId));
 
     result.fold(
       (failure) {
@@ -34,9 +33,9 @@ class HealthProgramViewModel extends BaseViewModel {
       },
       (program) {
         _healthProgram = program;
-        notifyListeners();
       },
     );
+    setBusy(false); // will also call notifyListener
   }
 
   Future<void> showDeleteProgramDialog() async {
@@ -57,8 +56,7 @@ class HealthProgramViewModel extends BaseViewModel {
         },
         (_) {
           _navigationService.back();
-          _navigationService
-              .navigateToHomeView(); //resets HomeView as the last route in the nav stack.
+          _navigationService.navigateToHomeView(); //resets HomeView as the last route in the nav stack.
         },
       );
     }
