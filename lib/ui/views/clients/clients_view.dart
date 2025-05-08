@@ -16,6 +16,7 @@ class ClientsView extends StackedView<ClientsViewModel> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Clients'),
+        centerTitle: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -44,7 +45,7 @@ class ClientsView extends StackedView<ClientsViewModel> {
                       ),
                     );
                   }
-                  final client = viewModel.clients[index];
+                  final client = viewModel.clients.elementAt(index);
                   return ClientCard(
                     firstName: client.firstName,
                     lastName: client.lastName,
@@ -101,27 +102,41 @@ class ClientSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    final results = viewModel.searchClients(query);
-    return ListView.builder(
-      controller: viewModel.searchScrollController,
-      itemCount: results.length + (viewModel.hasMoreSearchData ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (index == results.length) {
+    viewModel.searchClients(query);
+
+    return ListenableBuilder(
+      listenable: viewModel,
+      builder: (context, child) {
+        if (viewModel.busy('loadSearchClients')) {
           return const Center(
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(),
-            ),
+            child: CircularProgressIndicator(),
           );
         }
-        final client = results[index];
-        return ClientCard(
-          firstName: client.firstName,
-          lastName: client.lastName,
-          gender: Gender.fromString(client.gender.name),
-          dateOfBirth: client.dateOfBirth,
-          address: client.address,
-          onTap: () => viewModel.navigateToClientProfile(client.id),
+        final results = viewModel.filteredClients;
+
+        return ListView.builder(
+          controller: viewModel.searchScrollController,
+          itemCount: results.length + (viewModel.hasMoreSearchData ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index == results.length) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            final client = results.elementAt(index);
+
+            return ClientCard(
+              firstName: client.firstName,
+              lastName: client.lastName,
+              gender: Gender.fromString(client.gender.name),
+              dateOfBirth: client.dateOfBirth,
+              address: client.address,
+              onTap: () => viewModel.navigateToClientProfile(client.id),
+            );
+          },
         );
       },
     );
@@ -129,7 +144,12 @@ class ClientSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final suggestions = viewModel.searchClients(query);
+    final suggestions = viewModel.filteredClients
+        .where((client) =>
+            client.firstName.toLowerCase().contains(query.toLowerCase()) ||
+            client.lastName.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
     return ListView.builder(
       controller: viewModel.searchScrollController,
       itemCount: suggestions.length + (viewModel.hasMoreSearchData ? 1 : 0),
