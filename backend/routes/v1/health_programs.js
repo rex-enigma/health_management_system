@@ -6,11 +6,24 @@ const router = express.Router();
 // create a health program
 router.post('/v1/health-programs', authenticateJWT, async (req, res, next) => {
     const { name, description, start_date, end_date, image_path, eligibility_criteria } = req.body;
-    if (!name || !description || !start_date) {
-        return res.status(400).json({ error: 'Name, description, and start date are required' });
-    }
+
 
     try {
+
+        // later add a middleware that validates these input, so that the code looks clean
+        if (!name || !description || !start_date) {
+            throw { statusCode: 400, error: 'Name, description, and start date are required' };
+        }
+
+        if (start_date == null) {
+            throw { statusCode: 400, error: 'Start date is required.' };
+        }
+
+        if ((end_date !== null) && Date(end_date) < Date(start_date)) {
+            throw { statusCode: 400, error: 'End date cannot be earlier than the start date.' };
+
+        }
+
         const connection = await db.getConnection();
         try {
             await connection.beginTransaction();
@@ -18,33 +31,34 @@ router.post('/v1/health-programs', authenticateJWT, async (req, res, next) => {
             let eligibilityCriteriaId = null;
             let eligibilityCriteriaResponse = null;
             if (eligibility_criteria) {
-                const { min_age, max_age, required_diagnosis } = eligibility_criteria;
-                if (!required_diagnosis) {
-                    throw new Error('Eligibility criteria diagnosis_name is required');
-                }
+                const { min_age, max_age } = eligibility_criteria;
                 if (min_age < 0) {
-                    throw new Error('minAge must be a non-negative number');
+                    throw { statusCode: 400, error: 'minAge must be a non-negative number' };
                 }
                 if (max_age < 0) {
-                    throw new Error('maxAge must be a non-negative number');
+                    throw { statusCode: 400, error: 'maxAge must be a non-negative number' };
                 }
-                if (min_age > max_age) {
-                    throw new Error('minAge cannot be greater than maxAge');
+                if (max_age != null && min_age > max_age) {
+                    throw { statusCode: 400, error: 'minAge cannot be greater than maxAge' };
                 }
+                let diagnosisId = null;
+                // run if diagnosis is provided
+                if (eligibility_criteria.diagnosis) {
+                    let { icd_11_code, diagnosis_name } = eligibility_criteria.diagnosis;
+                    const [diagnosisResult] = await connection.execute(
+                        'SELECT id FROM diagnoses WHERE icd_11_code = ? AND diagnosis_name = ?',
+                        [icd_11_code, diagnosis_name]
+                    );
 
-                // Look up or create diagnosis
-                const [diagnosisResult] = await connection.execute(
-                    'INSERT INTO diagnoses (diagnosis_name) VALUES (?) ON DUPLICATE KEY UPDATE id = LAST_INSERT_ID(id)',
-                    [required_diagnosis]
-                );
-                const diagnosisId = diagnosisResult.insertId;
+                    diagnosisId = diagnosisResult[0].id;
+                }
 
                 const [criteriaResult] = await connection.execute(
-                    'INSERT INTO eligibility_criteria (min_age, max_age, required_diagnosis_id) VALUES (?, ?, ?)',
+                    'INSERT INTO eligibility_criteria (min_age, max_age, diagnosis_id) VALUES (?, ?, ?)',
                     [min_age, max_age, diagnosisId]
                 );
                 eligibilityCriteriaId = criteriaResult.insertId;
-                eligibilityCriteriaResponse = { id: eligibilityCriteriaId, min_age, max_age, required_diagnosis };
+                eligibilityCriteriaResponse = { id: eligibilityCriteriaId, min_age, max_age, diagnosis: eligibility_criteria.diagnosis };
             }
 
             const [programResult] = await connection.execute(
@@ -71,12 +85,14 @@ router.post('/v1/health-programs', authenticateJWT, async (req, res, next) => {
             });
         } catch (error) {
             await connection.rollback();
-            throw error;
+            console.log(error);
+            res.status(error.statusCode).json(error);
         } finally {
             connection.release();
         }
     } catch (error) {
         console.error('Health program creation error:', error);
+        res.status(error.statusCode).json(error);
         next(error);
     }
 });
@@ -91,16 +107,31 @@ router.get('/v1/health-programs/:id', requireAuth, async (req, res, next) => {
             'FROM health_programs hp JOIN users u ON hp.created_by_user_id = u.id WHERE hp.id = ?',
             [id]
         );
-        if (program.length === 0) return res.status(404).json({ error: 'Health program not found' });
+        if (program.length === 0) throw { statusCode: 404, error: 'Health program not found' };
 
         let eligibilityCriteria = null;
         if (program[0].eligibility_criteria_id) {
             const [criteria] = await db.execute(
-                'SELECT ec.id, ec.min_age, ec.max_age, d.diagnosis_name AS required_diagnosis ' +
-                'FROM eligibility_criteria ec JOIN diagnoses d ON ec.required_diagnosis_id = d.id WHERE ec.id = ?',
+                'SELECT ec.id, ec.min_age, ec.max_age, d.id AS diagnosis_id, d.diagnosis_name, d.icd_11_code ' +
+                'FROM eligibility_criteria ec LEFT JOIN diagnoses d ON ec.diagnosis_id = d.id WHERE ec.id = ?',
                 [program[0].eligibility_criteria_id]
             );
-            eligibilityCriteria = criteria.length > 0 ? criteria[0] : null;
+
+            const { id, min_age, max_age, diagnosis_id, diagnosis_name, icd_11_code } = criteria[0];
+            const diagnosis = diagnosis_id ? {
+                id: diagnosis_id,
+                diagnosis_name: diagnosis_name,
+                icd_11_code,
+            } : null;
+
+            eligibilityCriteria = {
+                id,
+                min_age,
+                max_age,
+                diagnosis
+            };
+
+            // eligibilityCriteria = criteria.length > 0 ? criteria[0] : null;
         }
 
         const programData = {
@@ -147,11 +178,26 @@ router.get('/v1/health-programs', requireAuth, validatePagination, async (req, r
                 let eligibilityCriteria = null;
                 if (program.eligibility_criteria_id) {
                     const [criteria] = await db.execute(
-                        'SELECT ec.id, ec.min_age, ec.max_age, d.diagnosis_name AS required_diagnosis ' +
-                        'FROM eligibility_criteria ec JOIN diagnoses d ON ec.required_diagnosis_id = d.id WHERE ec.id = ?',
+                        'SELECT ec.id, ec.min_age, ec.max_age, d.id AS diagnosis_id, d.diagnosis_name, d.icd_11_code ' +
+                        'FROM eligibility_criteria ec LEFT JOIN diagnoses d ON ec.diagnosis_id = d.id WHERE ec.id = ?',
                         [program.eligibility_criteria_id]
                     );
-                    eligibilityCriteria = criteria.length > 0 ? criteria[0] : null;
+
+                    const { id, min_age, max_age, diagnosis_id, diagnosis_name, icd_11_code } = criteria[0];
+                    const diagnosis = diagnosis_id ? {
+                        id: diagnosis_id,
+                        diagnosis_name: diagnosis_name,
+                        icd_11_code,
+                    } : null;
+
+                    eligibilityCriteria = {
+                        id,
+                        min_age,
+                        max_age,
+                        diagnosis
+                    };
+
+                    // eligibilityCriteria = criteria.length > 0 ? criteria[0] : null;
                 }
 
                 const programData = {
@@ -187,14 +233,16 @@ router.get('/v1/health-programs', requireAuth, validatePagination, async (req, r
 // search for health programs with pagination
 router.get('/v1/health-programs/search', requireAuth, validatePagination, async (req, res, next) => {
     const { limit, offset } = req.pagination;
-    const { query } = req.query;
-    if (!query) return res.status(400).json({ error: 'Query parameter is required' });
+    const { q } = req.query;
 
     try {
+
+        if (!q) throw { statusCode: 400, error: 'Query parameter is required' };
+
         const [programs] = await db.execute(
             'SELECT hp.*, u.id AS user_id, u.first_name, u.last_name, u.email, u.phone_number, u.profile_image_path ' +
             `FROM health_programs hp JOIN users u ON hp.created_by_user_id = u.id WHERE hp.name LIKE ? ORDER BY hp.id LIMIT ${limit} OFFSET ${offset}`,
-            [`%${query}%`]
+            [`%${q}%`]
         );
 
         const programsData = await Promise.all(
@@ -202,11 +250,25 @@ router.get('/v1/health-programs/search', requireAuth, validatePagination, async 
                 let eligibilityCriteria = null;
                 if (program.eligibility_criteria_id) {
                     const [criteria] = await db.execute(
-                        'SELECT ec.id, ec.min_age, ec.max_age, d.diagnosis_name ' +
+                        'SELECT ec.id, ec.min_age, ec.max_age, d.id AS diagnosis_id, d.diagnosis_name, d.icd_11_code ' +
                         'FROM eligibility_criteria ec JOIN diagnoses d ON ec.required_diagnosis_id = d.id WHERE ec.id = ?',
                         [program.eligibility_criteria_id]
                     );
-                    eligibilityCriteria = criteria.length > 0 ? criteria[0] : null;
+                    const { id, min_age, max_age, diagnosis_id, diagnosis_name, icd_11_code } = criteria[0];
+                    const diagnosis = diagnosis_id ? {
+                        id: diagnosis_id,
+                        diagnosis_name: diagnosis_name,
+                        icd_11_code,
+                    } : null;
+
+                    eligibilityCriteria = {
+                        id,
+                        min_age,
+                        max_age,
+                        diagnosis
+                    };
+
+                    // eligibilityCriteria = criteria.length > 0 ? criteria[0] : null;
                 }
 
                 const programData = {
@@ -235,6 +297,7 @@ router.get('/v1/health-programs/search', requireAuth, validatePagination, async 
         res.status(200).json(programsData);
     } catch (error) {
         console.error('Health program search error:', error);
+        res.status(error.statusCode).json(error);
         next(error);
     }
 });
@@ -248,13 +311,14 @@ router.delete('/v1/health-programs/:id', authenticateJWT, async (req, res, next)
     try {
         const [program] = await db.execute('SELECT * FROM health_programs WHERE id = ? AND created_by_user_id = ?', [id, req.user.id]);
         if (program.length === 0) {
-            return res.status(404).json({ error: 'Health program not found or not authorized' });
+            throw { statusCode: 404, error: 'Health program not found or action not authorized' };
         }
 
         await db.execute('DELETE FROM health_programs WHERE id = ?', [id]);
         res.status(200).json({ id: parseInt(id) });
     } catch (error) {
         console.error('Health program deletion error:', error);
+        res.status(error.statusCode).json(error);
         next(error);
     }
 });
