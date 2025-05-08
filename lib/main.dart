@@ -25,7 +25,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.tealAccent,
+          seedColor: const Color.fromARGB(255, 0, 199, 140),
         ),
       ),
       initialRoute: Routes.startupView,
