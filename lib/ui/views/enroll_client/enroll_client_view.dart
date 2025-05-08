@@ -11,11 +11,7 @@ class EnrollClientView extends StackedView<EnrollClientViewModel> {
   const EnrollClientView({Key? key, required this.clientId}) : super(key: key);
 
   @override
-  Widget builder(
-    BuildContext context,
-    EnrollClientViewModel viewModel,
-    Widget? child,
-  ) {
+  Widget builder(BuildContext context, EnrollClientViewModel viewModel, Widget? child) {
     if (viewModel.isBusy) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -25,6 +21,7 @@ class EnrollClientView extends StackedView<EnrollClientViewModel> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Enroll Client'),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -32,15 +29,21 @@ class EnrollClientView extends StackedView<EnrollClientViewModel> {
           children: [
             Expanded(
               child: ListView.builder(
-                itemCount: viewModel.healthPrograms.length,
+                controller: viewModel.scrollController,
+                itemCount: viewModel.healthPrograms.length + (viewModel.hasMoreData ? 1 : 0),
                 itemBuilder: (context, index) {
+                  if (index == viewModel.healthPrograms.length) {
+                    return viewModel.busy('loadMoreHealthPrograms')
+                        ? const Center(child: CircularProgressIndicator())
+                        : const SizedBox.shrink();
+                  }
                   final program = viewModel.healthPrograms[index];
-                  final isSelected = viewModel.selectedPrograms.contains(program.id);
-                  final eligibilityInfo = viewModel.eligibilityInfo[program.id] ?? (true, null);
+                  final isSelected = viewModel.selectedProgramIds.contains(program.id);
+                  final eligibilityInfo = viewModel.eligibilityInfo[program.id];
                   return SelectableProgramCard(
                     program: program,
                     isSelected: isSelected,
-                    isEligible: eligibilityInfo.$1,
+                    isEligible: eligibilityInfo!.$1,
                     ineligibilityReason: eligibilityInfo.$2,
                     onTap: () => viewModel.toggleProgramSelection(program.id),
                   );
