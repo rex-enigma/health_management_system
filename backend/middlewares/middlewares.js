@@ -74,7 +74,8 @@ export const requireAuth = (req, res, next) => {
 
 export const globalErrorHandler = (err, req, res, next) => {
     console.error('Error:', err.stack);
-    res.status(500).json({ error: 'Internal server error' });
+
+    res.status(500).json({ error: err });
 };
 
 export const validatePagination = (req, res, next) => {
