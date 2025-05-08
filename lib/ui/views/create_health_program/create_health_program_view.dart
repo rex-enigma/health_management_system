@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:health_managment_system/domain/entities/diagnosis_entity.dart';
+import 'package:health_managment_system/enums/diagnosis_selection_mode.dart';
 
 import 'package:health_managment_system/ui/common/ui_helpers.dart';
 import 'package:health_managment_system/ui/reusable_widgets/app_button.dart';
 import 'package:health_managment_system/ui/reusable_widgets/app_text_field.dart';
+import 'package:health_managment_system/ui/reusable_widgets/select_diagnoses_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:stacked/stacked.dart';
 import 'create_health_program_viewmodel.dart';
@@ -76,21 +79,9 @@ class CreateHealthProgramView extends StackedView<CreateHealthProgramViewModel> 
               keyboardType: TextInputType.number,
             ),
             verticalSpaceMedium,
-            DropdownButtonFormField<Diagnosis>(
-              value: viewModel.requiredDiagnosis,
-              decoration: InputDecoration(
-                labelText: 'Required Diagnosis',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              items: Diagnosis.values.map((diagnosis) {
-                return DropdownMenuItem<Diagnosis>(
-                  value: diagnosis,
-                  child: Text(diagnosis.name),
-                );
-              }).toList(),
-              onChanged: viewModel.setSelectedDiagnosis,
+            SelectDiagnosesWidget(
+              diagnosisSelectionMode: DiagnosisSelectionMode.single,
+              baseViewModel: viewModel,
             ),
             verticalSpaceLarge,
             AppButton(
