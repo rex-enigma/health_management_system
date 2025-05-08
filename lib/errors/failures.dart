@@ -19,15 +19,6 @@ class NotFoundFailure extends Failure {
   NotFoundFailure(super.message, {this.statusCode});
 }
 
-class IneligibleClientFailure extends Failure {
-  /// a list of HealthProgramIds which represent all HealthProgram that the client is ineligible
-  final List<int> ineligibleHealthProgramIds;
-
-  IneligibleClientFailure({
-    required this.ineligibleHealthProgramIds,
-  }) : super('Client is not eligible for health programs: $ineligibleHealthProgramIds');
-}
-
 class ClientAlreadyExistFailure extends Failure {
   final int? status;
   ClientAlreadyExistFailure(super.message, {this.status});
