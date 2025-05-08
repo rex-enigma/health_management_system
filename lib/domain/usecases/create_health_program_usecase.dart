@@ -6,8 +6,7 @@ import 'package:health_managment_system/domain/repository_interface/health_progr
 import 'package:health_managment_system/domain/usecases/usecase.dart';
 import 'package:health_managment_system/errors/failures.dart';
 
-class CreateHealthProgramUseCase
-    implements UseCase<Either<Failure, HealthProgramEntity>, CreateHealthProgramParams> {
+class CreateHealthProgramUseCase implements UseCase<Either<Failure, HealthProgramEntity>, CreateHealthProgramParams> {
   final HealthProgramsRepo _healthProgramsRepo;
 
   CreateHealthProgramUseCase({HealthProgramsRepo? healthProgramsRepo})
@@ -61,15 +60,17 @@ class EligibilityCriteriaParams {
 }
 
 class DiagnosisParams {
+  final int id;
   final String diagnosisName;
-  final String icd10Code;
+  final String icd11Code;
 
-  DiagnosisParams({required this.diagnosisName, required this.icd10Code});
+  DiagnosisParams({required this.id, required this.diagnosisName, required this.icd11Code});
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'diagnosis_name': diagnosisName,
-      'icd_11_code': icd10Code,
+      'icd_11_code': icd11Code,
     };
   }
 }
