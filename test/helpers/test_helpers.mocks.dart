@@ -513,8 +513,7 @@ class MockBottomSheetService extends _i1.Mock implements _i2.BottomSheetService 
 /// See the documentation for Mockito's code generation for more information.
 class MockDialogService extends _i1.Mock implements _i2.DialogService {
   @override
-  void registerCustomDialogBuilders(Map<dynamic, _i2.DialogBuilder>? builders) =>
-      super.noSuchMethod(
+  void registerCustomDialogBuilders(Map<dynamic, _i2.DialogBuilder>? builders) => super.noSuchMethod(
         Invocation.method(
           #registerCustomDialogBuilders,
           [builders],
