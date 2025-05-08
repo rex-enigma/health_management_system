@@ -1,7 +1,7 @@
 import 'package:health_managment_system/app/app.dialogs.dart';
 import 'package:health_managment_system/app/app.locator.dart';
 import 'package:health_managment_system/app/app.router.dart';
-import 'package:health_managment_system/domain/entities/client.dart';
+import 'package:health_managment_system/domain/entities/client_entity.dart';
 import 'package:health_managment_system/domain/usecases/delete_client_usecase.dart';
 import 'package:health_managment_system/domain/usecases/get_client_usecase.dart';
 import 'package:health_managment_system/ui/dialogs/info_alert/info_alert_dialog.dart';
@@ -22,8 +22,7 @@ class ClientViewModel extends BaseViewModel {
 
   Future<void> loadClient() async {
     setBusy(true);
-    final result = await _getClientUseCase(GetClientParams(id: clientId));
-    setBusy(false);
+    final result = await _getClientUseCase(GetClientParam(id: clientId));
 
     result.fold(
       (failure) {
@@ -35,9 +34,9 @@ class ClientViewModel extends BaseViewModel {
       },
       (client) {
         _client = client;
-        notifyListeners();
       },
     );
+    setBusy(false); // will also call notifyListener
   }
 
   Future<void> showDeleteClientDialog() async {
@@ -58,7 +57,8 @@ class ClientViewModel extends BaseViewModel {
         },
         (_) {
           _navigationService.back();
-          _navigationService.navigateToHomeView();
+
+          ///
         },
       );
     }
