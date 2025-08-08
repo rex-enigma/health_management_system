@@ -50,4 +50,4 @@ View Client Profile: Users can view detailed client information, including enrol
 
 <!-- ## Screens -->
 
-[ERD](./design/database_ERD/Screenshot%20from%202025-04-27%2023-18-15.png)
+[ERD](./design/database_ERD/Screenshot%20from%202025-05-08%2023-00-26.png)
